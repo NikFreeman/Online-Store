@@ -1,0 +1,108 @@
+:root {
+  --gap-cards: 20px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.wrapper {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gap-cards);
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  width: calc((100% - var(--gap-cards) * 3) / 4);
+  justify-items: center;
+  align-items: center;
+  background-color: #F5F5F5;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.card__discount {
+  align-self: flex-end;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 64px;
+  height: 29px;
+  background: #E56B50;
+  border-radius: 10px;
+  font-family: 'Geometria';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 18px;  
+  color: #FFFFFF;
+}
+
+.card__title {  
+  font-family: 'Geometria';
+  font-style: normal;
+  font-weight: 800;
+  font-size: 16px;
+  line-height: 21px;
+  color: #009FDF;
+}
+
+.card__image {
+  height: 200px;
+  width: 100%;
+  background-repeat: no-repeat;
+  /* background-size: contain; */
+  background-size: cover;
+}
+
+.card__price {
+  align-self: flex-start;
+  font-family: 'Geometria';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 22px;
+  line-height: 28px;
+}
+
+.card__btns {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+}
+
+.card__add-btn {
+  background: linear-gradient(90deg, #0099DC 7.09%, #3CC39D 93.66%);
+  box-shadow: 0px 2px 10px 1px rgba(0, 0, 0, 0.15);
+  border-radius: 5px;
+  border: none;
+  width: 50px;
+  height: 40px;
+}
+
+.card__detail-btn {
+  background: #F5F5F5;
+  border-radius: 5px;
+  border: 2px solid #009FDF;
+  width: 182px;
+  height: 40px;
+  font-family: 'Geometria';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 13px;
+  line-height: 16px;
+  text-transform: uppercase;
+  color: #009FDF;
+  box-shadow: 0px 2px 10px 1px rgba(0, 0, 0, 0.15);
+}
+
+.card__detail-btn:hover {
+  background: #009FDF;
+  color: #F5F5F5;
+}

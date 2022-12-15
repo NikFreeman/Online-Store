@@ -14,6 +14,9 @@ const baseConfig = {
             {
                 test: /\.(png|jpg|svg|gif|ico)$/,
                 type: 'asset/resource',
+                generator: {
+                    filename: 'assets/icons/[name][ext]',
+                },
             },
             {
                 test: /\.(woff|woff2|eot|ttf|otf)$/i,
@@ -34,7 +37,7 @@ const baseConfig = {
     },
     output: {
         filename: 'index.js',
-        path: path.resolve(__dirname, '../dist'),
+        path: path.resolve(__dirname, './dist'),
         clean: true,
     },
     plugins: [
