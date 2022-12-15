@@ -1,5 +1,6 @@
 import { ProductList } from '../utils/types';
-// import src from './products';
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const logo = require('../assets/icons/shopping-cart.svg');
 
 export async function getList() {
     const res = await fetch('https://dummyjson.com/products?limit=100');
@@ -35,7 +36,7 @@ export function createCards(data: ProductList) {
         const addBtn: HTMLElement = document.createElement('button');
         addBtn.className = 'card__add-btn';
         const cartIcon: HTMLImageElement = document.createElement('img');
-        cartIcon.src = '../assets/icons/shopping-cart.svg';
+        cartIcon.src = logo;
         cartIcon.alt = 'cart';
         cartIcon.className = 'card__cart-icon';
         addBtn.append(cartIcon);
