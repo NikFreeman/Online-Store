@@ -38,7 +38,8 @@ const baseConfig = {
     },
     output: {
         filename: 'index.js',
-        path: path.resolve(__dirname, '../dist'),
+        path: path.resolve(__dirname, 'dist'),
+        assetModuleFilename: 'images/[name][ext]',
         clean: true,
     },
     plugins: [

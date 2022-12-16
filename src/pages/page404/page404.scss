@@ -1,13 +1,5 @@
-$white: #EDEDED;
-$gray: #BFC0C0;
-$dark: #585959;
-$light: #D3DEEA;
-
+@import '/src/styles/_variable.scss';
 @import url('https://fonts.googleapis.com/css?family=Abril+Fatface|Lato');
-
-$big: 'Abril Fatface', serif;
-$body: 'Lato', sans-serif;
-
 
 .top {
   min-height: 100%;  
@@ -18,7 +10,7 @@ $body: 'Lato', sans-serif;
 
 /*text styling*/
 h1 {
-  font-family: $big;
+  font-family: 'Abril Fatface', serif;;
   color: $white;
   text-align: center;
   font-size: 9em;
@@ -26,21 +18,13 @@ h1 {
   text-shadow: -1px 0 $gray, 0 1px $gray, 1px 0 $gray, 0 -1px $gray;
 }
 h3 {
-  font-family: $body;
+  font-family: 'Lato', sans-serif;;
   font-size: 2em;
   text-transform: uppercase;
   text-align: center;
   color: $gray;
   margin-top: -20px;
   font-weight: 900;
-}
-p {
-  text-align: center;
-  font-family: $body;
-  color: $dark;
-  font-size: .6em;
-  margin-top: -20px;
-  text-transform: uppercase;
 }
 
 

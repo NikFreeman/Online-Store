@@ -1,10 +1,11 @@
 import './styles/index.css';
+import 'normalize.css';
 import router from './routes/router';
 
 window.addEventListener('click', (e) => {
-    const tt = <HTMLElement>e.target;
-    if (tt.hasAttribute('data-link')) {
-        history.pushState('', '', window.location.origin + tt.getAttribute('href'));
+    const tempTarget = <HTMLElement>e.target;
+    if (tempTarget.hasAttribute('data-link')) {
+        history.pushState('', '', window.location.origin + tempTarget.getAttribute('href'));
         router();
     }
     e.preventDefault();
