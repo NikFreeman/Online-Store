@@ -18,3 +18,7 @@ export interface ProductList {
     skip: number;
     limit: number;
 }
+
+export type GroupeBy = {
+    [key: string]: Product[];
+};
