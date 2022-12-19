@@ -2,10 +2,16 @@ import { ProductList, Product, GroupeBy } from '../../models/types';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const logo = require('../../assets/icons/shopping-cart.svg');
 
+let products: Product[] = [];
 export async function getList() {
     const res = await fetch('https://dummyjson.com/products?limit=100');
     const data: ProductList = await res.json();
     return data;
+}
+
+export function getProductsList(data: ProductList) {
+    products = data.products;
+    return data.products;
 }
 
 const main: HTMLElement = document.createElement('main');
@@ -35,28 +41,29 @@ filtersContainer.append(filterBrand, filterCategory);
 filterBrand.append(brandHeader, brandList);
 filterCategory.append(categoryHeader, categoryList);
 
+const groupedByBrand: GroupeBy = {};
 export function groupeByBrand(data: Product[]): GroupeBy {
-    const groupedBy: GroupeBy = {};
+    // const groupedBy: GroupeBy = {};
     for (const item of data) {
-        if (groupedBy[item.brand.toUpperCase()]) {
-            groupedBy[item.brand.toUpperCase()].push(item);
+        if (groupedByBrand[item.brand.toUpperCase()]) {
+            groupedByBrand[item.brand.toUpperCase()].push(item);
         } else {
-            groupedBy[item.brand.toUpperCase()] = [item];
+            groupedByBrand[item.brand.toUpperCase()] = [item];
         }
     }
-    return groupedBy;
+    return groupedByBrand;
 }
 
+const groupedByCategory: GroupeBy = {};
 export function groupeByCategory(data: Product[]): GroupeBy {
-    const groupedBy: GroupeBy = {};
     for (const item of data) {
-        if (groupedBy[item.category.toLowerCase()]) {
-            groupedBy[item.category.toLowerCase()].push(item);
+        if (groupedByCategory[item.category.toLowerCase()]) {
+            groupedByCategory[item.category.toLowerCase()].push(item);
         } else {
-            groupedBy[item.category.toLowerCase()] = [item];
+            groupedByCategory[item.category.toLowerCase()] = [item];
         }
     }
-    return groupedBy;
+    return groupedByCategory;
 }
 
 const checkboxes: HTMLInputElement[] = [];
@@ -105,35 +112,35 @@ function fillCategoryList(data: GroupeBy) {
     return data;
 }
 
-export function start() {
-    getList()
-        .then((data) => groupeByBrand(data.products))
-        .then((data) => fillBrandList(data))
-        .then((data) => getCheckedItems(data));
-    // .then((data) => createCards(data));
-    getList()
-        .then((data) => groupeByCategory(data.products))
-        .then((data) => fillCategoryList(data))
-        .then((data) => getCheckedItems(data));
+export async function start() {
+    await getList().then(getProductsList);
+    fillBrandList(groupeByBrand(products));
+    fillCategoryList(groupeByCategory(products));
+    createCards(products);
 }
 
 let cardListOfCheckedCheckboxes: HTMLInputElement[] = checkboxes;
 
-export function getCheckedItems(data: GroupeBy) {
+export function getCheckedItems() {
     cardListOfCheckedCheckboxes =
         checkboxes.filter((input) => input.checked).length > 0
             ? checkboxes.filter((input) => input.checked)
             : checkboxes;
     cardsBlock.innerHTML = '';
-    for (const key in data) {
+    for (const key in groupedByCategory) {
         if (cardListOfCheckedCheckboxes.some((el) => el.id === key)) {
-            createCards(data[key]);
+            createCards(groupedByCategory[key]);
+        }
+    }
+    for (const key in groupedByBrand) {
+        if (cardListOfCheckedCheckboxes.some((el) => el.id === key)) {
+            createCards(groupedByBrand[key]);
         }
     }
 }
 
-brandList.addEventListener('change', start);
-categoryList.addEventListener('change', start);
+brandList.addEventListener('change', getCheckedItems);
+categoryList.addEventListener('change', getCheckedItems);
 
 const cardsBlock: HTMLElement = document.createElement('div');
 cardsBlock.className = 'cards';
