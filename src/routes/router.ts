@@ -1,25 +1,40 @@
 import page404 from '../pages/page404';
 import testPage from '../pages/testPage';
+import testPageDetail from '../pages/testPage-details';
 import render from '../utils/render';
 
 const routes = new Map();
 routes.set('/', testPage);
 routes.set('/product', testPage);
-routes.set('/product-detail/:id', testPage);
+routes.set('/product-detail/:id', testPageDetail);
 
 function routerHandler() {
-    const pathname = window.location.pathname;
-    console.log(window.location);
-    if (routes.has(pathname)) {
-        render('App', routes.get(pathname)());
+    const routePath = parsePathName(window.location.pathname);
+    if (routePath) {
+        render('App', routes.get(routePath.routePath)(routePath.param));
     } else {
-        render('App', page404()); // not implementation
+        render('App', page404());
     }
 }
-function router() {
+
+function parsePathName(pathname: string): false | { routePath: string; param: string | null } {
+    const arr = pathname.split('/');
+    for (const keyRoute of routes.keys()) {
+        const tempKey = keyRoute.split('/');
+        if (arr[1] === tempKey[1]) {
+            if (tempKey.length === 3) {
+                return { routePath: keyRoute, param: arr[2] };
+            } else {
+                return { routePath: keyRoute, param: null };
+            }
+        }
+    }
+    return false;
+}
+
+function router(): void {
     window.addEventListener('click', (e) => {
         e.preventDefault();
-        console.log(e);
         const tempTarget = <HTMLElement>e.target;
         if (tempTarget.hasAttribute('data-link')) {
             history.pushState('', '', window.location.origin + tempTarget.getAttribute('href'));
