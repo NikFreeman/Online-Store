@@ -42,8 +42,7 @@ filterBrand.append(brandHeader, brandList);
 filterCategory.append(categoryHeader, categoryList);
 
 const groupedByBrand: GroupeBy = {};
-export function groupeByBrand(data: Product[]): GroupeBy {
-    // const groupedBy: GroupeBy = {};
+function groupeByBrand(data: Product[]): GroupeBy {
     for (const item of data) {
         if (groupedByBrand[item.brand.toUpperCase()]) {
             groupedByBrand[item.brand.toUpperCase()].push(item);
@@ -55,7 +54,7 @@ export function groupeByBrand(data: Product[]): GroupeBy {
 }
 
 const groupedByCategory: GroupeBy = {};
-export function groupeByCategory(data: Product[]): GroupeBy {
+function groupeByCategory(data: Product[]): GroupeBy {
     for (const item of data) {
         if (groupedByCategory[item.category.toLowerCase()]) {
             groupedByCategory[item.category.toLowerCase()].push(item);
@@ -67,8 +66,10 @@ export function groupeByCategory(data: Product[]): GroupeBy {
 }
 
 const checkboxes: HTMLInputElement[] = [];
+const checkboxesBrand: HTMLInputElement[] = [];
+const checkboxesCategory: HTMLInputElement[] = [];
 
-export function fillBrandList(data: GroupeBy) {
+function fillBrandList(data: GroupeBy) {
     if (!brandList.firstElementChild) {
         for (const brand in data) {
             const checkboxCont: HTMLElement = document.createElement('div');
@@ -78,6 +79,7 @@ export function fillBrandList(data: GroupeBy) {
             checkboxIn.id = `${brand}`;
             checkboxIn.className = 'checkbox';
             checkboxes.push(checkboxIn);
+            checkboxesBrand.push(checkboxIn);
             const checkboxLbl: HTMLLabelElement = document.createElement('label');
             checkboxLbl.htmlFor = checkboxIn.id;
             checkboxLbl.textContent = `${brand}`;
@@ -105,6 +107,7 @@ function fillCategoryList(data: GroupeBy) {
             checkboxIn.id = `${category}`;
             checkboxIn.className = 'checkbox';
             checkboxes.push(checkboxIn);
+            checkboxesCategory.push(checkboxIn);
             const checkboxLbl: HTMLLabelElement = document.createElement('label');
             checkboxLbl.htmlFor = checkboxIn.id;
             checkboxLbl.textContent = `${category}`;
@@ -129,23 +132,28 @@ export async function start() {
     createCards(products);
 }
 
-let cardListOfCheckedCheckboxes: HTMLInputElement[] = checkboxes;
+let listOfCheckedCheckboxes: HTMLInputElement[][] = [checkboxesBrand, checkboxesCategory];
 
-export function getCheckedItems() {
-    cardListOfCheckedCheckboxes =
-        checkboxes.filter((input) => input.checked).length > 0
-            ? checkboxes.filter((input) => input.checked)
-            : checkboxes;
+function getCheckedItems() {
     cardsBlock.innerHTML = '';
-    for (const key in groupedByCategory) {
-        if (cardListOfCheckedCheckboxes.some((el) => el.id === key)) {
-            createCards(groupedByCategory[key]);
+    listOfCheckedCheckboxes = [checkboxesBrand, checkboxesCategory];
+    if (checkboxes.filter((input) => input.checked).length > 0) {
+        if (checkboxesBrand.filter((input) => input.checked).length > 0) {
+            listOfCheckedCheckboxes[0] = checkboxesBrand.filter((input) => input.checked);
         }
-    }
-    for (const key in groupedByBrand) {
-        if (cardListOfCheckedCheckboxes.some((el) => el.id === key)) {
-            createCards(groupedByBrand[key]);
+        if (checkboxesCategory.filter((input) => input.checked).length > 0) {
+            listOfCheckedCheckboxes[1] = checkboxesCategory.filter((input) => input.checked);
         }
+        const prodList: Product[] = products.filter((item) => {
+            return (
+                listOfCheckedCheckboxes[0].map((el) => el.id).includes(item.brand.toUpperCase()) &&
+                listOfCheckedCheckboxes[1].map((el) => el.id).includes(item.category.toLowerCase())
+            );
+        });
+        createCards(prodList);
+    } else {
+        listOfCheckedCheckboxes = [checkboxesBrand, checkboxesCategory];
+        createCards(products);
     }
 }
 
