@@ -2,18 +2,18 @@ import page404 from '../pages/page404';
 import testPage from '../pages/testPage';
 import testPageDetail from '../pages/testPage-details';
 import render from '../utils/render';
-
+const mountedTag = 'App';
 const routes = new Map();
 routes.set('/', testPage);
 routes.set('/product', testPage);
 routes.set('/product-detail/:id', testPageDetail);
 
-function routerHandler() {
+function routerHandler(): void {
     const routePath = parsePathName(window.location.pathname);
     if (routePath) {
-        render('App', routes.get(routePath.routePath)(routePath.param));
+        render(mountedTag, routes.get(routePath.routePath)(routePath.param));
     } else {
-        render('App', page404());
+        render(mountedTag, page404());
     }
 }
 
