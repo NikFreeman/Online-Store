@@ -41,6 +41,42 @@ filtersContainer.append(filterBrand, filterCategory);
 filterBrand.append(brandHeader, brandList);
 filterCategory.append(categoryHeader, categoryList);
 
+const sortAndSettings: HTMLElement = document.createElement('div');
+sortAndSettings.className = 'settings';
+
+const sortMethods: string[] = ['PriceUp', 'PriceDown', 'RatingUp', 'RatingDown'];
+
+let sortBtn: HTMLInputElement = document.createElement('input');
+let labelForSort: HTMLLabelElement = document.createElement('label');
+for (let i = 0; i < sortMethods.length; i++) {
+    sortBtn = document.createElement('input');
+    sortBtn.type = 'radio';
+    sortBtn.name = 'radio';
+    sortBtn.id = `sort-${i + 1}`;
+    sortBtn.value = sortMethods[i];
+    labelForSort = document.createElement('label');
+    labelForSort.htmlFor = sortBtn.id;
+    labelForSort.className = `sort-control sort-control__${i + 1}`;
+    labelForSort.textContent = `${sortMethods[i]}`;
+    sortAndSettings.append(sortBtn, labelForSort);
+}
+
+function sortItems(data: Product[]) {
+    const sortMethod: string | undefined = sortAndSettings.querySelector('input:checked')?.id;
+    switch (sortMethod) {
+        case 'sort-1':
+            return data.sort((a, b) => a.price - b.price);
+        case 'sort-2':
+            return data.sort((a, b) => b.price - a.price);
+        case 'sort-3':
+            return data.sort((a, b) => a.rating - b.rating);
+        case 'sort-4':
+            return data.sort((a, b) => b.rating - a.rating);
+        default:
+            return data;
+    }
+}
+
 const groupedByBrand: GroupeBy = {};
 function groupeByBrand(data: Product[]): GroupeBy {
     for (const item of data) {
@@ -135,7 +171,7 @@ export async function start() {
 let listOfCheckedCheckboxes: HTMLInputElement[][] = [checkboxesBrand, checkboxesCategory];
 
 function getCheckedItems() {
-    cardsBlock.innerHTML = '';
+    // cardsBlock.innerHTML = '';
     listOfCheckedCheckboxes = [checkboxesBrand, checkboxesCategory];
     if (checkboxes.filter((input) => input.checked).length > 0) {
         if (checkboxesBrand.filter((input) => input.checked).length > 0) {
@@ -159,12 +195,14 @@ function getCheckedItems() {
 
 brandList.addEventListener('change', getCheckedItems);
 categoryList.addEventListener('change', getCheckedItems);
+sortAndSettings.addEventListener('change', getCheckedItems);
 
 const cardsBlock: HTMLElement = document.createElement('div');
 cardsBlock.className = 'cards';
 
 export function createCards(data: Product[]) {
-    data.map((item) => {
+    cardsBlock.innerHTML = '';
+    sortItems(data).map((item) => {
         const card: HTMLElement = document.createElement('div');
         card.className = 'card';
         const discount: HTMLElement = document.createElement('div');
@@ -197,4 +235,4 @@ export function createCards(data: Product[]) {
     });
 }
 
-main.append(filtersContainer, cardsBlock);
+main.append(filtersContainer, sortAndSettings, cardsBlock);
