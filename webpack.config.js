@@ -2,6 +2,7 @@
 const path = require('path');
 const { merge } = require('webpack-merge');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CopyPlugin = require('copy-webpack-plugin');
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 //const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const EslintPlugin = require('eslint-webpack-plugin');
@@ -41,6 +42,7 @@ const baseConfig = {
         path: path.resolve(__dirname, 'dist'),
         assetModuleFilename: 'images/[name][ext]',
         clean: true,
+        publicPath: '/',
     },
     plugins: [
         new HtmlWebpackPlugin({
@@ -49,6 +51,9 @@ const baseConfig = {
         }),
         //new CleanWebpackPlugin(),
         new EslintPlugin({ extensions: 'ts' }),
+        new CopyPlugin({
+            patterns: [{ from: './src/assets/static', to: './' }],
+        }),
     ],
 };
 
