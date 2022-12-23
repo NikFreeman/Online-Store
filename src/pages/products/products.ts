@@ -2,8 +2,10 @@ import { ProductList, Product, GroupeBy } from '../../models/types';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const logo = require('../../assets/images/shopping-cart.svg');
 
+// query params
 const searchParams = new URLSearchParams(document.location.search);
 
+// get products from API
 let products: Product[] = [];
 export async function getList() {
     const res = await fetch('https://dummyjson.com/products?limit=100');
@@ -11,11 +13,13 @@ export async function getList() {
     return data;
 }
 
+// get list of all products as array
 export function getProductsList(data: ProductList) {
     products = data.products;
     return data.products;
 }
 
+// draw html elements for start page
 const main: HTMLElement = document.createElement('main');
 main.className = 'wrapper';
 document.body.append(main);
@@ -26,7 +30,7 @@ filtersContainer.className = 'filter';
 const filterBrand: HTMLElement = document.createElement('div');
 filterBrand.className = 'filter__brand filter__block';
 const brandHeader: HTMLElement = document.createElement('div');
-brandHeader.className = 'filter__brand-header';
+brandHeader.className = 'filter__brand-header filter__header';
 brandHeader.textContent = 'Brand';
 const brandList: HTMLElement = document.createElement('div');
 brandList.className = 'filter__list';
@@ -34,10 +38,12 @@ brandList.className = 'filter__list';
 const filterCategory: HTMLElement = document.createElement('div');
 filterCategory.className = 'filter__category filter__block';
 const categoryHeader: HTMLElement = document.createElement('div');
-categoryHeader.className = 'filter__category-header';
+categoryHeader.className = 'filter__category-header filter__header';
 categoryHeader.textContent = 'Category';
 const categoryList: HTMLElement = document.createElement('div');
 categoryList.className = 'filter__list';
+
+// dual ranges
 
 const filterRanges: HTMLElement = document.createElement('div');
 filterRanges.className = 'filter__ranges filter__block';
@@ -52,6 +58,24 @@ sliderFirstOne.type = 'range';
 sliderSecondOne.id = 'toPrice';
 sliderSecondOne.type = 'range';
 
+const valuePriceContainer: HTMLElement = document.createElement('div');
+valuePriceContainer.className = 'filter__values value__container';
+const valueMinPrice: HTMLElement = document.createElement('span');
+valueMinPrice.className = 'filter__min-value filter__value';
+const valueMaxPrice: HTMLElement = document.createElement('span');
+valueMaxPrice.className = 'filter__max-value filter__value';
+
+const rangeNameOne: HTMLElement = document.createElement('div');
+rangeNameOne.className = 'range__title filter__header';
+rangeNameOne.textContent = 'Price';
+
+const rangeValuesOne: HTMLElement = document.createElement('div');
+rangeValuesOne.className = 'range__values';
+const rangeValuePriceMin: HTMLElement = document.createElement('div');
+rangeValuePriceMin.className = 'range__value';
+const rangeValuePriceMax: HTMLElement = document.createElement('div');
+rangeValuePriceMax.className = 'range__value';
+
 const rangeContainerTwo: HTMLElement = document.createElement('div');
 rangeContainerTwo.className = 'filter__range range__container';
 const slidersControlTwo: HTMLElement = document.createElement('div');
@@ -63,17 +87,85 @@ sliderFirstTwo.type = 'range';
 sliderSecondTwo.id = 'toStock';
 sliderSecondTwo.type = 'range';
 
-filterRanges.append(rangeContainerOne, rangeContainerTwo);
-rangeContainerOne.append(slidersControlOne);
-slidersControlOne.append(sliderFirstOne, sliderSecondOne);
+const valueStockContainer: HTMLElement = document.createElement('div');
+valueStockContainer.className = 'filter__values value__container';
+const valueMinStock: HTMLElement = document.createElement('span');
+valueMinStock.className = 'filter__min-value filter__value';
+const valueMaxStock: HTMLElement = document.createElement('span');
+valueMaxStock.className = 'filter__max-value filter__value';
 
-rangeContainerTwo.append(slidersControlTwo);
+const rangeNameTwo: HTMLElement = document.createElement('div');
+rangeNameTwo.className = 'range__title filter__header';
+rangeNameTwo.textContent = 'Stock';
+
+const rangeValuesTwo: HTMLElement = document.createElement('div');
+rangeValuesTwo.className = 'range__values';
+const rangeValueStockMin: HTMLElement = document.createElement('div');
+rangeValueStockMin.className = 'range__value';
+const rangeValueStockMax: HTMLElement = document.createElement('div');
+rangeValueStockMax.className = 'range__value';
+
+filterRanges.append(rangeContainerOne, rangeContainerTwo);
+rangeContainerOne.append(rangeNameOne, slidersControlOne, valuePriceContainer);
+slidersControlOne.append(sliderFirstOne, sliderSecondOne);
+valuePriceContainer.append(valueMinPrice, valueMaxPrice);
+
+rangeContainerTwo.append(rangeNameTwo, slidersControlTwo, valueStockContainer);
 slidersControlTwo.append(sliderFirstTwo, sliderSecondTwo);
+valueStockContainer.append(valueMinStock, valueMaxStock);
 
 filtersContainer.append(filterBrand, filterCategory, filterRanges);
 filterBrand.append(brandHeader, brandList);
 filterCategory.append(categoryHeader, categoryList);
 
+class RangeSettings {
+    data: Product[];
+    constructor(data: Product[]) {
+        this.data = data;
+    }
+    minPrice() {
+        return this.data.reduce((min, prod) => (prod.price < min ? prod.price : min), this.data[0].price);
+    }
+    maxPrice() {
+        return this.data.reduce((max, prod) => (prod.price > max ? prod.price : max), this.data[0].price);
+    }
+    minStock() {
+        return this.data.reduce((min, prod) => (prod.stock < min ? prod.stock : min), this.data[0].stock);
+    }
+    maxStock() {
+        return this.data.reduce((max, prod) => (prod.stock > max ? prod.stock : max), this.data[0].stock);
+    }
+}
+
+function setRangeMinMax(data: Product[]) {
+    const settings = new RangeSettings(data);
+    sliderFirstOne.min = settings.minPrice().toString();
+    sliderFirstOne.max = settings.maxPrice().toString();
+    sliderSecondOne.min = settings.minPrice().toString();
+    sliderSecondOne.max = settings.maxPrice().toString();
+    sliderFirstTwo.min = settings.minStock().toString();
+    sliderFirstTwo.max = settings.maxStock().toString();
+    sliderSecondTwo.min = settings.minStock().toString();
+    sliderSecondTwo.max = settings.maxStock().toString();
+}
+
+function setRangeValues(data: Product[]) {
+    const currentSettings = new RangeSettings(data);
+    sliderFirstOne.value = currentSettings.minPrice().toString();
+    sliderSecondOne.value = currentSettings.maxPrice().toString();
+    // sliderFirstOne.max = sliderSecondOne.value;
+    // sliderSecondOne.min = sliderFirstOne.value;
+    valueMinPrice.textContent = sliderFirstOne.value;
+    valueMaxPrice.textContent = sliderSecondOne.value;
+    sliderFirstTwo.value = currentSettings.minStock().toString();
+    sliderSecondTwo.value = currentSettings.maxStock().toString();
+    // sliderFirstTwo.max = sliderSecondTwo.value;
+    // sliderSecondTwo.min = sliderFirstTwo.value;
+    valueMinStock.textContent = sliderFirstTwo.value;
+    valueMaxStock.textContent = sliderSecondTwo.value;
+}
+
+// sort elements
 const sortAndSettings: HTMLElement = document.createElement('div');
 sortAndSettings.className = 'settings';
 
@@ -217,6 +309,7 @@ export async function start() {
     await getList().then(getProductsList);
     fillBrandList(groupeByBrand(products));
     fillCategoryList(groupeByCategory(products));
+    setRangeMinMax(products);
     getCheckedItems();
 }
 
@@ -249,12 +342,14 @@ function getCheckedItems() {
         });
         window.history.replaceState(null, '', '?' + searchParams.toString());
         createCards(prodList);
+        setRangeValues(prodList);
     } else {
         listOfCheckedCheckboxes = [checkboxesBrand, checkboxesCategory];
         searchParams.delete('brand');
         searchParams.delete('category');
         window.history.replaceState(null, '', '?' + searchParams.toString());
         createCards(products);
+        setRangeValues(products);
     }
 }
 

@@ -45,8 +45,9 @@ button {
   padding: 10px;
 }
 
-.filter__brand-header,
-.filter__category-header {
+/* .filter__brand-header,
+.filter__category-header, */
+.filter__header {
   text-align: center;
   font-family: 'Geometria';
   font-style: normal;
@@ -84,12 +85,16 @@ button {
   display: flex;
   flex-direction: column;
   width: 80%;
-  margin: 10% auto;
+  margin: 5% auto;
+}
+
+.range__title {
+  margin-bottom: 1em;
 }
 
 .range__sliders {
   position: relative;
-  min-height: 50px;
+  min-height: 15px;
 }
 
 /* .form_control {
@@ -158,6 +163,11 @@ input[type="range"] {
 #fromStock {
   height: 0;
   z-index: 1;
+}
+
+.filter__values {
+  display: flex;
+  justify-content: space-between;
 }
 
 
