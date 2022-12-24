@@ -44,7 +44,6 @@ const categoryList: HTMLElement = document.createElement('div');
 categoryList.className = 'filter__list';
 
 // dual ranges
-
 const filterRanges: HTMLElement = document.createElement('div');
 filterRanges.className = 'filter__ranges filter__block';
 const rangeContainerOne: HTMLElement = document.createElement('div');
@@ -150,20 +149,46 @@ function setRangeMinMax(data: Product[]) {
 }
 
 function setRangeValues(data: Product[]) {
-    const currentSettings = new RangeSettings(data);
+    const currentSettings = new RangeSettings(getRangedItems(data));
     sliderFirstOne.value = currentSettings.minPrice().toString();
     sliderSecondOne.value = currentSettings.maxPrice().toString();
-    // sliderFirstOne.max = sliderSecondOne.value;
-    // sliderSecondOne.min = sliderFirstOne.value;
     valueMinPrice.textContent = sliderFirstOne.value;
     valueMaxPrice.textContent = sliderSecondOne.value;
     sliderFirstTwo.value = currentSettings.minStock().toString();
     sliderSecondTwo.value = currentSettings.maxStock().toString();
-    // sliderFirstTwo.max = sliderSecondTwo.value;
-    // sliderSecondTwo.min = sliderFirstTwo.value;
     valueMinStock.textContent = sliderFirstTwo.value;
     valueMaxStock.textContent = sliderSecondTwo.value;
 }
+
+function getRangeValues(e: Event) {
+    const target = e.target as HTMLInputElement;
+    const parent = target.parentElement as HTMLDivElement;
+    const sibling = parent.nextElementSibling as HTMLDivElement;
+    const firstChild = sibling.firstElementChild as HTMLSpanElement;
+    const lastChild = sibling.lastElementChild as HTMLSpanElement;
+    if (target.nextElementSibling) {
+        const range2Sibling = target.nextElementSibling as HTMLInputElement;
+        firstChild.textContent = target.value;
+        if (+target.value >= +range2Sibling.value) {
+            target.value = range2Sibling.value;
+            firstChild.textContent = target.value;
+        }
+        searchParams.set(target.id.slice(-5).toLowerCase(), `${target.value}↕${range2Sibling.value}`);
+        window.history.replaceState(null, '', '?' + searchParams.toString());
+    } else {
+        const range1Sibling = target.previousElementSibling as HTMLInputElement;
+        lastChild.textContent = target.value;
+        if (+target.value <= +range1Sibling.value) {
+            target.value = range1Sibling.value;
+            lastChild.textContent = target.value;
+        }
+        searchParams.set(target.id.slice(-5).toLowerCase(), `${range1Sibling.value}↕${target.value}`);
+        window.history.replaceState(null, '', '?' + searchParams.toString());
+    }
+    getCheckedItems();
+}
+
+filterRanges.addEventListener('input', getRangeValues);
 
 // sort elements
 const sortAndSettings: HTMLElement = document.createElement('div');
@@ -213,8 +238,8 @@ function sortItems(data: Product[]) {
     }
 }
 
-const groupedByBrand: GroupeBy = {};
 function groupeByBrand(data: Product[]): GroupeBy {
+    const groupedByBrand: GroupeBy = {};
     for (const item of data) {
         if (groupedByBrand[item.brand.toUpperCase()]) {
             groupedByBrand[item.brand.toUpperCase()].push(item);
@@ -225,8 +250,8 @@ function groupeByBrand(data: Product[]): GroupeBy {
     return groupedByBrand;
 }
 
-const groupedByCategory: GroupeBy = {};
 function groupeByCategory(data: Product[]): GroupeBy {
+    const groupedByCategory: GroupeBy = {};
     for (const item of data) {
         if (groupedByCategory[item.category.toLowerCase()]) {
             groupedByCategory[item.category.toLowerCase()].push(item);
@@ -241,6 +266,7 @@ const checkboxes: HTMLInputElement[] = [];
 const checkboxesBrand: HTMLInputElement[] = [];
 const checkboxesCategory: HTMLInputElement[] = [];
 
+// const prodCheckedList: Product[] = getCheckedItems();
 function fillBrandList(data: GroupeBy) {
     if (!brandList.firstElementChild) {
         const selectedBrands: string[] | undefined = searchParams.get('brand')?.split('↕');
@@ -265,7 +291,7 @@ function fillBrandList(data: GroupeBy) {
             checkboxLbl.append(checkmark);
             const count: HTMLElement = document.createElement('span');
             count.className = 'brand-count';
-            count.textContent = `(${data[brand].length})`;
+            count.textContent = `(${data[brand].length}/${data[brand].length})`;
             checkboxCont.append(checkboxIn, checkboxLbl, count);
             brandList.append(checkboxCont);
         }
@@ -313,6 +339,23 @@ export async function start() {
     getCheckedItems();
 }
 
+function getRangedItems(data: Product[]) {
+    const selectedPrice: string[] | undefined = searchParams.get('price')?.split('↕');
+    const selectedStock: string[] | undefined = searchParams.get('stock')?.split('↕');
+    let prodItems: Product[] = data;
+    if (selectedPrice) {
+        prodItems = data.filter(
+            (item) => item.price >= Number(selectedPrice[0]) && item.price <= Number(selectedPrice[1])
+        );
+    }
+    if (selectedStock) {
+        prodItems = prodItems.filter(
+            (item) => item.stock >= Number(selectedStock[0]) && item.stock <= Number(selectedStock[1])
+        );
+    }
+    return prodItems;
+}
+
 let listOfCheckedCheckboxes: HTMLInputElement[][] = [checkboxesBrand, checkboxesCategory];
 
 function getCheckedItems() {
@@ -334,7 +377,7 @@ function getCheckedItems() {
         } else {
             searchParams.delete('category');
         }
-        const prodList: Product[] = products.filter((item) => {
+        const prodList: Product[] = getRangedItems(products).filter((item) => {
             return (
                 listOfCheckedCheckboxes[0].map((el) => el.id).includes(item.brand.toUpperCase()) &&
                 listOfCheckedCheckboxes[1].map((el) => el.id).includes(item.category.toLowerCase())
@@ -343,19 +386,22 @@ function getCheckedItems() {
         window.history.replaceState(null, '', '?' + searchParams.toString());
         createCards(prodList);
         setRangeValues(prodList);
+        return prodList;
     } else {
         listOfCheckedCheckboxes = [checkboxesBrand, checkboxesCategory];
         searchParams.delete('brand');
         searchParams.delete('category');
         window.history.replaceState(null, '', '?' + searchParams.toString());
-        createCards(products);
+        createCards(getRangedItems(products));
         setRangeValues(products);
+        return products;
     }
 }
 
 brandList.addEventListener('change', getCheckedItems);
 categoryList.addEventListener('change', getCheckedItems);
 sortAndSettings.addEventListener('change', getCheckedItems);
+// filterRanges.addEventListener('input', getCheckedItems);
 
 const cardsBlock: HTMLElement = document.createElement('div');
 cardsBlock.className = 'cards';

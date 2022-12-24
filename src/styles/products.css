@@ -170,6 +170,14 @@ input[type="range"] {
   justify-content: space-between;
 }
 
+.filter__value {
+  font-family: 'Geometria';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 18px;
+}
+
 
 
 
