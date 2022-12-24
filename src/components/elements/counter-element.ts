@@ -16,7 +16,7 @@ const styles = `
     text-align: center;
     line-height: 20px;
     width: 25px;
-    height: 30px;
+    height: 20px;
     margin-left: 5px;
     margin-right: 5px;
     border: none;
@@ -34,7 +34,7 @@ const template = `<style>${styles}</style>
 <button id='counter-decrement'>+</button>
 </div>
 `;
-// We define an ES6 class that extends HTMLElement
+
 class CounterElement extends HTMLElement {
     counter: number;
     incrementButton: HTMLButtonElement | null;
@@ -45,25 +45,19 @@ class CounterElement extends HTMLElement {
     }
     constructor() {
         super();
-
-        // Initialise the counter value
         this.counter = 0;
         this.incrementButton = null;
         this.decrementButton = null;
         this.counterValue = null;
-        // We attach an open shadow root to the custom element
+
         const shadowRoot = this.attachShadow({ mode: 'open' });
 
-        // We provide the shadow root with some HTML
         shadowRoot.innerHTML = template;
-        // We can query the shadow root for internal elements
-        // in this case the button
         if (this.shadowRoot) {
             this.incrementButton = this.shadowRoot.querySelector('#counter-increment');
             this.decrementButton = this.shadowRoot.querySelector('#counter-decrement');
             this.counterValue = this.shadowRoot.querySelector('#counter-value');
         }
-        // We can bind an event which references one of the class methods
         if (this.incrementButton) {
             this.incrementButton.addEventListener('click', this.decrement.bind(this));
         }
@@ -82,7 +76,6 @@ class CounterElement extends HTMLElement {
         this.invalidate();
     }
 
-    // Call when the counter changes value
     invalidate() {
         if (this.counterValue) {
             if (this.counter < 0) this.counter = 0;
@@ -94,10 +87,12 @@ class CounterElement extends HTMLElement {
         if (oldVal !== newVal) {
             if (name === 'counter') {
                 this.counter = Number(newVal);
+                if (this.counterValue) this.counterValue.innerHTML = String(this.counter);
+                const event = new CustomEvent('counted', { bubbles: true, detail: this.counter });
+                this.dispatchEvent(event);
             }
         }
     }
 }
 
-// This is where the actual element is defined for use in the DOM
 customElements.define('counter-element', CounterElement);
