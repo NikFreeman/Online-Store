@@ -26,9 +26,12 @@ const styles = `
   .cart__item-title {
     grid-area: title;
   }
+
   .cart__item-amount {
     grid-area: amount;
+    font-weight: bold;
   }
+
   .cart__item-description {
     grid-area: description;
   }
@@ -39,6 +42,11 @@ const styles = `
     background: white;
     border-radius: 10px;
   } 
+  
+  .cart__item-close:hover {
+    color:red;
+  }
+
   .cart__item-count {
     grid-area: count;
     justify-self: end;
@@ -50,54 +58,76 @@ const styles = `
     border-radius: 10px;
   }`;
 
-const template = `
-<style>${styles}</style>
-<div class='cart__item'>
-  <div class='cart__item-thumbnail'>
-    <img class ='cart__item-image'>
+const template = document.createElement('template');
+template.innerHTML = `
+  <style>${styles}</style>
+  <div class='cart__item'>
+    <div class='cart__item-thumbnail'>
+      <img class ='cart__item-image'>
+    </div>
+    <h3 class='cart__item-title'><slot name='title'></slot></h3>
+    <p class='cart__item-description'><slot name='description'></slot></p>  
+    <p class='cart__item-amount'></p>
+      <button class='cart__item-close'>X</button>
+      <counter-element class='cart__item-count'></counter-element>
+      
   </div>
-  <h3 class='cart__item-title'><slot name='title'></slot></h3>
-  <p class='cart__item-description'>An apple mobile which is nothing like apple</p>  
-  <p class='cart__item-amount'>55455</p>
-    <button class='cart__item-close' >X</button>
-    <counter-element class='cart__item-count'></counter-element>
-    
-</div>
-<hr> `;
+  <hr> `;
 
 class CartItem extends HTMLElement {
     counter: CounterElement | null;
+    removeButton: HTMLButtonElement | null;
     imageThumbnail: HTMLImageElement | null;
+    amount: HTMLElement | null;
     static get observedAttributes() {
-        return ['count', 'id', 'src'];
+        return ['count', 'id', 'src', 'price'];
     }
+
     constructor() {
         super();
-        this.counter = null;
-        this.imageThumbnail = null;
-        const shadowRoot = this.attachShadow({ mode: 'open' });
-        shadowRoot.innerHTML = template;
 
+        const shadowRoot = this.attachShadow({ mode: 'open' });
+        shadowRoot.appendChild(template.content.cloneNode(true));
         if (this.shadowRoot) {
             this.counter = this.shadowRoot.querySelector('counter-element');
             if (this.counter) {
                 this.counter.addEventListener('counted', this.countedCount.bind(this));
             }
             this.imageThumbnail = this.shadowRoot.querySelector('.cart__item-image');
+            this.removeButton = this.shadowRoot.querySelector('.cart__item-close');
+            if (this.removeButton) {
+                this.removeButton.addEventListener('click', this.handlerRemoveButton.bind(this));
+            }
+            this.amount = this.shadowRoot.querySelector('.cart__item-amount');
+        } else {
+            this.counter = null;
+            this.removeButton = null;
+            this.imageThumbnail = null;
+            this.amount = null;
         }
     }
+
     countedCount(e: Event) {
         this.setAttribute('count', String((e as CustomEvent).detail));
     }
+
+    handlerRemoveButton() {
+        const removeEvent = new CustomEvent('remove-item', { bubbles: true, detail: this.getAttribute('id') });
+        console.log(removeEvent);
+        this.dispatchEvent(removeEvent);
+    }
+
     attributeChangedCallback(name: string, oldVal: string, newVal: string) {
         if (oldVal !== newVal) {
             if (name === 'count') {
                 if (this.counter) {
                     this.counter.setAttribute('counter', String(newVal));
+                    this.calculateAmount();
                 }
             }
         }
     }
+
     connectedCallback() {
         const countTemp = this.getAttribute('count');
         const src = this.getAttribute('src');
@@ -106,6 +136,14 @@ class CartItem extends HTMLElement {
         }
         if (src && this.imageThumbnail) {
             this.imageThumbnail.src = src;
+        }
+        this.calculateAmount();
+    }
+    calculateAmount() {
+        const price = Number(this.getAttribute('price'));
+        const count = Number(this.getAttribute('Count'));
+        if (this.amount) {
+            this.amount.textContent = String(price * count);
         }
     }
 }

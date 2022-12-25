@@ -22,12 +22,16 @@ const styles = `
     border: none;
     background: none;
 }
+#counter-increment:hover, #counter-decrement:hover {
+color: black;
+}
 
 #counter-value {
     font-weight: bold;
 }
 `;
-const template = `<style>${styles}</style>            
+const template = document.createElement('template');
+template.innerHTML = `<style>${styles}</style>            
 <div class='buttons'>
 <button id='counter-increment'>-</button>
 <span id='counter-value'> 0 </span>
@@ -51,8 +55,8 @@ class CounterElement extends HTMLElement {
         this.counterValue = null;
 
         const shadowRoot = this.attachShadow({ mode: 'open' });
+        shadowRoot.appendChild(template.content.cloneNode(true));
 
-        shadowRoot.innerHTML = template;
         if (this.shadowRoot) {
             this.incrementButton = this.shadowRoot.querySelector('#counter-increment');
             this.decrementButton = this.shadowRoot.querySelector('#counter-decrement');
