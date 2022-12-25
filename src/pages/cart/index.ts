@@ -1,6 +1,8 @@
 import '../../components/elements/cart-item';
 import StorageBox from '../../utils/storage';
 import CartController from '../../components/controller/cartController';
+import { ProductsController } from '../../components/controller/productsController';
+
 //тестовое значение корзины
 const cartTest = new CartController();
 cartTest.addProduct(3, 1, 100);
@@ -9,12 +11,14 @@ cartTest.addProduct(26, 5, 112);
 cartTest.addProduct(78, 6, 214);
 cartTest.addProduct(34, 2, 657);
 StorageBox.setStorage('cart', JSON.stringify(cartTest));
+
 //------
 
 const storage = StorageBox.getStorage('cart');
 const tempArray = storage ? JSON.parse(storage) : [];
 const cart = new CartController(tempArray);
 
+console.log(ProductsController.getProductDetails(1));
 console.log(cart);
 function pageCart() {
     const counts = `<div>

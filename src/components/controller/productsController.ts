@@ -1,27 +1,19 @@
-import { Product } from '../../models/Product';
+//import { Product } from '../../models/Product';
 
-export class Products {
-    public products: Product[];
-    constructor() {
-        this.products = [];
-    }
+export class ProductsController {
+    // setProducts(arr: Product[]) {
+    //     this.products = arr;
+    // }
 
-    setProducts(arr: Product[]) {
-        this.products = arr;
-    }
-
-    getProduct() {
-        return this.products;
-    }
-
-    isProduct(id: number) {
-        return this.products.findIndex((elem) => (elem.id = id)) !== -1;
-    }
-
-    getProductDetails(id: number) {
-        const index = this.products.findIndex((elem) => (elem.id = id));
-        if (index !== -1) {
-            return this.products[index];
-        }
+    static async getProductDetails(id: number) {
+        const urlBase = 'https://dummyjson.com/products/';
+        const url = urlBase + String(id);
+        const res = await fetch(url);
+        const data = await res.json();
+        return data;
+        // const index = this.products.findIndex((elem) => (elem.id = id));
+        // if (index !== -1) {
+        //     return this.products[index];
+        // }
     }
 }
