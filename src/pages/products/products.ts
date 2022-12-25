@@ -43,6 +43,130 @@ categoryHeader.textContent = 'Category';
 const categoryList: HTMLElement = document.createElement('div');
 categoryList.className = 'filter__list';
 
+function groupeByBrand(data: Product[]): GroupeBy {
+    const groupedByBrand: GroupeBy = {};
+    for (const item of data) {
+        if (groupedByBrand[item.brand.toUpperCase()]) {
+            groupedByBrand[item.brand.toUpperCase()].push(item);
+        } else {
+            groupedByBrand[item.brand.toUpperCase()] = [item];
+        }
+    }
+    return groupedByBrand;
+}
+
+function groupeByCategory(data: Product[]): GroupeBy {
+    const groupedByCategory: GroupeBy = {};
+    for (const item of data) {
+        if (groupedByCategory[item.category.toLowerCase()]) {
+            groupedByCategory[item.category.toLowerCase()].push(item);
+        } else {
+            groupedByCategory[item.category.toLowerCase()] = [item];
+        }
+    }
+    return groupedByCategory;
+}
+
+const checkboxes: HTMLInputElement[] = [];
+const checkboxesBrand: HTMLInputElement[] = [];
+const checkboxesCategory: HTMLInputElement[] = [];
+
+function fillBrandList(data: GroupeBy) {
+    if (!brandList.firstElementChild) {
+        const selectedBrands: string[] | undefined = searchParams.get('brand')?.split('↕');
+        for (const brand in data) {
+            const checkboxCont: HTMLElement = document.createElement('div');
+            checkboxCont.className = 'checkbox-line';
+            const checkboxIn: HTMLInputElement = document.createElement('input');
+            checkboxIn.type = 'checkbox';
+            checkboxIn.id = `${brand}`;
+            checkboxIn.className = 'checkbox';
+            if (selectedBrands?.includes(brand.toUpperCase())) {
+                checkboxIn.checked = true;
+            }
+            checkboxes.push(checkboxIn);
+            checkboxesBrand.push(checkboxIn);
+            const checkboxLbl: HTMLLabelElement = document.createElement('label');
+            checkboxLbl.htmlFor = checkboxIn.id;
+            checkboxLbl.textContent = `${brand}`;
+            checkboxLbl.className = 'label';
+            const checkmark: HTMLElement = document.createElement('span');
+            checkmark.className = 'checkmark';
+            checkboxLbl.append(checkmark);
+            const restCount: HTMLElement = document.createElement('span');
+            restCount.className = 'brand__rest-count items-count';
+            restCount.id = `brand-${brand}`;
+            restCount.textContent = `(${data[brand].length}`;
+            const count: HTMLElement = document.createElement('span');
+            count.className = 'brand-count items-count';
+            count.textContent = `/${data[brand].length})`;
+            checkboxCont.append(checkboxIn, checkboxLbl, restCount, count);
+            brandList.append(checkboxCont);
+        }
+    }
+    return data;
+}
+
+function fillCategoryList(data: GroupeBy) {
+    if (!categoryList.firstElementChild) {
+        const selectedCategories: string[] | undefined = searchParams.get('category')?.split('↕');
+        for (const category in data) {
+            const checkboxCont: HTMLElement = document.createElement('div');
+            checkboxCont.className = 'checkbox-line';
+            const checkboxIn: HTMLInputElement = document.createElement('input');
+            checkboxIn.type = 'checkbox';
+            checkboxIn.id = `${category}`;
+            checkboxIn.className = 'checkbox';
+            if (selectedCategories?.includes(category.toLowerCase())) {
+                checkboxIn.checked = true;
+            }
+            checkboxes.push(checkboxIn);
+            checkboxesCategory.push(checkboxIn);
+            const checkboxLbl: HTMLLabelElement = document.createElement('label');
+            checkboxLbl.htmlFor = checkboxIn.id;
+            checkboxLbl.textContent = `${category}`;
+            checkboxLbl.className = 'label';
+            const checkmark: HTMLElement = document.createElement('span');
+            checkmark.className = 'checkmark';
+            checkboxLbl.append(checkmark);
+            const restCount: HTMLElement = document.createElement('span');
+            restCount.className = 'category__rest-count items-count';
+            restCount.id = `category-${category}`;
+            restCount.textContent = `(${data[category].length}`;
+            const count: HTMLElement = document.createElement('span');
+            count.className = 'brand-count items-count';
+            count.textContent = `/${data[category].length})`;
+            checkboxCont.append(checkboxIn, checkboxLbl, restCount, count);
+            categoryList.append(checkboxCont);
+        }
+    }
+    return data;
+}
+
+function fillRestCountBrand(data: Product[]) {
+    const arrRestCount = filterBrand.querySelectorAll('.brand__rest-count');
+    const restBrands = groupeByBrand(data);
+    arrRestCount.forEach((el) => {
+        if (restBrands[el.id.slice(6)]) {
+            el.textContent = `(${restBrands[el.id.slice(6)].length}`;
+        } else {
+            el.textContent = '(0';
+        }
+    });
+}
+
+function fillRestCountCategory(data: Product[]) {
+    const arrRestCount = filterCategory.querySelectorAll('.category__rest-count');
+    const restCategories = groupeByCategory(data);
+    arrRestCount.forEach((el) => {
+        if (restCategories[el.id.slice(9)]) {
+            el.textContent = `(${restCategories[el.id.slice(9)].length}`;
+        } else {
+            el.textContent = '(0';
+        }
+    });
+}
+
 // dual ranges
 const filterRanges: HTMLElement = document.createElement('div');
 filterRanges.className = 'filter__ranges filter__block';
@@ -193,6 +317,11 @@ filterRanges.addEventListener('input', getRangeValues);
 // sort elements
 const sortAndSettings: HTMLElement = document.createElement('div');
 sortAndSettings.className = 'settings';
+const sortContainer: HTMLElement = document.createElement('div');
+sortContainer.className = 'settings__sort';
+const sizeContainer: HTMLElement = document.createElement('div');
+sizeContainer.className = 'settings__size';
+sortAndSettings.append(sortContainer, sizeContainer);
 
 const sortMethods: string[] = ['PriceUp', 'PriceDown', 'RatingUp', 'RatingDown'];
 
@@ -211,11 +340,11 @@ for (let i = 0; i < sortMethods.length; i++) {
     labelForSort.htmlFor = sortBtn.id;
     labelForSort.className = `sort-control sort-control__${i + 1}`;
     labelForSort.textContent = `${sortMethods[i]}`;
-    sortAndSettings.append(sortBtn, labelForSort);
+    sortContainer.append(sortBtn, labelForSort);
 }
 
 function sortItems(data: Product[]) {
-    const sortMethod: string | undefined = sortAndSettings.querySelector('input:checked')?.id;
+    const sortMethod: string | undefined = sortContainer.querySelector('input:checked')?.id;
     switch (sortMethod) {
         case 'sort-1':
             searchParams.set('sort', '1');
@@ -238,98 +367,46 @@ function sortItems(data: Product[]) {
     }
 }
 
-function groupeByBrand(data: Product[]): GroupeBy {
-    const groupedByBrand: GroupeBy = {};
-    for (const item of data) {
-        if (groupedByBrand[item.brand.toUpperCase()]) {
-            groupedByBrand[item.brand.toUpperCase()].push(item);
-        } else {
-            groupedByBrand[item.brand.toUpperCase()] = [item];
-        }
+// cards size change
+const sizeMethods: string[] = ['Small', 'Large'];
+
+sizeMethods.forEach((size) => {
+    const sizeBtn: HTMLInputElement = document.createElement('input');
+    sizeBtn.type = 'radio';
+    sizeBtn.name = 'radio';
+    sizeBtn.id = `size-${size.toLowerCase()}`;
+    if (searchParams.get('size') === size.toLowerCase()) {
+        sizeBtn.checked = true;
+    } else if (size === 'Large') {
+        sizeBtn.checked = true;
     }
-    return groupedByBrand;
+    sizeBtn.value = size;
+    const labelForSize: HTMLLabelElement = document.createElement('label');
+    labelForSize.htmlFor = sizeBtn.id;
+    labelForSize.className = `size-control size-control__${size.toLowerCase()}`;
+    labelForSize.textContent = `${size}`;
+    sizeContainer.append(sizeBtn, labelForSize);
+});
+
+function sizeItems() {
+    const sizeMethod: string | undefined = sizeContainer.querySelector('input:checked')?.id;
+    switch (sizeMethod) {
+        case 'size-small':
+            searchParams.set('size', 'small');
+            window.history.replaceState(null, '', '?' + searchParams.toString());
+            document.documentElement.style.setProperty('--cards-multiplier', '1.5');
+            break;
+        case 'size-large':
+            searchParams.set('size', 'large');
+            window.history.replaceState(null, '', '?' + searchParams.toString());
+            document.documentElement.style.setProperty('--cards-multiplier', '1');
+            break;
+        default:
+            document.documentElement.style.setProperty('--cards-multiplier', '1');
+    }
 }
 
-function groupeByCategory(data: Product[]): GroupeBy {
-    const groupedByCategory: GroupeBy = {};
-    for (const item of data) {
-        if (groupedByCategory[item.category.toLowerCase()]) {
-            groupedByCategory[item.category.toLowerCase()].push(item);
-        } else {
-            groupedByCategory[item.category.toLowerCase()] = [item];
-        }
-    }
-    return groupedByCategory;
-}
-
-const checkboxes: HTMLInputElement[] = [];
-const checkboxesBrand: HTMLInputElement[] = [];
-const checkboxesCategory: HTMLInputElement[] = [];
-
-// const prodCheckedList: Product[] = getCheckedItems();
-function fillBrandList(data: GroupeBy) {
-    if (!brandList.firstElementChild) {
-        const selectedBrands: string[] | undefined = searchParams.get('brand')?.split('↕');
-        for (const brand in data) {
-            const checkboxCont: HTMLElement = document.createElement('div');
-            checkboxCont.className = 'checkbox-line';
-            const checkboxIn: HTMLInputElement = document.createElement('input');
-            checkboxIn.type = 'checkbox';
-            checkboxIn.id = `${brand}`;
-            checkboxIn.className = 'checkbox';
-            if (selectedBrands?.includes(brand.toUpperCase())) {
-                checkboxIn.checked = true;
-            }
-            checkboxes.push(checkboxIn);
-            checkboxesBrand.push(checkboxIn);
-            const checkboxLbl: HTMLLabelElement = document.createElement('label');
-            checkboxLbl.htmlFor = checkboxIn.id;
-            checkboxLbl.textContent = `${brand}`;
-            checkboxLbl.className = 'label';
-            const checkmark: HTMLElement = document.createElement('span');
-            checkmark.className = 'checkmark';
-            checkboxLbl.append(checkmark);
-            const count: HTMLElement = document.createElement('span');
-            count.className = 'brand-count';
-            count.textContent = `(${data[brand].length}/${data[brand].length})`;
-            checkboxCont.append(checkboxIn, checkboxLbl, count);
-            brandList.append(checkboxCont);
-        }
-    }
-    return data;
-}
-
-function fillCategoryList(data: GroupeBy) {
-    if (!categoryList.firstElementChild) {
-        const selectedCategories: string[] | undefined = searchParams.get('category')?.split('↕');
-        for (const category in data) {
-            const checkboxCont: HTMLElement = document.createElement('div');
-            checkboxCont.className = 'checkbox-line';
-            const checkboxIn: HTMLInputElement = document.createElement('input');
-            checkboxIn.type = 'checkbox';
-            checkboxIn.id = `${category}`;
-            checkboxIn.className = 'checkbox';
-            if (selectedCategories?.includes(category.toLowerCase())) {
-                checkboxIn.checked = true;
-            }
-            checkboxes.push(checkboxIn);
-            checkboxesCategory.push(checkboxIn);
-            const checkboxLbl: HTMLLabelElement = document.createElement('label');
-            checkboxLbl.htmlFor = checkboxIn.id;
-            checkboxLbl.textContent = `${category}`;
-            checkboxLbl.className = 'label';
-            const checkmark: HTMLElement = document.createElement('span');
-            checkmark.className = 'checkmark';
-            checkboxLbl.append(checkmark);
-            const count: HTMLElement = document.createElement('span');
-            count.className = 'brand-count';
-            count.textContent = `(${data[category].length})`;
-            checkboxCont.append(checkboxIn, checkboxLbl, count);
-            categoryList.append(checkboxCont);
-        }
-    }
-    return data;
-}
+sizeContainer.addEventListener('change', sizeItems);
 
 export async function start() {
     await getList().then(getProductsList);
@@ -384,6 +461,8 @@ function getCheckedItems() {
             );
         });
         window.history.replaceState(null, '', '?' + searchParams.toString());
+        fillRestCountBrand(prodList);
+        fillRestCountCategory(prodList);
         createCards(prodList);
         setRangeValues(prodList);
         return prodList;
@@ -392,6 +471,8 @@ function getCheckedItems() {
         searchParams.delete('brand');
         searchParams.delete('category');
         window.history.replaceState(null, '', '?' + searchParams.toString());
+        fillRestCountBrand(getRangedItems(products));
+        fillRestCountCategory(getRangedItems(products));
         createCards(getRangedItems(products));
         setRangeValues(products);
         return products;
@@ -400,7 +481,7 @@ function getCheckedItems() {
 
 brandList.addEventListener('change', getCheckedItems);
 categoryList.addEventListener('change', getCheckedItems);
-sortAndSettings.addEventListener('change', getCheckedItems);
+sortContainer.addEventListener('change', getCheckedItems);
 // filterRanges.addEventListener('input', getCheckedItems);
 
 const cardsBlock: HTMLElement = document.createElement('div');
@@ -426,7 +507,7 @@ export function createCards(data: Product[]) {
         const btnsWrapper: HTMLElement = document.createElement('div');
         btnsWrapper.className = 'card__btns';
         const addBtn: HTMLElement = document.createElement('button');
-        addBtn.className = 'card__add-btn';
+        addBtn.className = 'card__add-btn card__btn';
         const cartIcon: HTMLImageElement = document.createElement('img');
         cartIcon.src = logo;
         cartIcon.alt = 'cart';
@@ -436,12 +517,15 @@ export function createCards(data: Product[]) {
         cartText.textContent = 'add';
         addBtn.append(cartIcon, cartText);
         const detailsBtn: HTMLElement = document.createElement('button');
-        detailsBtn.className = 'card__detail-btn';
+        detailsBtn.className = 'card__detail-btn card__btn';
         detailsBtn.textContent = 'details';
         btnsWrapper.append(addBtn, detailsBtn);
         card.append(discount, title, cardImg, price, btnsWrapper);
         cardsBlock.append(card);
     });
+    if (cardsBlock.innerHTML === '') {
+        cardsBlock.innerHTML = '<span class="cards-text">No products found</span>';
+    }
 }
 
 main.append(filtersContainer, sortAndSettings, cardsBlock);
