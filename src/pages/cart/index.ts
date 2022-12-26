@@ -57,11 +57,8 @@ async function pageCart() {
 }
 function removeItem(e: Event) {
     const id = Number((e as CustomEvent).detail);
-    console.log(id);
-    console.log(cart);
     cart.removeProduct(id);
-    console.log(cart);
-    StorageBox.setStorage('cart', JSON.stringify(cartTest.getCart()));
+    StorageBox.setStorage('cart', JSON.stringify(cart.getCart()));
     pageCart();
 }
 
