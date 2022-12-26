@@ -67,7 +67,7 @@ template.innerHTML = `
     </div>
     <h3 class='cart__item-title'><slot name='title'></slot></h3>
     <p class='cart__item-description'><slot name='description'></slot></p>  
-    <p>Amount: <span class='cart__item-amount'></span></p>
+    <p class = 'cart__item-amount'>Amount: <span class='cart__item-amount'></span></p>
       <button class='cart__item-close'>X</button>
       <counter-element class='cart__item-count'></counter-element>
       

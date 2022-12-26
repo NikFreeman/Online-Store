@@ -1,5 +1,4 @@
 import '../../components/elements/cart-item';
-import StorageBox from '../../utils/storage';
 import CartController from '../../components/controller/cartController';
 import { ProductsController } from '../../components/controller/productsController';
 import { Product } from './../../models/Product';
@@ -11,20 +10,19 @@ cartTest.addProduct(23, 1, 110);
 cartTest.addProduct(26, 5, 112);
 cartTest.addProduct(78, 6, 214);
 cartTest.addProduct(34, 2, 657);
-StorageBox.setStorage('cart', JSON.stringify(cartTest.getCart()));
 
 //------
-const storage = StorageBox.getStorage('cart');
-const cartArray = storage ? JSON.parse(storage) : [];
-const cart = new CartController(cartArray);
+
+const cart = new CartController();
 
 function renderItem(product: Product, count: number, price: number) {
     const template = document.createElement('template');
-    template.innerHTML = `<div>
-    <cart-item src=${product.thumbnail} count=${count} price =${price} id=${product.id} stock=${product.stock}>
-     <span slot='title'>${product.title}</span>
-     <span slot='description'>${product.description}</span>
-    </cart-item>    
+    template.innerHTML = `
+    <div>
+      <cart-item src=${product.thumbnail} count=${count} price =${price} id=${product.id} stock=${product.stock}>
+        <span slot='title'>${product.title}</span>
+        <span slot='description'>${product.description}</span>
+      </cart-item>    
   </div>`;
     return template;
 }
@@ -58,7 +56,6 @@ async function pageCart() {
 function removeItem(e: Event) {
     const id = Number((e as CustomEvent).detail);
     cart.removeProduct(id);
-    StorageBox.setStorage('cart', JSON.stringify(cart.getCart()));
     pageCart();
 }
 

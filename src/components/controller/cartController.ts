@@ -1,27 +1,27 @@
 import Cart from '../../models/Cart/Cart';
 import ErrorMessage from '../../models/error-message';
+import StorageBox from '../../utils/storage';
 class CartController {
     public cart: Cart[];
-    constructor(arr = []) {
+    constructor() {
+        const storage = StorageBox.getStorage('cart');
+        const arr = storage ? JSON.parse(storage) : [];
         this.cart = arr;
     }
     addProduct(id: number, count = 1, price: number) {
-        // const addIndex = this.indexProduct(id);
-        // if (addIndex === -1) {
         const product: Cart = {
             id: id,
             count: count,
             price: price,
         };
         this.cart.push(product);
-        // } else {
-        //     this.addCountProduct(id, count);
-        // }
+        StorageBox.setStorage('cart', JSON.stringify(this.cart));
     }
     removeProduct(id: number) {
         const removeIndex = this.indexProduct(id);
         if (removeIndex !== -1) {
-            return this.cart.splice(removeIndex, 1);
+            this.cart.splice(removeIndex, 1);
+            StorageBox.setStorage('cart', JSON.stringify(this.cart));
         }
         return [];
     }
@@ -35,6 +35,7 @@ class CartController {
         const index = this.indexProduct(id);
         if (index !== -1) {
             this.cart[index].count += count;
+            StorageBox.setStorage('cart', JSON.stringify(this.cart));
         } else {
             throw new Error(ErrorMessage.notProductInCart);
         }
@@ -44,6 +45,7 @@ class CartController {
         const index = this.indexProduct(id);
         if (index !== -1) {
             this.cart[index].count -= count;
+            StorageBox.setStorage('cart', JSON.stringify(this.cart));
             if (this.cart[index].count <= 0) {
                 this.removeProduct(id);
             }
