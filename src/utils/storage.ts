@@ -1,9 +1,13 @@
+import Cart from '../models/Cart/Cart';
+
 class StorageBox {
-    static setStorage(key: string, value: string) {
-        localStorage.setItem(key, value);
+    static key = 'cart';
+    static setStorage(value: Cart[]) {
+        localStorage.setItem(StorageBox.key, JSON.stringify(value));
     }
-    static getStorage(key: string) {
-        return localStorage.getItem(key);
+    static getStorage() {
+        const storage = localStorage.getItem(StorageBox.key);
+        return storage ? JSON.parse(storage) : [];
     }
 }
 export default StorageBox;

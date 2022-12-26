@@ -96,7 +96,7 @@ class CartItem extends HTMLElement {
             this.imageThumbnail = this.shadowRoot.querySelector('.cart__item-image');
             this.removeButton = this.shadowRoot.querySelector('.cart__item-close');
             if (this.removeButton) {
-                this.removeButton.addEventListener('click', this.handlerRemoveButton.bind(this));
+                this.removeButton.addEventListener('click', this.handleRemoveButton.bind(this));
             }
             this.amount = this.shadowRoot.querySelector('.cart__item-amount');
         } else {
@@ -115,11 +115,11 @@ class CartItem extends HTMLElement {
         }
 
         if (count === 0) {
-            this.handlerRemoveButton();
+            this.handleRemoveButton();
         }
     }
 
-    handlerRemoveButton() {
+    handleRemoveButton() {
         const removeEvent = new CustomEvent('remove-item', { bubbles: true, detail: this.getAttribute('id') });
         this.dispatchEvent(removeEvent);
     }
@@ -148,7 +148,7 @@ class CartItem extends HTMLElement {
     }
     calculateAmount() {
         const price = Number(this.getAttribute('price'));
-        const count = Number(this.getAttribute('Count'));
+        const count = Number(this.getAttribute('count'));
         if (this.amount) {
             this.amount.textContent = String(price * count);
         }

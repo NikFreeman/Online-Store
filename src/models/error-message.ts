@@ -1,5 +1,5 @@
 enum ErrorMessage {
-    notProductInCart = 'Product not in cart',
+    PRODUCT_NOT_IN_CART = 'Product not in cart',
 }
 
 export default ErrorMessage;
