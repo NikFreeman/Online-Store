@@ -1,6 +1,6 @@
-import { getList, getProductsList, start } from './pages/products/products';
+import { start } from './pages/products/products';
 import './style.css';
 
 console.log('Online-Store');
-getList().then(getProductsList);
+// getList().then(getProductsList);
 start();

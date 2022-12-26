@@ -1,4 +1,5 @@
 import { ProductList, Product, GroupeBy } from '../../models/types';
+import { groupeByBrand, groupeByCategory } from '../../utils/grouping';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const logo = require('../../assets/images/shopping-cart.svg');
 
@@ -42,30 +43,6 @@ categoryHeader.className = 'filter__category-header filter__header';
 categoryHeader.textContent = 'Category';
 const categoryList: HTMLElement = document.createElement('div');
 categoryList.className = 'filter__list';
-
-function groupeByBrand(data: Product[]): GroupeBy {
-    const groupedByBrand: GroupeBy = {};
-    for (const item of data) {
-        if (groupedByBrand[item.brand.toUpperCase()]) {
-            groupedByBrand[item.brand.toUpperCase()].push(item);
-        } else {
-            groupedByBrand[item.brand.toUpperCase()] = [item];
-        }
-    }
-    return groupedByBrand;
-}
-
-function groupeByCategory(data: Product[]): GroupeBy {
-    const groupedByCategory: GroupeBy = {};
-    for (const item of data) {
-        if (groupedByCategory[item.category.toLowerCase()]) {
-            groupedByCategory[item.category.toLowerCase()].push(item);
-        } else {
-            groupedByCategory[item.category.toLowerCase()] = [item];
-        }
-    }
-    return groupedByCategory;
-}
 
 const checkboxes: HTMLInputElement[] = [];
 const checkboxesBrand: HTMLInputElement[] = [];
@@ -264,12 +241,12 @@ function setRangeMinMax(data: Product[]) {
     const settings = new RangeSettings(data);
     sliderFirstOne.min = settings.minPrice().toString();
     sliderFirstOne.max = settings.maxPrice().toString();
-    sliderSecondOne.min = settings.minPrice().toString();
-    sliderSecondOne.max = settings.maxPrice().toString();
+    sliderSecondOne.min = sliderFirstOne.min;
+    sliderSecondOne.max = sliderFirstOne.max;
     sliderFirstTwo.min = settings.minStock().toString();
     sliderFirstTwo.max = settings.maxStock().toString();
-    sliderSecondTwo.min = settings.minStock().toString();
-    sliderSecondTwo.max = settings.maxStock().toString();
+    sliderSecondTwo.min = sliderFirstTwo.min;
+    sliderSecondTwo.max = sliderFirstTwo.max;
 }
 
 function setRangeValues(data: Product[]) {
@@ -321,7 +298,9 @@ const sortContainer: HTMLElement = document.createElement('div');
 sortContainer.className = 'settings__sort';
 const sizeContainer: HTMLElement = document.createElement('div');
 sizeContainer.className = 'settings__size';
-sortAndSettings.append(sortContainer, sizeContainer);
+const foundProducts: HTMLElement = document.createElement('div');
+foundProducts.className = 'settings__found';
+sortAndSettings.append(sortContainer, foundProducts, sizeContainer);
 
 const sortMethods: string[] = ['PriceUp', 'PriceDown', 'RatingUp', 'RatingDown'];
 
@@ -377,8 +356,6 @@ sizeMethods.forEach((size) => {
     sizeBtn.id = `size-${size.toLowerCase()}`;
     if (searchParams.get('size') === size.toLowerCase()) {
         sizeBtn.checked = true;
-    } else if (size === 'Large') {
-        sizeBtn.checked = true;
     }
     sizeBtn.value = size;
     const labelForSize: HTMLLabelElement = document.createElement('label');
@@ -414,6 +391,7 @@ export async function start() {
     fillCategoryList(groupeByCategory(products));
     setRangeMinMax(products);
     getCheckedItems();
+    sizeItems();
 }
 
 function getRangedItems(data: Product[]) {
@@ -523,6 +501,7 @@ export function createCards(data: Product[]) {
         card.append(discount, title, cardImg, price, btnsWrapper);
         cardsBlock.append(card);
     });
+    foundProducts.textContent = `Found: ${data.length}`;
     if (cardsBlock.innerHTML === '') {
         cardsBlock.innerHTML = '<span class="cards-text">No products found</span>';
     }

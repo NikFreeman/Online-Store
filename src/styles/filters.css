@@ -1,0 +1,77 @@
+.filter {
+  display: flex;
+  gap: var(--gap-cards);
+  background: #FFFFFF;
+  box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.25);
+  border-radius: 10px;
+  margin: 20px 0;
+  width: 100%;
+}
+
+.filter__block {
+  display: flex;
+  flex-direction: column;
+  width: calc((100% - var(--gap-cards) * 2) / 3);
+  padding: 10px;
+}
+
+.filter__header {
+  text-align: center;
+  font-family: 'Geometria';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 23px;
+  text-transform: uppercase;
+  color: #000000;
+}
+
+.filter__list {
+  height: 300px;
+  overflow-y: scroll;
+}
+
+.filter__list::-webkit-scrollbar-thumb {
+  background: #D9D9D9;
+  border-radius: 3px;
+}
+
+.filter__list::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(0deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), #D9D9D9; 
+}
+
+.filter__list::-webkit-scrollbar {
+  width: 10px;
+  background: #ededed;
+  border-radius: 3px;
+}
+
+.filter__values {
+  display: flex;
+  justify-content: space-between;
+}
+
+.filter__value {
+  font-family: 'Geometria';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 18px;
+}
+
+
+.range__container {
+  display: flex;
+  flex-direction: column;
+  width: 80%;
+  margin: 5% auto;
+}
+
+.range__title {
+  margin-bottom: 1em;
+}
+
+.range__sliders {
+  position: relative;
+  min-height: 15px;
+}

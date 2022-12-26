@@ -1,6 +1,10 @@
 @import './styles/normalize.css';
 @import './styles/products.css';
-
+@import './styles/filters.css';
+@import './styles/ranges.css';
+@import './styles/checkboxes.css';
+@import './styles/settings.css';
+@import './styles/cards.css';
 
 
 @font-face {
