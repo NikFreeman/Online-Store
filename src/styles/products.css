@@ -2,7 +2,8 @@
   --gap-cards: 20px;
   --cards-in-row: 4;
   --cards-multiplier: 1;
-  --btn-width: 48%;
+  --direction-for-btns: row;
+  /* --btn-width: 48%; */
   --primary: #2196F3;
 }
 
@@ -24,14 +25,14 @@ button {
   :root {
     --gap-cards: 10px;
     --cards-in-row: 4;
+    --direction-for-btns: column;
   }
+  
+}
 
-  .card__btns {
-    flex-direction: column;
-    gap: 0.5em;
-  }
-
-  .card__btn {
-    width: 100%;
+@media (max-width: 779px) {
+  :root {
+    --gap-cards: 10px;
+    --cards-in-row: 2;
   }
 }

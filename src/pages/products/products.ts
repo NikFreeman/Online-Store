@@ -1,10 +1,10 @@
 import { ProductList, Product, GroupeBy } from '../../models/types';
 import { groupeByBrand, groupeByCategory } from '../../utils/grouping';
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const logo = require('../../assets/images/shopping-cart.svg');
+import { createCards } from './cards';
+import { switchSizeItems, RangeSettings } from './settings';
 
 // query params
-const searchParams = new URLSearchParams(document.location.search);
+export const searchParams = new URLSearchParams(document.location.search);
 
 // get products from API
 let products: Product[] = [];
@@ -218,25 +218,6 @@ filtersContainer.append(filterBrand, filterCategory, filterRanges);
 filterBrand.append(brandHeader, brandList);
 filterCategory.append(categoryHeader, categoryList);
 
-class RangeSettings {
-    data: Product[];
-    constructor(data: Product[]) {
-        this.data = data;
-    }
-    minPrice() {
-        return this.data.reduce((min, prod) => (prod.price < min ? prod.price : min), this.data[0].price);
-    }
-    maxPrice() {
-        return this.data.reduce((max, prod) => (prod.price > max ? prod.price : max), this.data[0].price);
-    }
-    minStock() {
-        return this.data.reduce((min, prod) => (prod.stock < min ? prod.stock : min), this.data[0].stock);
-    }
-    maxStock() {
-        return this.data.reduce((max, prod) => (prod.stock > max ? prod.stock : max), this.data[0].stock);
-    }
-}
-
 function setRangeMinMax(data: Product[]) {
     const settings = new RangeSettings(data);
     sliderFirstOne.min = settings.minPrice().toString();
@@ -294,11 +275,12 @@ filterRanges.addEventListener('input', getRangeValues);
 // sort elements
 const sortAndSettings: HTMLElement = document.createElement('div');
 sortAndSettings.className = 'settings';
-const sortContainer: HTMLElement = document.createElement('div');
+export const sortContainer: HTMLElement = document.createElement('div');
 sortContainer.className = 'settings__sort';
-const sizeContainer: HTMLElement = document.createElement('div');
+export const sizeContainer: HTMLElement = document.createElement('div');
 sizeContainer.className = 'settings__size';
-const foundProducts: HTMLElement = document.createElement('div');
+
+export const foundProducts: HTMLElement = document.createElement('div');
 foundProducts.className = 'settings__found';
 sortAndSettings.append(sortContainer, foundProducts, sizeContainer);
 
@@ -322,30 +304,6 @@ for (let i = 0; i < sortMethods.length; i++) {
     sortContainer.append(sortBtn, labelForSort);
 }
 
-function sortItems(data: Product[]) {
-    const sortMethod: string | undefined = sortContainer.querySelector('input:checked')?.id;
-    switch (sortMethod) {
-        case 'sort-1':
-            searchParams.set('sort', '1');
-            window.history.replaceState(null, '', '?' + searchParams.toString());
-            return data.sort((a, b) => a.price - b.price);
-        case 'sort-2':
-            searchParams.set('sort', '2');
-            window.history.replaceState(null, '', '?' + searchParams.toString());
-            return data.sort((a, b) => b.price - a.price);
-        case 'sort-3':
-            searchParams.set('sort', '3');
-            window.history.replaceState(null, '', '?' + searchParams.toString());
-            return data.sort((a, b) => a.rating - b.rating);
-        case 'sort-4':
-            searchParams.set('sort', '4');
-            window.history.replaceState(null, '', '?' + searchParams.toString());
-            return data.sort((a, b) => b.rating - a.rating);
-        default:
-            return data;
-    }
-}
-
 // cards size change
 const sizeMethods: string[] = ['Small', 'Large'];
 
@@ -365,25 +323,7 @@ sizeMethods.forEach((size) => {
     sizeContainer.append(sizeBtn, labelForSize);
 });
 
-function sizeItems() {
-    const sizeMethod: string | undefined = sizeContainer.querySelector('input:checked')?.id;
-    switch (sizeMethod) {
-        case 'size-small':
-            searchParams.set('size', 'small');
-            window.history.replaceState(null, '', '?' + searchParams.toString());
-            document.documentElement.style.setProperty('--cards-multiplier', '1.5');
-            break;
-        case 'size-large':
-            searchParams.set('size', 'large');
-            window.history.replaceState(null, '', '?' + searchParams.toString());
-            document.documentElement.style.setProperty('--cards-multiplier', '1');
-            break;
-        default:
-            document.documentElement.style.setProperty('--cards-multiplier', '1');
-    }
-}
-
-sizeContainer.addEventListener('change', sizeItems);
+sizeContainer.addEventListener('change', switchSizeItems);
 
 export async function start() {
     await getList().then(getProductsList);
@@ -391,7 +331,7 @@ export async function start() {
     fillCategoryList(groupeByCategory(products));
     setRangeMinMax(products);
     getCheckedItems();
-    sizeItems();
+    switchSizeItems();
 }
 
 function getRangedItems(data: Product[]) {
@@ -460,51 +400,8 @@ function getCheckedItems() {
 brandList.addEventListener('change', getCheckedItems);
 categoryList.addEventListener('change', getCheckedItems);
 sortContainer.addEventListener('change', getCheckedItems);
-// filterRanges.addEventListener('input', getCheckedItems);
 
-const cardsBlock: HTMLElement = document.createElement('div');
+export const cardsBlock: HTMLElement = document.createElement('div');
 cardsBlock.className = 'cards';
-
-export function createCards(data: Product[]) {
-    cardsBlock.innerHTML = '';
-    sortItems(data).map((item) => {
-        const card: HTMLElement = document.createElement('div');
-        card.className = 'card';
-        const discount: HTMLElement = document.createElement('div');
-        discount.className = 'card__discount';
-        discount.textContent = `-${item.discountPercentage.toString()}%`;
-        const title: HTMLElement = document.createElement('div');
-        title.className = 'card__title';
-        title.textContent = item.title;
-        const cardImg: HTMLElement = document.createElement('div');
-        cardImg.className = 'card__image';
-        cardImg.style.backgroundImage = `url(${item.thumbnail})`;
-        const price: HTMLElement = document.createElement('div');
-        price.className = 'card__price';
-        price.textContent = `$ ${item.price.toString()}`;
-        const btnsWrapper: HTMLElement = document.createElement('div');
-        btnsWrapper.className = 'card__btns';
-        const addBtn: HTMLElement = document.createElement('button');
-        addBtn.className = 'card__add-btn card__btn';
-        const cartIcon: HTMLImageElement = document.createElement('img');
-        cartIcon.src = logo;
-        cartIcon.alt = 'cart';
-        cartIcon.className = 'card__cart-icon';
-        const cartText: HTMLElement = document.createElement('span');
-        cartText.className = 'add-to-cart';
-        cartText.textContent = 'add';
-        addBtn.append(cartIcon, cartText);
-        const detailsBtn: HTMLElement = document.createElement('button');
-        detailsBtn.className = 'card__detail-btn card__btn';
-        detailsBtn.textContent = 'details';
-        btnsWrapper.append(addBtn, detailsBtn);
-        card.append(discount, title, cardImg, price, btnsWrapper);
-        cardsBlock.append(card);
-    });
-    foundProducts.textContent = `Found: ${data.length}`;
-    if (cardsBlock.innerHTML === '') {
-        cardsBlock.innerHTML = '<span class="cards-text">No products found</span>';
-    }
-}
 
 main.append(filtersContainer, sortAndSettings, cardsBlock);

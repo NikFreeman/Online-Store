@@ -72,20 +72,25 @@
 
 .card__btns {
   display: flex;
+  flex-direction: var(--direction-for-btns);
   width: 100%;
-  justify-content: space-between;
+  gap: 0.5em;
+}
+
+.card__btn {
+  width: 100%;
+  height: 40px;
 }
 
 .card__add-btn {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 10%;
+  gap: 5%;
   background: linear-gradient(90deg, #0099DC 7.09%, #3CC39D 93.66%);
   box-shadow: 0px 2px 10px 1px rgba(0, 0, 0, 0.15);
   border-radius: 5px;
   border: none;
-  width: 48%;
   height: 40px;
 }
 
@@ -107,8 +112,6 @@
   background: #F5F5F5;
   border-radius: 5px;
   border: 2px solid #009FDF;
-  width: 48%;
-  height: 40px;
   font-family: 'Geometria';
   font-style: normal;
   font-weight: 700;
