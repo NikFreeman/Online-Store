@@ -1,4 +1,4 @@
-//import { Product } from '../../models/Product';
+import { Product } from '../../models/Product';
 
 export class ProductsController {
     // setProducts(arr: Product[]) {
@@ -9,7 +9,7 @@ export class ProductsController {
         const urlBase = 'https://dummyjson.com/products/';
         const url = urlBase + String(id);
         const res = await fetch(url);
-        const data = await res.json();
+        const data: Product = await res.json();
         return data;
         // const index = this.products.findIndex((elem) => (elem.id = id));
         // if (index !== -1) {

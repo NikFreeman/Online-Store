@@ -109,11 +109,13 @@ class CartItem extends HTMLElement {
 
     countedCount(e: Event) {
         this.setAttribute('count', String((e as CustomEvent).detail));
+        if (Number((e as CustomEvent).detail) === 0) {
+            this.handlerRemoveButton();
+        }
     }
 
     handlerRemoveButton() {
         const removeEvent = new CustomEvent('remove-item', { bubbles: true, detail: this.getAttribute('id') });
-        console.log(removeEvent);
         this.dispatchEvent(removeEvent);
     }
 
