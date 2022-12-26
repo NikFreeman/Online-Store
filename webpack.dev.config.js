@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const path = require('path');
 
 module.exports = {
@@ -5,6 +6,7 @@ module.exports = {
     devtool: 'inline-source-map',
     devServer: {
         static: path.resolve(__dirname, 'dist'),
+        historyApiFallback: true,
         port: 9000,
     },
 };
