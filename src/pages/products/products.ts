@@ -21,9 +21,10 @@ export function getProductsList(data: ProductList) {
 }
 
 // draw html elements for start page
-const main: HTMLElement = document.createElement('main');
+const main: HTMLElement = document.createElement('div');
 main.className = 'wrapper';
-document.body.append(main);
+const app = document.getElementById('App');
+// document.body.append(main);
 
 const filtersContainer: HTMLElement = document.createElement('div');
 filtersContainer.className = 'filter';
@@ -332,6 +333,7 @@ export async function start() {
     setRangeMinMax(products);
     getCheckedItems();
     switchSizeItems();
+    app?.append(main);
 }
 
 function getRangedItems(data: Product[]) {

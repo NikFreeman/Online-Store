@@ -2,6 +2,7 @@ import page404 from '../pages/page404';
 import testPage from '../pages/testPage';
 import testPageDetail from '../pages/testPage-details';
 import render from '../utils/render';
+import { start } from '../pages/products/products';
 
 const mountedTag = 'App';
 const routes = new Map();
@@ -12,7 +13,9 @@ routes.set('/product-detail/:id', testPageDetail);
 
 function routerHandler(): void {
     const routePath = parsePathName(window.location.pathname);
-    if (routePath) {
+    if (routePath && routePath.routePath === '/') {
+        start();
+    } else if (routePath) {
         render(mountedTag, routes.get(routePath.routePath)(routePath.param));
     } else {
         render(mountedTag, page404());
@@ -36,7 +39,7 @@ function parsePathName(pathname: string): false | { routePath: string; param: st
 
 function router(): void {
     window.addEventListener('click', (e) => {
-        e.preventDefault();
+        // e.preventDefault();
         const tempTarget = <HTMLElement>e.target;
         if (tempTarget.hasAttribute('data-link')) {
             history.pushState('', '', window.location.origin + tempTarget.getAttribute('href'));
