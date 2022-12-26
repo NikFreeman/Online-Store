@@ -27,7 +27,8 @@ class CartController {
     }
 
     indexProduct(id: number) {
-        return this.cart.findIndex((elem) => (elem.id = id));
+        const idx = this.cart.findIndex((elem) => elem.id === id);
+        return idx;
     }
 
     addCountProduct(id: number, count: number) {

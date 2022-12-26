@@ -21,7 +21,7 @@ const cart = new CartController(cartArray);
 function renderItem(product: Product, count: number, price: number) {
     const template = document.createElement('template');
     template.innerHTML = `<div>
-    <cart-item src=${product.thumbnail} count=${count} price =${price} id=${product.id}>
+    <cart-item src=${product.thumbnail} count=${count} price =${price} id=${product.id} stock=${product.stock}>
      <span slot='title'>${product.title}</span>
      <span slot='description'>${product.description}</span>
     </cart-item>    
@@ -57,7 +57,10 @@ async function pageCart() {
 }
 function removeItem(e: Event) {
     const id = Number((e as CustomEvent).detail);
+    console.log(id);
+    console.log(cart);
     cart.removeProduct(id);
+    console.log(cart);
     StorageBox.setStorage('cart', JSON.stringify(cartTest.getCart()));
     pageCart();
 }

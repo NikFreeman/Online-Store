@@ -67,7 +67,7 @@ template.innerHTML = `
     </div>
     <h3 class='cart__item-title'><slot name='title'></slot></h3>
     <p class='cart__item-description'><slot name='description'></slot></p>  
-    <p class='cart__item-amount'></p>
+    <p>Amount: <span class='cart__item-amount'></span></p>
       <button class='cart__item-close'>X</button>
       <counter-element class='cart__item-count'></counter-element>
       
@@ -80,7 +80,7 @@ class CartItem extends HTMLElement {
     imageThumbnail: HTMLImageElement | null;
     amount: HTMLElement | null;
     static get observedAttributes() {
-        return ['count', 'id', 'src', 'price'];
+        return ['count', 'id', 'src', 'price', 'stock'];
     }
 
     constructor() {
@@ -108,8 +108,13 @@ class CartItem extends HTMLElement {
     }
 
     countedCount(e: Event) {
-        this.setAttribute('count', String((e as CustomEvent).detail));
-        if (Number((e as CustomEvent).detail) === 0) {
+        const stock = Number(this.getAttribute('stock'));
+        const count = Number((e as CustomEvent).detail);
+        if (count > 0 && count <= stock) {
+            this.setAttribute('count', String(count));
+        }
+
+        if (count === 0) {
             this.handlerRemoveButton();
         }
     }
