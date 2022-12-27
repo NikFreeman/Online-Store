@@ -1,5 +1,5 @@
 import './testPage.scss';
-function testPage() {
+function r_testPage() {
     const fragment = `<div class="top">
                           <h1>Product</h1>
                           <h3>Product is loaded</h3>
@@ -7,4 +7,4 @@ function testPage() {
     return fragment;
 }
 
-export default testPage;
+export default r_testPage;

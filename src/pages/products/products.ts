@@ -333,7 +333,10 @@ export async function start() {
     setRangeMinMax(products);
     getCheckedItems();
     switchSizeItems();
-    app?.append(main);
+    if (app) {
+        app.innerHTML = '';
+        app.append(main);
+    }
 }
 
 function getRangedItems(data: Product[]) {
