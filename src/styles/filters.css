@@ -75,3 +75,36 @@
   position: relative;
   min-height: 15px;
 }
+
+
+.filter__btns {
+  display: flex;
+  width: 90%;
+  gap: 0.5em;
+  margin: 1em;
+}
+
+.filter__btn {
+  width: 50%;
+  height: 40px;
+  background: #F5F5F5;
+  border-radius: 5px;
+  border: 2px solid #009FDF;
+  font-family: 'Geometria';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 13px;
+  line-height: 16px;
+  text-transform: uppercase;
+  color: #009FDF;
+  box-shadow: 0px 2px 10px 1px rgba(0, 0, 0, 0.15);
+}
+
+.filter__btn:hover {
+  background: #009FDF;
+  color: #F5F5F5;
+}
+
+.invisible-text {
+  display: none;
+}

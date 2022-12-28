@@ -19,6 +19,6 @@ export interface ProductList {
     limit: number;
 }
 
-export type GroupeBy = {
+export type GroupedBy = {
     [key: string]: Product[];
 };

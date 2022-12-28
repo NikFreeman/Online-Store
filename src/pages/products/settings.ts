@@ -42,6 +42,8 @@ export function switchSizeItems() {
             break;
         default:
             (sizeContainer.querySelector('#size-large') as HTMLInputElement).checked = true;
+            document.documentElement.style.setProperty('--cards-multiplier', '1');
+            document.documentElement.style.removeProperty('--direction-for-btns');
     }
 }
 

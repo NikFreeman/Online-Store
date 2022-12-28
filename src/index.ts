@@ -3,5 +3,3 @@ import './styles/index.css';
 import './style.css';
 
 router();
-
-console.log('Online-Store');

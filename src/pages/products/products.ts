@@ -1,13 +1,14 @@
-import { ProductList, Product, GroupeBy } from '../../models/types';
-import { groupeByBrand, groupeByCategory } from '../../utils/grouping';
+import { ProductList, Product, GroupedBy } from '../../models/types';
+import { groupByBrand, groupByCategory } from '../../utils/grouping';
 import { createCards } from './cards';
 import { switchSizeItems, RangeSettings } from './settings';
+import { btnsContainer } from './copyLink';
 
 // query params
 export const searchParams = new URLSearchParams(document.location.search);
 
 // get products from API
-let products: Product[] = [];
+export let products: Product[] = [];
 export async function getList() {
     const res = await fetch('https://dummyjson.com/products?limit=100');
     const data: ProductList = await res.json();
@@ -31,30 +32,35 @@ filtersContainer.className = 'filter';
 
 const filterBrand: HTMLElement = document.createElement('div');
 filterBrand.className = 'filter__brand filter__block';
+
 const brandHeader: HTMLElement = document.createElement('div');
 brandHeader.className = 'filter__brand-header filter__header';
 brandHeader.textContent = 'Brand';
+
 const brandList: HTMLElement = document.createElement('div');
 brandList.className = 'filter__list';
 
 const filterCategory: HTMLElement = document.createElement('div');
 filterCategory.className = 'filter__category filter__block';
+
 const categoryHeader: HTMLElement = document.createElement('div');
 categoryHeader.className = 'filter__category-header filter__header';
 categoryHeader.textContent = 'Category';
+
 const categoryList: HTMLElement = document.createElement('div');
 categoryList.className = 'filter__list';
 
-const checkboxes: HTMLInputElement[] = [];
+export const checkboxes: HTMLInputElement[] = [];
 const checkboxesBrand: HTMLInputElement[] = [];
 const checkboxesCategory: HTMLInputElement[] = [];
 
-function fillBrandList(data: GroupeBy) {
+function fillBrandList(data: GroupedBy) {
     if (!brandList.firstElementChild) {
         const selectedBrands: string[] | undefined = searchParams.get('brand')?.split('↕');
         for (const brand in data) {
             const checkboxCont: HTMLElement = document.createElement('div');
             checkboxCont.className = 'checkbox-line';
+
             const checkboxIn: HTMLInputElement = document.createElement('input');
             checkboxIn.type = 'checkbox';
             checkboxIn.id = `${brand}`;
@@ -64,17 +70,21 @@ function fillBrandList(data: GroupeBy) {
             }
             checkboxes.push(checkboxIn);
             checkboxesBrand.push(checkboxIn);
+
             const checkboxLbl: HTMLLabelElement = document.createElement('label');
             checkboxLbl.htmlFor = checkboxIn.id;
             checkboxLbl.textContent = `${brand}`;
             checkboxLbl.className = 'label';
+
             const checkmark: HTMLElement = document.createElement('span');
             checkmark.className = 'checkmark';
             checkboxLbl.append(checkmark);
+
             const restCount: HTMLElement = document.createElement('span');
             restCount.className = 'brand__rest-count items-count';
             restCount.id = `brand-${brand}`;
             restCount.textContent = `(${data[brand].length}`;
+
             const count: HTMLElement = document.createElement('span');
             count.className = 'brand-count items-count';
             count.textContent = `/${data[brand].length})`;
@@ -85,12 +95,13 @@ function fillBrandList(data: GroupeBy) {
     return data;
 }
 
-function fillCategoryList(data: GroupeBy) {
+function fillCategoryList(data: GroupedBy) {
     if (!categoryList.firstElementChild) {
         const selectedCategories: string[] | undefined = searchParams.get('category')?.split('↕');
         for (const category in data) {
             const checkboxCont: HTMLElement = document.createElement('div');
             checkboxCont.className = 'checkbox-line';
+
             const checkboxIn: HTMLInputElement = document.createElement('input');
             checkboxIn.type = 'checkbox';
             checkboxIn.id = `${category}`;
@@ -100,17 +111,21 @@ function fillCategoryList(data: GroupeBy) {
             }
             checkboxes.push(checkboxIn);
             checkboxesCategory.push(checkboxIn);
+
             const checkboxLbl: HTMLLabelElement = document.createElement('label');
             checkboxLbl.htmlFor = checkboxIn.id;
             checkboxLbl.textContent = `${category}`;
             checkboxLbl.className = 'label';
+
             const checkmark: HTMLElement = document.createElement('span');
             checkmark.className = 'checkmark';
             checkboxLbl.append(checkmark);
+
             const restCount: HTMLElement = document.createElement('span');
             restCount.className = 'category__rest-count items-count';
             restCount.id = `category-${category}`;
             restCount.textContent = `(${data[category].length}`;
+
             const count: HTMLElement = document.createElement('span');
             count.className = 'brand-count items-count';
             count.textContent = `/${data[category].length})`;
@@ -123,7 +138,7 @@ function fillCategoryList(data: GroupeBy) {
 
 function fillRestCountBrand(data: Product[]) {
     const arrRestCount = filterBrand.querySelectorAll('.brand__rest-count');
-    const restBrands = groupeByBrand(data);
+    const restBrands = groupByBrand(data);
     arrRestCount.forEach((el) => {
         if (restBrands[el.id.slice(6)]) {
             el.textContent = `(${restBrands[el.id.slice(6)].length}`;
@@ -135,7 +150,8 @@ function fillRestCountBrand(data: Product[]) {
 
 function fillRestCountCategory(data: Product[]) {
     const arrRestCount = filterCategory.querySelectorAll('.category__rest-count');
-    const restCategories = groupeByCategory(data);
+
+    const restCategories = groupByCategory(data);
     arrRestCount.forEach((el) => {
         if (restCategories[el.id.slice(9)]) {
             el.textContent = `(${restCategories[el.id.slice(9)].length}`;
@@ -148,21 +164,27 @@ function fillRestCountCategory(data: Product[]) {
 // dual ranges
 const filterRanges: HTMLElement = document.createElement('div');
 filterRanges.className = 'filter__ranges filter__block';
+
 const rangeContainerOne: HTMLElement = document.createElement('div');
 rangeContainerOne.className = 'filter__range range__container';
+
 const slidersControlOne: HTMLElement = document.createElement('div');
 slidersControlOne.className = 'filter__sliders range__sliders';
+
 const sliderFirstOne: HTMLInputElement = document.createElement('input');
-const sliderSecondOne: HTMLInputElement = document.createElement('input');
 sliderFirstOne.id = 'fromPrice';
 sliderFirstOne.type = 'range';
+
+const sliderSecondOne: HTMLInputElement = document.createElement('input');
 sliderSecondOne.id = 'toPrice';
 sliderSecondOne.type = 'range';
 
 const valuePriceContainer: HTMLElement = document.createElement('div');
 valuePriceContainer.className = 'filter__values value__container';
+
 const valueMinPrice: HTMLElement = document.createElement('span');
 valueMinPrice.className = 'filter__min-value filter__value';
+
 const valueMaxPrice: HTMLElement = document.createElement('span');
 valueMaxPrice.className = 'filter__max-value filter__value';
 
@@ -172,26 +194,33 @@ rangeNameOne.textContent = 'Price';
 
 const rangeValuesOne: HTMLElement = document.createElement('div');
 rangeValuesOne.className = 'range__values';
+
 const rangeValuePriceMin: HTMLElement = document.createElement('div');
 rangeValuePriceMin.className = 'range__value';
+
 const rangeValuePriceMax: HTMLElement = document.createElement('div');
 rangeValuePriceMax.className = 'range__value';
 
 const rangeContainerTwo: HTMLElement = document.createElement('div');
 rangeContainerTwo.className = 'filter__range range__container';
+
 const slidersControlTwo: HTMLElement = document.createElement('div');
 slidersControlTwo.className = 'filter__sliders range__sliders';
+
 const sliderFirstTwo: HTMLInputElement = document.createElement('input');
-const sliderSecondTwo: HTMLInputElement = document.createElement('input');
 sliderFirstTwo.id = 'fromStock';
 sliderFirstTwo.type = 'range';
+
+const sliderSecondTwo: HTMLInputElement = document.createElement('input');
 sliderSecondTwo.id = 'toStock';
 sliderSecondTwo.type = 'range';
 
 const valueStockContainer: HTMLElement = document.createElement('div');
 valueStockContainer.className = 'filter__values value__container';
+
 const valueMinStock: HTMLElement = document.createElement('span');
 valueMinStock.className = 'filter__min-value filter__value';
+
 const valueMaxStock: HTMLElement = document.createElement('span');
 valueMaxStock.className = 'filter__max-value filter__value';
 
@@ -201,12 +230,14 @@ rangeNameTwo.textContent = 'Stock';
 
 const rangeValuesTwo: HTMLElement = document.createElement('div');
 rangeValuesTwo.className = 'range__values';
+
 const rangeValueStockMin: HTMLElement = document.createElement('div');
 rangeValueStockMin.className = 'range__value';
+
 const rangeValueStockMax: HTMLElement = document.createElement('div');
 rangeValueStockMax.className = 'range__value';
 
-filterRanges.append(rangeContainerOne, rangeContainerTwo);
+filterRanges.append(btnsContainer, rangeContainerOne, rangeContainerTwo);
 rangeContainerOne.append(rangeNameOne, slidersControlOne, valuePriceContainer);
 slidersControlOne.append(sliderFirstOne, sliderSecondOne);
 valuePriceContainer.append(valueMinPrice, valueMaxPrice);
@@ -220,27 +251,31 @@ filterBrand.append(brandHeader, brandList);
 filterCategory.append(categoryHeader, categoryList);
 
 function setRangeMinMax(data: Product[]) {
-    const settings = new RangeSettings(data);
-    sliderFirstOne.min = settings.minPrice().toString();
-    sliderFirstOne.max = settings.maxPrice().toString();
-    sliderSecondOne.min = sliderFirstOne.min;
-    sliderSecondOne.max = sliderFirstOne.max;
-    sliderFirstTwo.min = settings.minStock().toString();
-    sliderFirstTwo.max = settings.maxStock().toString();
-    sliderSecondTwo.min = sliderFirstTwo.min;
-    sliderSecondTwo.max = sliderFirstTwo.max;
+    if (data.length > 0) {
+        const settings = new RangeSettings(data);
+        sliderFirstOne.min = settings.minPrice().toString();
+        sliderFirstOne.max = settings.maxPrice().toString();
+        sliderSecondOne.min = sliderFirstOne.min;
+        sliderSecondOne.max = sliderFirstOne.max;
+        sliderFirstTwo.min = settings.minStock().toString();
+        sliderFirstTwo.max = settings.maxStock().toString();
+        sliderSecondTwo.min = sliderFirstTwo.min;
+        sliderSecondTwo.max = sliderFirstTwo.max;
+    }
 }
 
-function setRangeValues(data: Product[]) {
-    const currentSettings = new RangeSettings(getRangedItems(data));
-    sliderFirstOne.value = currentSettings.minPrice().toString();
-    sliderSecondOne.value = currentSettings.maxPrice().toString();
-    valueMinPrice.textContent = sliderFirstOne.value;
-    valueMaxPrice.textContent = sliderSecondOne.value;
-    sliderFirstTwo.value = currentSettings.minStock().toString();
-    sliderSecondTwo.value = currentSettings.maxStock().toString();
-    valueMinStock.textContent = sliderFirstTwo.value;
-    valueMaxStock.textContent = sliderSecondTwo.value;
+export function setRangeValues(data: Product[]) {
+    if (data.length > 0) {
+        const currentSettings = new RangeSettings(getRangedItems(data));
+        sliderFirstOne.value = currentSettings.minPrice().toString();
+        sliderSecondOne.value = currentSettings.maxPrice().toString();
+        valueMinPrice.textContent = sliderFirstOne.value;
+        valueMaxPrice.textContent = sliderSecondOne.value;
+        sliderFirstTwo.value = currentSettings.minStock().toString();
+        sliderSecondTwo.value = currentSettings.maxStock().toString();
+        valueMinStock.textContent = sliderFirstTwo.value;
+        valueMaxStock.textContent = sliderSecondTwo.value;
+    }
 }
 
 function getRangeValues(e: Event) {
@@ -271,13 +306,15 @@ function getRangeValues(e: Event) {
     getCheckedItems();
 }
 
-filterRanges.addEventListener('input', getRangeValues);
+filterRanges.addEventListener('change', getRangeValues);
 
 // sort elements
 const sortAndSettings: HTMLElement = document.createElement('div');
 sortAndSettings.className = 'settings';
+
 export const sortContainer: HTMLElement = document.createElement('div');
 sortContainer.className = 'settings__sort';
+
 export const sizeContainer: HTMLElement = document.createElement('div');
 sizeContainer.className = 'settings__size';
 
@@ -317,6 +354,7 @@ sizeMethods.forEach((size) => {
         sizeBtn.checked = true;
     }
     sizeBtn.value = size;
+
     const labelForSize: HTMLLabelElement = document.createElement('label');
     labelForSize.htmlFor = sizeBtn.id;
     labelForSize.className = `size-control size-control__${size.toLowerCase()}`;
@@ -328,8 +366,8 @@ sizeContainer.addEventListener('change', switchSizeItems);
 
 export async function start() {
     await getList().then(getProductsList);
-    fillBrandList(groupeByBrand(products));
-    fillCategoryList(groupeByCategory(products));
+    fillBrandList(groupByBrand(products));
+    fillCategoryList(groupByCategory(products));
     setRangeMinMax(products);
     getCheckedItems();
     switchSizeItems();
@@ -339,7 +377,7 @@ export async function start() {
     }
 }
 
-function getRangedItems(data: Product[]) {
+export function getRangedItems(data: Product[]) {
     const selectedPrice: string[] | undefined = searchParams.get('price')?.split('↕');
     const selectedStock: string[] | undefined = searchParams.get('stock')?.split('↕');
     let prodItems: Product[] = data;
@@ -358,7 +396,7 @@ function getRangedItems(data: Product[]) {
 
 let listOfCheckedCheckboxes: HTMLInputElement[][] = [checkboxesBrand, checkboxesCategory];
 
-function getCheckedItems() {
+export function getCheckedItems() {
     listOfCheckedCheckboxes = [checkboxesBrand, checkboxesCategory];
     if (checkboxes.filter((input) => input.checked).length > 0) {
         if (checkboxesBrand.filter((input) => input.checked).length > 0) {
@@ -377,6 +415,7 @@ function getCheckedItems() {
         } else {
             searchParams.delete('category');
         }
+
         const prodList: Product[] = getRangedItems(products).filter((item) => {
             return (
                 listOfCheckedCheckboxes[0].map((el) => el.id).includes(item.brand.toUpperCase()) &&
