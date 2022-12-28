@@ -330,10 +330,10 @@ for (let i = 0; i < sortMethods.length; i++) {
     sortBtn.type = 'radio';
     sortBtn.name = 'sort';
     sortBtn.id = `sort-${i + 1}`;
-    if (searchParams.get('sort') === `${i + 1}`) {
+    sortBtn.value = sortMethods[i];
+    if (searchParams.get('sort') === sortMethods[i]) {
         sortBtn.checked = true;
     }
-    sortBtn.value = sortMethods[i];
     labelForSort = document.createElement('label');
     labelForSort.htmlFor = sortBtn.id;
     labelForSort.className = `sort-control sort-control__${i + 1}`;

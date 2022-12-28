@@ -2,22 +2,23 @@ import { Product } from '../../models/types';
 import { searchParams, sizeContainer, sortContainer } from './products';
 
 export function sortItems(data: Product[]) {
-    const sortMethod: string | undefined = sortContainer.querySelector('input:checked')?.id;
+    type SortMethod = 'PriceUp' | 'PriceDown' | 'RatingUp' | 'RatingDown';
+    const sortMethod = (sortContainer.querySelector('input:checked') as HTMLInputElement)?.value as SortMethod;
     switch (sortMethod) {
-        case 'sort-1':
-            searchParams.set('sort', '1');
+        case 'PriceUp':
+            searchParams.set('sort', 'PriceUp');
             window.history.replaceState(null, '', '?' + searchParams.toString());
             return data.sort((a, b) => a.price - b.price);
-        case 'sort-2':
-            searchParams.set('sort', '2');
+        case 'PriceDown':
+            searchParams.set('sort', 'PriceDown');
             window.history.replaceState(null, '', '?' + searchParams.toString());
             return data.sort((a, b) => b.price - a.price);
-        case 'sort-3':
-            searchParams.set('sort', '3');
+        case 'RatingUp':
+            searchParams.set('sort', 'RatingUp');
             window.history.replaceState(null, '', '?' + searchParams.toString());
             return data.sort((a, b) => a.rating - b.rating);
-        case 'sort-4':
-            searchParams.set('sort', '4');
+        case 'RatingDown':
+            searchParams.set('sort', 'RatingDown');
             window.history.replaceState(null, '', '?' + searchParams.toString());
             return data.sort((a, b) => b.rating - a.rating);
         default:
