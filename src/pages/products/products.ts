@@ -22,32 +22,31 @@ export function getProductsList(data: ProductList) {
 }
 
 // draw html elements for start page
-const main: HTMLElement = document.createElement('div');
+const main = document.createElement('div');
 main.className = 'wrapper';
 const app = document.getElementById('App');
-// document.body.append(main);
 
-const filtersContainer: HTMLElement = document.createElement('div');
+const filtersContainer = document.createElement('div');
 filtersContainer.className = 'filter';
 
-const filterBrand: HTMLElement = document.createElement('div');
+const filterBrand = document.createElement('div');
 filterBrand.className = 'filter__brand filter__block';
 
-const brandHeader: HTMLElement = document.createElement('div');
+const brandHeader = document.createElement('div');
 brandHeader.className = 'filter__brand-header filter__header';
 brandHeader.textContent = 'Brand';
 
-const brandList: HTMLElement = document.createElement('div');
+const brandList = document.createElement('div');
 brandList.className = 'filter__list';
 
-const filterCategory: HTMLElement = document.createElement('div');
+const filterCategory = document.createElement('div');
 filterCategory.className = 'filter__category filter__block';
 
-const categoryHeader: HTMLElement = document.createElement('div');
+const categoryHeader = document.createElement('div');
 categoryHeader.className = 'filter__category-header filter__header';
 categoryHeader.textContent = 'Category';
 
-const categoryList: HTMLElement = document.createElement('div');
+const categoryList = document.createElement('div');
 categoryList.className = 'filter__list';
 
 export const checkboxes: HTMLInputElement[] = [];
@@ -58,10 +57,10 @@ function fillBrandList(data: GroupedBy) {
     if (!brandList.firstElementChild) {
         const selectedBrands: string[] | undefined = searchParams.get('brand')?.split('↕');
         for (const brand in data) {
-            const checkboxCont: HTMLElement = document.createElement('div');
+            const checkboxCont = document.createElement('div');
             checkboxCont.className = 'checkbox-line';
 
-            const checkboxIn: HTMLInputElement = document.createElement('input');
+            const checkboxIn = document.createElement('input');
             checkboxIn.type = 'checkbox';
             checkboxIn.id = `${brand}`;
             checkboxIn.className = 'checkbox';
@@ -71,21 +70,21 @@ function fillBrandList(data: GroupedBy) {
             checkboxes.push(checkboxIn);
             checkboxesBrand.push(checkboxIn);
 
-            const checkboxLbl: HTMLLabelElement = document.createElement('label');
+            const checkboxLbl = document.createElement('label');
             checkboxLbl.htmlFor = checkboxIn.id;
             checkboxLbl.textContent = `${brand}`;
             checkboxLbl.className = 'label';
 
-            const checkmark: HTMLElement = document.createElement('span');
+            const checkmark = document.createElement('span');
             checkmark.className = 'checkmark';
             checkboxLbl.append(checkmark);
 
-            const restCount: HTMLElement = document.createElement('span');
+            const restCount = document.createElement('span');
             restCount.className = 'brand__rest-count items-count';
             restCount.id = `brand-${brand}`;
             restCount.textContent = `(${data[brand].length}`;
 
-            const count: HTMLElement = document.createElement('span');
+            const count = document.createElement('span');
             count.className = 'brand-count items-count';
             count.textContent = `/${data[brand].length})`;
             checkboxCont.append(checkboxIn, checkboxLbl, restCount, count);
@@ -99,10 +98,10 @@ function fillCategoryList(data: GroupedBy) {
     if (!categoryList.firstElementChild) {
         const selectedCategories: string[] | undefined = searchParams.get('category')?.split('↕');
         for (const category in data) {
-            const checkboxCont: HTMLElement = document.createElement('div');
+            const checkboxCont = document.createElement('div');
             checkboxCont.className = 'checkbox-line';
 
-            const checkboxIn: HTMLInputElement = document.createElement('input');
+            const checkboxIn = document.createElement('input');
             checkboxIn.type = 'checkbox';
             checkboxIn.id = `${category}`;
             checkboxIn.className = 'checkbox';
@@ -112,21 +111,21 @@ function fillCategoryList(data: GroupedBy) {
             checkboxes.push(checkboxIn);
             checkboxesCategory.push(checkboxIn);
 
-            const checkboxLbl: HTMLLabelElement = document.createElement('label');
+            const checkboxLbl = document.createElement('label');
             checkboxLbl.htmlFor = checkboxIn.id;
             checkboxLbl.textContent = `${category}`;
             checkboxLbl.className = 'label';
 
-            const checkmark: HTMLElement = document.createElement('span');
+            const checkmark = document.createElement('span');
             checkmark.className = 'checkmark';
             checkboxLbl.append(checkmark);
 
-            const restCount: HTMLElement = document.createElement('span');
+            const restCount = document.createElement('span');
             restCount.className = 'category__rest-count items-count';
             restCount.id = `category-${category}`;
             restCount.textContent = `(${data[category].length}`;
 
-            const count: HTMLElement = document.createElement('span');
+            const count = document.createElement('span');
             count.className = 'brand-count items-count';
             count.textContent = `/${data[category].length})`;
             checkboxCont.append(checkboxIn, checkboxLbl, restCount, count);
@@ -162,79 +161,79 @@ function fillRestCountCategory(data: Product[]) {
 }
 
 // dual ranges
-const filterRanges: HTMLElement = document.createElement('div');
+const filterRanges = document.createElement('div');
 filterRanges.className = 'filter__ranges filter__block';
 
-const rangeContainerOne: HTMLElement = document.createElement('div');
+const rangeContainerOne = document.createElement('div');
 rangeContainerOne.className = 'filter__range range__container';
 
-const slidersControlOne: HTMLElement = document.createElement('div');
+const slidersControlOne = document.createElement('div');
 slidersControlOne.className = 'filter__sliders range__sliders';
 
-const sliderFirstOne: HTMLInputElement = document.createElement('input');
+const sliderFirstOne = document.createElement('input');
 sliderFirstOne.id = 'fromPrice';
 sliderFirstOne.type = 'range';
 
-const sliderSecondOne: HTMLInputElement = document.createElement('input');
+const sliderSecondOne = document.createElement('input');
 sliderSecondOne.id = 'toPrice';
 sliderSecondOne.type = 'range';
 
-const valuePriceContainer: HTMLElement = document.createElement('div');
+const valuePriceContainer = document.createElement('div');
 valuePriceContainer.className = 'filter__values value__container';
 
-const valueMinPrice: HTMLElement = document.createElement('span');
+const valueMinPrice = document.createElement('span');
 valueMinPrice.className = 'filter__min-value filter__value';
 
-const valueMaxPrice: HTMLElement = document.createElement('span');
+const valueMaxPrice = document.createElement('span');
 valueMaxPrice.className = 'filter__max-value filter__value';
 
-const rangeNameOne: HTMLElement = document.createElement('div');
+const rangeNameOne = document.createElement('div');
 rangeNameOne.className = 'range__title filter__header';
 rangeNameOne.textContent = 'Price';
 
-const rangeValuesOne: HTMLElement = document.createElement('div');
+const rangeValuesOne = document.createElement('div');
 rangeValuesOne.className = 'range__values';
 
-const rangeValuePriceMin: HTMLElement = document.createElement('div');
+const rangeValuePriceMin = document.createElement('div');
 rangeValuePriceMin.className = 'range__value';
 
-const rangeValuePriceMax: HTMLElement = document.createElement('div');
+const rangeValuePriceMax = document.createElement('div');
 rangeValuePriceMax.className = 'range__value';
 
-const rangeContainerTwo: HTMLElement = document.createElement('div');
+const rangeContainerTwo = document.createElement('div');
 rangeContainerTwo.className = 'filter__range range__container';
 
-const slidersControlTwo: HTMLElement = document.createElement('div');
+const slidersControlTwo = document.createElement('div');
 slidersControlTwo.className = 'filter__sliders range__sliders';
 
-const sliderFirstTwo: HTMLInputElement = document.createElement('input');
+const sliderFirstTwo = document.createElement('input');
 sliderFirstTwo.id = 'fromStock';
 sliderFirstTwo.type = 'range';
 
-const sliderSecondTwo: HTMLInputElement = document.createElement('input');
+const sliderSecondTwo = document.createElement('input');
 sliderSecondTwo.id = 'toStock';
 sliderSecondTwo.type = 'range';
 
-const valueStockContainer: HTMLElement = document.createElement('div');
+const valueStockContainer = document.createElement('div');
 valueStockContainer.className = 'filter__values value__container';
 
-const valueMinStock: HTMLElement = document.createElement('span');
+const valueMinStock = document.createElement('span');
 valueMinStock.className = 'filter__min-value filter__value';
 
-const valueMaxStock: HTMLElement = document.createElement('span');
+const valueMaxStock = document.createElement('span');
 valueMaxStock.className = 'filter__max-value filter__value';
 
-const rangeNameTwo: HTMLElement = document.createElement('div');
+const rangeNameTwo = document.createElement('div');
 rangeNameTwo.className = 'range__title filter__header';
 rangeNameTwo.textContent = 'Stock';
 
-const rangeValuesTwo: HTMLElement = document.createElement('div');
+const rangeValuesTwo = document.createElement('div');
 rangeValuesTwo.className = 'range__values';
 
-const rangeValueStockMin: HTMLElement = document.createElement('div');
+const rangeValueStockMin = document.createElement('div');
 rangeValueStockMin.className = 'range__value';
 
-const rangeValueStockMax: HTMLElement = document.createElement('div');
+const rangeValueStockMax = document.createElement('div');
 rangeValueStockMax.className = 'range__value';
 
 filterRanges.append(btnsContainer, rangeContainerOne, rangeContainerTwo);
@@ -309,23 +308,23 @@ function getRangeValues(e: Event) {
 filterRanges.addEventListener('change', getRangeValues);
 
 // sort elements
-const sortAndSettings: HTMLElement = document.createElement('div');
+const sortAndSettings = document.createElement('div');
 sortAndSettings.className = 'settings';
 
-export const sortContainer: HTMLElement = document.createElement('div');
+export const sortContainer = document.createElement('div');
 sortContainer.className = 'settings__sort';
 
-export const sizeContainer: HTMLElement = document.createElement('div');
+export const sizeContainer = document.createElement('div');
 sizeContainer.className = 'settings__size';
 
-export const foundProducts: HTMLElement = document.createElement('div');
+export const foundProducts = document.createElement('div');
 foundProducts.className = 'settings__found';
 sortAndSettings.append(sortContainer, foundProducts, sizeContainer);
 
 const sortMethods: string[] = ['PriceUp', 'PriceDown', 'RatingUp', 'RatingDown'];
 
-let sortBtn: HTMLInputElement = document.createElement('input');
-let labelForSort: HTMLLabelElement = document.createElement('label');
+let sortBtn = document.createElement('input');
+let labelForSort = document.createElement('label');
 for (let i = 0; i < sortMethods.length; i++) {
     sortBtn = document.createElement('input');
     sortBtn.type = 'radio';
@@ -346,7 +345,7 @@ for (let i = 0; i < sortMethods.length; i++) {
 const sizeMethods: string[] = ['Small', 'Large'];
 
 sizeMethods.forEach((size) => {
-    const sizeBtn: HTMLInputElement = document.createElement('input');
+    const sizeBtn = document.createElement('input');
     sizeBtn.type = 'radio';
     sizeBtn.name = 'size';
     sizeBtn.id = `size-${size.toLowerCase()}`;
@@ -355,7 +354,7 @@ sizeMethods.forEach((size) => {
     }
     sizeBtn.value = size;
 
-    const labelForSize: HTMLLabelElement = document.createElement('label');
+    const labelForSize = document.createElement('label');
     labelForSize.htmlFor = sizeBtn.id;
     labelForSize.className = `size-control size-control__${size.toLowerCase()}`;
     labelForSize.textContent = `${size}`;
@@ -445,7 +444,7 @@ brandList.addEventListener('change', getCheckedItems);
 categoryList.addEventListener('change', getCheckedItems);
 sortContainer.addEventListener('change', getCheckedItems);
 
-export const cardsBlock: HTMLElement = document.createElement('div');
+export const cardsBlock = document.createElement('div');
 cardsBlock.className = 'cards';
 
 main.append(filtersContainer, sortAndSettings, cardsBlock);
