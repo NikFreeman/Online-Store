@@ -26,15 +26,16 @@ export function sortItems(data: Product[]) {
 }
 
 export function switchSizeItems() {
-    const sizeMethod: string | undefined = sizeContainer.querySelector('input:checked')?.id;
+    type SizeMethod = 'Small' | 'Large';
+    const sizeMethod = (sizeContainer.querySelector('input:checked') as HTMLInputElement)?.value as SizeMethod;
     switch (sizeMethod) {
-        case 'size-small':
+        case 'Small':
             searchParams.set('size', 'small');
             window.history.replaceState(null, '', '?' + searchParams.toString());
             document.documentElement.style.setProperty('--cards-multiplier', '1.5');
             document.documentElement.style.setProperty('--direction-for-btns', 'column');
             break;
-        case 'size-large':
+        case 'Large':
             searchParams.set('size', 'large');
             window.history.replaceState(null, '', '?' + searchParams.toString());
             document.documentElement.style.setProperty('--cards-multiplier', '1');

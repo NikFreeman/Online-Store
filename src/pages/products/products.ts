@@ -329,7 +329,7 @@ let labelForSort: HTMLLabelElement = document.createElement('label');
 for (let i = 0; i < sortMethods.length; i++) {
     sortBtn = document.createElement('input');
     sortBtn.type = 'radio';
-    sortBtn.name = 'radio';
+    sortBtn.name = 'sort';
     sortBtn.id = `sort-${i + 1}`;
     if (searchParams.get('sort') === `${i + 1}`) {
         sortBtn.checked = true;
@@ -348,7 +348,7 @@ const sizeMethods: string[] = ['Small', 'Large'];
 sizeMethods.forEach((size) => {
     const sizeBtn: HTMLInputElement = document.createElement('input');
     sizeBtn.type = 'radio';
-    sizeBtn.name = 'radio';
+    sizeBtn.name = 'size';
     sizeBtn.id = `size-${size.toLowerCase()}`;
     if (searchParams.get('size') === size.toLowerCase()) {
         sizeBtn.checked = true;
