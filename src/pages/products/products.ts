@@ -3,6 +3,7 @@ import { groupByBrand, groupByCategory } from '../../utils/grouping';
 import { createCards } from './cards';
 import { switchSizeItems, RangeSettings } from './settings';
 import { btnsContainer } from './copyLink';
+import { searchCont, searchIn, searchProducts } from './search';
 
 // query params
 export const searchParams = new URLSearchParams(document.location.search);
@@ -160,9 +161,12 @@ function fillRestCountCategory(data: Product[]) {
     });
 }
 
+const restfilters = document.createElement('div');
+restfilters.className = 'filter__block';
+
 // dual ranges
 const filterRanges = document.createElement('div');
-filterRanges.className = 'filter__ranges filter__block';
+filterRanges.className = 'filter__ranges';
 
 const rangeContainerOne = document.createElement('div');
 rangeContainerOne.className = 'filter__range range__container';
@@ -236,7 +240,8 @@ rangeValueStockMin.className = 'range__value';
 const rangeValueStockMax = document.createElement('div');
 rangeValueStockMax.className = 'range__value';
 
-filterRanges.append(btnsContainer, rangeContainerOne, rangeContainerTwo);
+restfilters.append(btnsContainer, filterRanges, searchCont);
+filterRanges.append(rangeContainerOne, rangeContainerTwo);
 rangeContainerOne.append(rangeNameOne, slidersControlOne, valuePriceContainer);
 slidersControlOne.append(sliderFirstOne, sliderSecondOne);
 valuePriceContainer.append(valueMinPrice, valueMaxPrice);
@@ -245,7 +250,7 @@ rangeContainerTwo.append(rangeNameTwo, slidersControlTwo, valueStockContainer);
 slidersControlTwo.append(sliderFirstTwo, sliderSecondTwo);
 valueStockContainer.append(valueMinStock, valueMaxStock);
 
-filtersContainer.append(filterBrand, filterCategory, filterRanges);
+filtersContainer.append(filterBrand, filterCategory, restfilters);
 filterBrand.append(brandHeader, brandList);
 filterCategory.append(categoryHeader, categoryList);
 
@@ -422,20 +427,20 @@ export function getCheckedItems() {
             );
         });
         window.history.replaceState(null, '', '?' + searchParams.toString());
-        fillRestCountBrand(prodList);
-        fillRestCountCategory(prodList);
-        createCards(prodList);
-        setRangeValues(prodList);
+        fillRestCountBrand(searchProducts(prodList));
+        fillRestCountCategory(searchProducts(prodList));
+        createCards(searchProducts(prodList));
+        setRangeValues(searchProducts(prodList));
         return prodList;
     } else {
         listOfCheckedCheckboxes = [checkboxesBrand, checkboxesCategory];
         searchParams.delete('brand');
         searchParams.delete('category');
         window.history.replaceState(null, '', '?' + searchParams.toString());
-        fillRestCountBrand(getRangedItems(products));
-        fillRestCountCategory(getRangedItems(products));
-        createCards(getRangedItems(products));
-        setRangeValues(products);
+        fillRestCountBrand(searchProducts(getRangedItems(products)));
+        fillRestCountCategory(searchProducts(getRangedItems(products)));
+        createCards(searchProducts(getRangedItems(products)));
+        setRangeValues(searchProducts(products));
         return products;
     }
 }
@@ -443,6 +448,8 @@ export function getCheckedItems() {
 brandList.addEventListener('change', getCheckedItems);
 categoryList.addEventListener('change', getCheckedItems);
 sortContainer.addEventListener('change', getCheckedItems);
+
+searchIn.addEventListener('input', getCheckedItems);
 
 export const cardsBlock = document.createElement('div');
 cardsBlock.className = 'cards';

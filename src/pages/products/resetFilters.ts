@@ -1,4 +1,5 @@
 import { searchParams, checkboxes, getCheckedItems, sizeContainer, sortContainer } from './products';
+import { searchIn } from './search';
 
 export const resetBtn = document.createElement('button');
 resetBtn.className = 'filter__reset-btn filter__btn';
@@ -10,6 +11,7 @@ async function resetFilters() {
         .toString()
         .split('&')
         .forEach((param) => searchParams.delete(param.split('=')[0]));
+    searchIn.value = '';
     (sizeContainer.querySelector('#size-large') as HTMLInputElement).checked = true;
     document.documentElement.style.setProperty('--cards-multiplier', '1');
     document.documentElement.style.removeProperty('--direction-for-btns');
