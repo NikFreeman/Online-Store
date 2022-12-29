@@ -9,7 +9,7 @@ const styles = `
 .cart__item-thumbnail {
     grid-area: thumbnail;
     width: 160px;
-    hight: 80px;
+    height: 80px;
     border-radius: 10px;
   }
   .cart__item {
@@ -48,10 +48,8 @@ const styles = `
     justify-self: end;
     border: 1px solid lightblue;
     background: linear-gradient(90deg, #0099DC 7.09%, #3CC39D 93.66%);
-box-shadow: 0px 2px 10px 1px rgba(0, 0, 0, 0.15);
-border-radius: 5px;
-   // background: white;
-  //  border-radius: 10px;
+    box-shadow: 0px 2px 10px 1px rgba(0, 0, 0, 0.15);
+    border-radius: 5px;
   } 
   
   .cart__item-close:hover {

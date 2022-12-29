@@ -48,23 +48,28 @@ async function pageCart() {
     const app = document.getElementById('App'); //Kochab
     if (app) {
         app.innerHTML = `<div>
-          
-        
+            <h1 class='cart__title'>Cart</h1>
+            <div class="cart__wrapper">            
+            <div class="cart__summary">
+            <h3>Summary</h3>
+            </div>
         </div>
         `;
     }
 
     const div = document.createElement('div');
+    div.classList.add('cart__items');
     const data = await pageCartRender();
     const divTemp = data.reduce(function (div_1, template) {
         div_1.appendChild(template.content.cloneNode(true));
         return div_1;
     }, div);
-    // kochab
-    console.log(divTemp);
-    // if (app) {
-    //     app.appendChild(divTemp);
-    // }
+    if (app) {
+        const cartWrapper = app.querySelector('.cart__wrapper');
+        if (cartWrapper) {
+            cartWrapper.insertBefore(divTemp, cartWrapper.firstChild);
+        }
+    }
 }
 function removeItem(e: Event) {
     const id = Number((e as CustomEvent).detail);
