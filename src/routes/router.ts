@@ -1,6 +1,6 @@
-import page404 from '../pages/page404';
-import testPage from '../pages/testPage';
-import testPageDetail from '../pages/testPage-details';
+import { page404 } from '../pages/page404';
+import { r_testPage } from '../pages/testPage';
+import { r_testPageDetail } from '../pages/testPage-details';
 import pageCart from '../pages/cart';
 
 import render from '../utils/render';
@@ -8,15 +8,21 @@ import render from '../utils/render';
 const mountedTag = 'App';
 const routes = new Map();
 
-routes.set('/', testPage);
-routes.set('/product', testPage);
-routes.set('/product-detail/:id', testPageDetail);
+routes.set('/', r_testPage);
+routes.set('/product', r_testPage);
+routes.set('/product-detail/:id', r_testPageDetail);
 routes.set('/cart', pageCart);
 
 function routerHandler(): void {
     const routePath = parsePathName(window.location.pathname);
+
     if (routePath) {
-        render(mountedTag, routes.get(routePath.routePath)(routePath.param));
+        const name = String(routes.get(routePath.routePath).name);
+        if (name.substring(0, 2) === 'r_') {
+            render(mountedTag, routes.get(routePath.routePath)(routePath.param));
+        } else {
+            routes.get(routePath.routePath)(routePath.param);
+        }
     } else {
         render(mountedTag, page404());
     }

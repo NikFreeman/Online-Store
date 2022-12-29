@@ -1,9 +1,11 @@
+import './cart.scss';
 import '../../components/elements/cart-item';
 import CartController from '../../components/controller/cartController';
 import { ProductsController } from '../../components/controller/productsController';
 import { Product } from './../../models/Product';
 
 //тестовое значение корзины
+localStorage.removeItem('cart');
 const cartTest = new CartController();
 cartTest.addProduct(3, 1, 100);
 cartTest.addProduct(23, 1, 110);
@@ -22,6 +24,9 @@ function renderItem(product: Product, count: number, price: number) {
       <cart-item src=${product.thumbnail} count=${count} price =${price} id=${product.id} stock=${product.stock}>
         <span slot='title'>${product.title}</span>
         <span slot='description'>${product.description}</span>
+        <span slot='stock'>${product.stock}</span>
+        <span slot='category'>${product.category}</span>
+        <span slot='rating'>${product.rating}</span>
       </cart-item>    
   </div>`;
     return template;
@@ -41,6 +46,14 @@ function pageCartRender() {
 }
 async function pageCart() {
     const app = document.getElementById('App'); //Kochab
+    if (app) {
+        app.innerHTML = `<div>
+          
+        
+        </div>
+        `;
+    }
+
     const div = document.createElement('div');
     const data = await pageCartRender();
     const divTemp = data.reduce(function (div_1, template) {
@@ -48,10 +61,10 @@ async function pageCart() {
         return div_1;
     }, div);
     // kochab
-    if (app) {
-        app.innerHTML = '';
-        app.appendChild(divTemp);
-    }
+    console.log(divTemp);
+    // if (app) {
+    //     app.appendChild(divTemp);
+    // }
 }
 function removeItem(e: Event) {
     const id = Number((e as CustomEvent).detail);

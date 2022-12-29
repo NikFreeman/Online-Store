@@ -1,6 +1,7 @@
 import './counter-element';
 
 const styles = `
+
 * {
     margin-block-end:0;
     margin-block-start:0;
@@ -15,20 +16,27 @@ const styles = `
     margin-top: 10px;
     margin-bottom: 10px;
     display: grid;
-    grid-template-columns: 160px auto 100px; 
-    grid-template-rows: 20px 30px 20px;
+    grid-template-columns: 160px 1fr 1fr 120px; 
+    grid-template-rows: 20px 30px 30px 20px;
     column-gap: 10px;
     grid-template-areas:
-      'thumbnail title close'
-      'thumbnail description .'
-      'thumbnail amount count';
+      'thumbnail title title close'
+      'thumbnail description description stock'
+      'thumbnail catalog rating count'
+      'thumbnail catalog rating amount';
   }
   .cart__item-title {
     grid-area: title;
+    color: ;
   }
 
   .cart__item-amount {
     grid-area: amount;
+    justify-self: center;
+    align-self: center;    
+  }
+
+  .cart__item-amount-item {
     font-weight: bold;
   }
 
@@ -39,14 +47,22 @@ const styles = `
     grid-area: close;
     justify-self: end;
     border: 1px solid lightblue;
-    background: white;
-    border-radius: 10px;
+    background: linear-gradient(90deg, #0099DC 7.09%, #3CC39D 93.66%);
+box-shadow: 0px 2px 10px 1px rgba(0, 0, 0, 0.15);
+border-radius: 5px;
+   // background: white;
+  //  border-radius: 10px;
   } 
   
   .cart__item-close:hover {
     color:red;
+    border:1px solid blue;
   }
-
+  .cart__item-stock {
+    grid-area: stock;
+    justify-self: center;
+    align-self: center;
+  }
   .cart__item-count {
     grid-area: count;
     justify-self: end;
@@ -54,7 +70,7 @@ const styles = `
   .cart__item-image {
     width: 100%;
     height: 100%;
-    object-fil: cover;
+    object-fit: contain;
     border-radius: 10px;
   }`;
 
@@ -65,9 +81,14 @@ template.innerHTML = `
     <div class='cart__item-thumbnail'>
       <img class ='cart__item-image'>
     </div>
+    
     <h3 class='cart__item-title'><slot name='title'></slot></h3>
+    
     <p class='cart__item-description'><slot name='description'></slot></p>  
-    <p class = 'cart__item-amount'>Amount: <span class='cart__item-amount'></span></p>
+    <p class = 'cart__item-amount'>Amount: $<span class='cart__item-amount-item'></span></p>
+    <p class = 'cart__item-stock'>Stock: <span><slot name='stock'></slot></span></p>
+    <p class = 'cart__item-category'>Category: <span><slot name='category'></slot></span></p>
+    <p class = 'cart__item-rating'>Rating: <span><slot name='rating'></slot></span></p>
       <button class='cart__item-close'>X</button>
       <counter-element class='cart__item-count'></counter-element>
       
@@ -98,7 +119,7 @@ class CartItem extends HTMLElement {
             if (this.removeButton) {
                 this.removeButton.addEventListener('click', this.handleRemoveButton.bind(this));
             }
-            this.amount = this.shadowRoot.querySelector('.cart__item-amount');
+            this.amount = this.shadowRoot.querySelector('.cart__item-amount-item');
         } else {
             this.counter = null;
             this.removeButton = null;
@@ -128,8 +149,13 @@ class CartItem extends HTMLElement {
         if (oldVal !== newVal) {
             if (name === 'count') {
                 if (this.counter) {
-                    this.counter.setAttribute('counter', String(newVal));
+                    this.counter.setAttribute('counter', newVal);
                     this.calculateAmount();
+                }
+            }
+            if (name === 'stock') {
+                if (this.counter) {
+                    this.counter.setAttribute('stock', newVal);
                 }
             }
         }

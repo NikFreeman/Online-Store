@@ -45,7 +45,7 @@ class CounterElement extends HTMLElement {
     decrementButton: HTMLButtonElement | null;
     counterValue: HTMLElement | null;
     static get observedAttributes() {
-        return ['counter'];
+        return ['counter', 'stock'];
     }
     constructor() {
         super();
@@ -82,7 +82,13 @@ class CounterElement extends HTMLElement {
 
     invalidate() {
         if (this.counterValue) {
-            if (this.counter < 0) this.counter = 0;
+            if (this.counter < 0) {
+                this.counter = 0;
+            } else {
+                if (this.counter >= Number(this.getAttribute('stock'))) {
+                    this.counter = Number(this.getAttribute('stock'));
+                }
+            }
             this.counterValue.innerHTML = String(this.counter);
             this.setAttribute('counter', String(this.counter));
         }
