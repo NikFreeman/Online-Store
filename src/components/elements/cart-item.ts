@@ -27,7 +27,12 @@ const styles = `
   }
   .cart__item-title {
     grid-area: title;
-    color: ;
+    font-family: 'Geometria';
+    font-style: normal;
+    font-weight: 800;
+    font-size: 16px;
+    line-height: 21px;
+    color: #009FDF;
   }
 
   .cart__item-amount {
