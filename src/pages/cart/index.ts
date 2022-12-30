@@ -48,10 +48,16 @@ async function pageCart() {
     const app = document.getElementById('App'); //Kochab
     if (app) {
         app.innerHTML = `<div>
-            <h1 class='cart__title'>Cart</h1>
-            <div class="cart__wrapper">            
-            <div class="cart__summary">
-            <h3>Summary</h3>
+            <h3 class="cart__title">Cart</h3>
+            
+            <div class='cart__wrapper'>            
+            <div class='cart__summary'>
+            <h2 class='summary__title'>Summary</h2>
+            <p> Products: <span class='summary__product-value'>23</span></p>
+            <p> Total: <span class='summary__total-value'>222</span></p>
+            <h4>Promo</h4>
+            <input class='summary__promo'>
+            <button class='summary__buy'>Buy now</button>
             </div>
         </div>
         `;

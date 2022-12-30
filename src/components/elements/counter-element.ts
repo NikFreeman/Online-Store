@@ -25,7 +25,9 @@ const styles = `
 #counter-increment:hover, #counter-decrement:hover {
 color: black;
 }
-
+#counter-increment:disabled  {
+    color: white;
+    }
 #counter-value {
     font-weight: bold;
 }
@@ -33,9 +35,9 @@ color: black;
 const template = document.createElement('template');
 template.innerHTML = `<style>${styles}</style>            
 <div class='buttons'>
-<button id='counter-increment'>-</button>
+<button id='counter-decrement'>-</button>
 <span id='counter-value'> 0 </span>
-<button id='counter-decrement'>+</button>
+<button id='counter-increment'>+</button>
 </div>
 `;
 
@@ -63,10 +65,10 @@ class CounterElement extends HTMLElement {
             this.counterValue = this.shadowRoot.querySelector('#counter-value');
         }
         if (this.incrementButton) {
-            this.incrementButton.addEventListener('click', this.decrement.bind(this));
+            this.incrementButton.addEventListener('click', this.increment.bind(this));
         }
         if (this.decrementButton) {
-            this.decrementButton.addEventListener('click', this.increment.bind(this));
+            this.decrementButton.addEventListener('click', this.decrement.bind(this));
         }
     }
 
@@ -87,6 +89,13 @@ class CounterElement extends HTMLElement {
             } else {
                 if (this.counter >= Number(this.getAttribute('stock'))) {
                     this.counter = Number(this.getAttribute('stock'));
+                    if (this.incrementButton) {
+                        this.incrementButton.disabled = true;
+                    }
+                } else {
+                    if (this.incrementButton) {
+                        this.incrementButton.disabled = false;
+                    }
                 }
             }
             this.counterValue.innerHTML = String(this.counter);

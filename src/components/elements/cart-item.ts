@@ -17,7 +17,7 @@ const styles = `
     margin-bottom: 10px;
     display: grid;
     grid-template-columns: 160px 1fr 1fr 120px; 
-    grid-template-rows: 20px 30px 30px 20px;
+    grid-template-rows: 20px 30px 30px 30px;
     column-gap: 10px;
     grid-template-areas:
       'thumbnail title title close'
