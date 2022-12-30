@@ -32,29 +32,21 @@ class CartController {
         return idx;
     }
 
-    addProductCount(id: number, count: number) {
+    setProductCount(id: number, count: number) {
         const index = this.getProductIndex(id);
         if (index !== -1) {
-            this.cart[index].count += count;
+            this.cart[index].count = count;
             StorageBox.setStorage(this.cart);
         } else {
             throw new Error(ErrorMessage.PRODUCT_NOT_IN_CART);
         }
     }
-
-    reduceProductCount(id: number, count = 1) {
-        const index = this.getProductIndex(id);
-        if (index !== -1) {
-            this.cart[index].count -= count;
-            StorageBox.setStorage(this.cart);
-            if (this.cart[index].count <= 0) {
-                this.removeProduct(id);
-            }
-        } else {
-            throw new Error(ErrorMessage.PRODUCT_NOT_IN_CART);
-        }
+    getSummaryCount() {
+        return this.cart.reduce((acc, item) => acc + item.count, 0);
     }
-
+    getSummaryAmount() {
+        return this.cart.reduce((acc, item) => acc + item.count * item.price, 0);
+    }
     getCart() {
         return this.cart;
     }

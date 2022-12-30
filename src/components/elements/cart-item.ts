@@ -84,9 +84,7 @@ template.innerHTML = `
     <div class='cart__item-thumbnail'>
       <img class ='cart__item-image'>
     </div>
-    
     <h3 class='cart__item-title'><slot name='title'></slot></h3>
-    
     <p class='cart__item-description'><slot name='description'></slot></p>  
     <p class = 'cart__item-amount'>Amount: $<span class='cart__item-amount-item'></span></p>
     <p class = 'cart__item-stock'>Stock: <span><slot name='stock'></slot></span></p>
@@ -94,8 +92,7 @@ template.innerHTML = `
     <p class = 'cart__item-rating'>Rating: <span><slot name='rating'></slot></span></p>
       <button class='cart__item-close'>X</button>
       <counter-element class='cart__item-count'></counter-element>
-      
-  </div>
+    </div>
   <hr> `;
 
 class CartItem extends HTMLElement {
@@ -136,11 +133,19 @@ class CartItem extends HTMLElement {
         const count = Number((e as CustomEvent).detail);
         if (count > 0 && count <= stock) {
             this.setAttribute('count', String(count));
+            this.handleCounted();
         }
 
         if (count === 0) {
             this.handleRemoveButton();
         }
+    }
+    handleCounted() {
+        const countedEvent = new CustomEvent('counted-id', {
+            bubbles: true,
+            detail: { id: this.getAttribute('id'), count: this.getAttribute('count') },
+        });
+        this.dispatchEvent(countedEvent);
     }
 
     handleRemoveButton() {

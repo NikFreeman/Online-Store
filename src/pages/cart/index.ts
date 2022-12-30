@@ -1,6 +1,7 @@
 import './cart.scss';
 import '../../components/elements/cart-item';
 import CartController from '../../components/controller/cartController';
+import PromoCodes from '../../models/promo-codes';
 import { ProductsController } from '../../components/controller/productsController';
 import { Product } from './../../models/Product';
 
@@ -34,9 +35,12 @@ function renderItem(product: Product, count: number, price: number) {
 
 function pageCartRender() {
     const app = document.getElementById('App');
-    app?.removeEventListener('remove-item', removeItem);
-    app?.addEventListener('remove-item', removeItem);
-
+    if (app) {
+        app.removeEventListener('remove-item', removeItem);
+        app.removeEventListener('counted-id', changeProductCount);
+        app.addEventListener('remove-item', removeItem);
+        app.addEventListener('counted-id', changeProductCount);
+    }
     const cartItem = cart
         .getCart()
         .map(({ id, count, price }) =>
@@ -47,20 +51,24 @@ function pageCartRender() {
 async function pageCart() {
     const app = document.getElementById('App'); //Kochab
     if (app) {
-        app.innerHTML = `<div>
-            <h3 class="cart__title">Cart</h3>
+        app.innerHTML = `<div class='wrapper'>
+            <h3 class="cart__title">Products in Cart</h3>
             
             <div class='cart__wrapper'>            
             <div class='cart__summary'>
             <h2 class='summary__title'>Summary</h2>
-            <p> Products: <span class='summary__product-value'>23</span></p>
-            <p> Total: <span class='summary__total-value'>222</span></p>
+            <p> Products: <span class='summary__product-value'></span></p>
+            <p> Total: $<span class='summary__not-promo'></span> $<span class='summary__total-value'></span></p>
+            <div class=''>
             <h4>Promo</h4>
-            <input class='summary__promo'>
+            <input class='summary__promo'><button class='btn'>Apply</button>
             <button class='summary__buy'>Buy now</button>
             </div>
         </div>
         `;
+        const inputPromo = app.querySelector('.summary__promo');
+        inputPromo?.removeEventListener('input', handleInputPromo);
+        inputPromo?.addEventListener('input', handleInputPromo);
     }
 
     const div = document.createElement('div');
@@ -80,7 +88,42 @@ async function pageCart() {
 function removeItem(e: Event) {
     const id = Number((e as CustomEvent).detail);
     cart.removeProduct(id);
-    pageCart();
+    renderRemoveCartItem(id);
+    setSummaryInfo();
+}
+
+function changeProductCount(e: Event) {
+    const { id, count } = (e as CustomEvent).detail;
+    cart.setProductCount(Number(id), Number(count));
+    setSummaryInfo();
+}
+
+function renderRemoveCartItem(id: number) {
+    const cartItems = document.querySelector('.cart__items');
+    if (cartItems) {
+        const item = cartItems.querySelector(`cart-item[id="${id}"]`);
+        if (item) {
+            const removeItem = item.closest('div') as Node;
+            cartItems.removeChild(removeItem);
+        }
+        if (cartItems.children.length === 0) {
+            cartItems.innerHTML = '<div class="top"><h3>Cart is empty</h3> </div>';
+        }
+    }
+}
+function setSummaryInfo() {
+    const summaryProductCount = document.querySelector('.summary__product-value');
+    const summaryProductAmount = document.querySelector('.summary__total-value');
+    if (summaryProductCount) {
+        summaryProductCount.textContent = `${cart.getSummaryCount()}`;
+    }
+    if (summaryProductAmount) {
+        summaryProductAmount.textContent = `${cart.getSummaryAmount()}`;
+    }
+}
+function handleInputPromo(e: Event) {
+    console.log(PromoCodes);
+    console.log(e.target);
 }
 
 export default pageCart;
