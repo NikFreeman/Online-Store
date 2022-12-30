@@ -15,6 +15,9 @@ const baseConfig = {
             {
                 test: /\.(png|jpg|svg|gif|ico)$/,
                 type: 'asset/resource',
+                generator: {
+                    filename: 'assets/icons/[name][ext]',
+                },
             },
             {
                 test: /\.(woff|woff2|eot|ttf|otf)$/i,

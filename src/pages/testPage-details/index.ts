@@ -1,6 +1,6 @@
 import './testPage-detail.scss';
 
-function testPageDetail(id: string) {
+function r_testPageDetail(id: string) {
     const fragment = `<div class="top">
                           <h1>Product ${id}</h1>
                           <h3>Product is loaded</h3>
@@ -8,4 +8,4 @@ function testPageDetail(id: string) {
     return fragment;
 }
 
-export default testPageDetail;
+export default r_testPageDetail;

@@ -4,7 +4,7 @@ html, body {
 #App {
     display: flex;
     min-height: inherit;
-    align-items: center;
+    align-items: flex-start;
     justify-content: center;
     overflow: auto;
 }
