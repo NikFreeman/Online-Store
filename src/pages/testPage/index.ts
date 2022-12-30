@@ -7,4 +7,4 @@ function r_testPage() {
     return fragment;
 }
 
-export { r_testPage };
+export default r_testPage;

@@ -8,4 +8,4 @@ function r_testPageDetail(id: string) {
     return fragment;
 }
 
-export { r_testPageDetail };
+export default r_testPageDetail;
