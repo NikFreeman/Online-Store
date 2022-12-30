@@ -1,17 +1,15 @@
-import { page404 } from '../pages/page404';
-import { r_testPage } from '../pages/testPage';
-import { r_testPageDetail } from '../pages/testPage-details';
-import pageCart from '../pages/cart';
-
+import page404 from '../pages/page404';
+import r_testPage from '../pages/testPage';
+import r_testPageDetail from '../pages/testPage-details';
 import render from '../utils/render';
+import { start } from '../pages/products/products';
 
 const mountedTag = 'App';
 const routes = new Map();
 
-routes.set('/', r_testPage);
+routes.set('/', start);
 routes.set('/product', r_testPage);
 routes.set('/product-detail/:id', r_testPageDetail);
-routes.set('/cart', pageCart);
 
 function routerHandler(): void {
     const routePath = parsePathName(window.location.pathname);
@@ -45,9 +43,9 @@ function parsePathName(pathname: string): false | { routePath: string; param: st
 
 function router(): void {
     window.addEventListener('click', (e) => {
-        e.preventDefault();
         const tempTarget = <HTMLElement>e.target;
         if (tempTarget.hasAttribute('data-link')) {
+            e.preventDefault();
             history.pushState('', '', window.location.origin + tempTarget.getAttribute('href'));
             routerHandler();
         }

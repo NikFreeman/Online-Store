@@ -1,0 +1,25 @@
+@import './styles/products.css';
+@import './styles/filters.css';
+@import './styles/ranges.css';
+@import './styles/checkboxes.css';
+@import './styles/settings.css';
+@import './styles/cards.css';
+
+
+@font-face {
+  font-family: 'Geometria';
+  src: url("assets/fonts/geometria_medium.otf");
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: 'Geometria';
+  src: url("assets/fonts/geometria_bold.otf");
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: 'Geometria';
+  src: url("assets/fonts/geometria_extrabold.otf");
+  font-weight: 800;
+}
