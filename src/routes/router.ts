@@ -3,6 +3,7 @@ import r_testPage from '../pages/testPage';
 import r_testPageDetail from '../pages/testPage-details';
 import render from '../utils/render';
 import { start } from '../pages/products/products';
+import pageCart from '../pages/cart';
 
 const mountedTag = 'App';
 const routes = new Map();
@@ -10,15 +11,17 @@ const routes = new Map();
 routes.set('/', start);
 routes.set('/product', r_testPage);
 routes.set('/product-detail/:id', r_testPageDetail);
+routes.set('/cart', pageCart);
 
 function routerHandler(): void {
     const routePath = parsePathName(window.location.pathname);
+
     if (routePath) {
         const name = String(routes.get(routePath.routePath).name);
         if (name.substring(0, 2) === 'r_') {
             render(mountedTag, routes.get(routePath.routePath)(routePath.param));
         } else {
-            start();
+            routes.get(routePath.routePath)(routePath.param);
         }
     } else {
         render(mountedTag, page404());

@@ -3,4 +3,4 @@
 team task Online-Store
 deploy
 
-<https://rainbow-lokum-9a005b.netlify.app/>
+<https://rainbow-online-store.netlify.app/>
