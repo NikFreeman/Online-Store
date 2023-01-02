@@ -4,6 +4,7 @@ import { createCards } from './cards';
 import { switchSizeItems, RangeSettings } from './settings';
 import { btnsContainer } from './copyLink';
 import { searchCont, searchIn, searchProducts } from './search';
+import { header } from '../../components/header/header';
 
 // query params
 export const searchParams = new URLSearchParams(document.location.search);
@@ -378,6 +379,7 @@ export async function start() {
     if (app) {
         app.innerHTML = '';
         app.append(main);
+        app.prepend(header);
     }
 }
 

@@ -16,7 +16,7 @@ cartTest.addProduct(34, 2, 657);
 
 //------
 
-const cart = new CartController();
+export const cart = new CartController();
 
 function renderItem(product: Product, count: number, price: number) {
     const template = document.createElement('template');
