@@ -4,6 +4,7 @@ import { createCards } from './cards';
 import { switchSizeItems, RangeSettings } from './settings';
 import { btnsContainer } from './copyLink';
 import { searchCont, searchIn, searchProducts } from './search';
+import { cart } from '../cart/index';
 
 // query params
 export const searchParams = new URLSearchParams(document.location.search);
@@ -461,16 +462,18 @@ function actionCardButtons(e: Event) {
         const elementId = e.target.closest('.card')?.id.substring(5);
         const prod = products.find((item) => item.id.toString() === elementId);
         if (prod) {
-            console.log(prod.description);
+            console.log(cart.getCart());
             if (e.target.classList.contains('card__detail-btn')) {
                 window.location.href = `/product-detail/${elementId}`;
             } else if (e.target.closest('.card__add-btn')) {
                 const addBtn = e.target.closest('.card__add-btn');
                 if (addBtn && addBtn.lastElementChild && addBtn.firstElementChild) {
                     if (addBtn.lastElementChild.textContent === 'remove') {
+                        cart.removeProduct(prod.id);
                         addBtn.lastElementChild.textContent = 'add';
                         addBtn.firstElementChild.setAttribute('data-count', '');
                     } else {
+                        cart.addProduct(prod.id, 1, prod.price);
                         addBtn.lastElementChild.textContent = 'remove';
                         addBtn.firstElementChild.setAttribute('data-count', '1');
                     }

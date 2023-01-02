@@ -1,6 +1,7 @@
 import { Product } from '../../models/types';
 import { cardsBlock, foundProducts } from './products';
 import { sortItems } from './settings';
+import { cart } from '../cart/index';
 
 const logo = require('../../assets/images/shopping-cart.svg');
 
@@ -44,7 +45,15 @@ export function createCards(data: Product[]) {
 
         const cartText = document.createElement('span');
         cartText.className = 'add-to-cart';
-        cartText.textContent = 'add';
+        if (cart.getCart().find((cartItem) => cartItem.id === item.id)) {
+            cartText.textContent = 'remove';
+            iconContainer.setAttribute(
+                'data-count',
+                `${cart.getCart().find((cartItem) => cartItem.id === item.id)?.count}`
+            );
+        } else {
+            cartText.textContent = 'add';
+        }
         addBtn.append(iconContainer, cartText);
 
         const detailsBtn = document.createElement('button');
