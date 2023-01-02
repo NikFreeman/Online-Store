@@ -455,3 +455,28 @@ export const cardsBlock = document.createElement('div');
 cardsBlock.className = 'cards';
 
 main.append(filtersContainer, sortAndSettings, cardsBlock);
+
+function actionCardButtons(e: Event) {
+    if (e.target instanceof HTMLElement) {
+        const elementId = e.target.closest('.card')?.id.substring(5);
+        const prod = products.find((item) => item.id.toString() === elementId);
+        if (prod) {
+            console.log(prod.description);
+            if (e.target.classList.contains('card__detail-btn')) {
+                window.location.href = `/product-detail/${elementId}`;
+            } else if (e.target.closest('.card__add-btn')) {
+                const addBtn = e.target.closest('.card__add-btn');
+                if (addBtn && addBtn.lastElementChild && addBtn.firstElementChild) {
+                    if (addBtn.lastElementChild.textContent === 'remove') {
+                        addBtn.lastElementChild.textContent = 'add';
+                        addBtn.firstElementChild.setAttribute('data-count', '');
+                    } else {
+                        addBtn.lastElementChild.textContent = 'remove';
+                        addBtn.firstElementChild.setAttribute('data-count', '1');
+                    }
+                }
+            }
+        }
+    }
+}
+cardsBlock.addEventListener('click', actionCardButtons);
