@@ -58,11 +58,14 @@ async function pageCart() {
             <div class='cart__summary'>
             <h2 class='summary__title'>Summary</h2>
             <p> Products: <span class='summary__product-value'></span></p>
-            <p> Total: $<span class='summary__not-promo'></span> $<span class='summary__total-value'></span></p>
+            <p> Total: <span class='summary__not-promo'></span> $<span class='summary__total-value'></span></p>
             <div class=''>
             <h4>Promo</h4>
-            <input class='summary__promo'><button class='btn'>Apply</button>
-            <button class='summary__buy'>Buy now</button>
+            <div class = 'summary__promo'>
+            <input type='text' class='summary__input'>
+            <button class='summary__btn'>Apply</button>
+            </div>
+            <button class='summary__btn summary__buy'>Buy now</button>
             </div>
         </div>
         `;
@@ -85,6 +88,7 @@ async function pageCart() {
         }
     }
 }
+
 function removeItem(e: Event) {
     const id = Number((e as CustomEvent).detail);
     cart.removeProduct(id);
