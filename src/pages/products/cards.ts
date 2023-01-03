@@ -1,6 +1,7 @@
 import { Product } from '../../models/types';
 import { cardsBlock, foundProducts } from './products';
 import { sortItems } from './settings';
+import { cart } from '../cart/index';
 
 const logo = require('../../assets/images/shopping-cart.svg');
 
@@ -9,12 +10,13 @@ export function createCards(data: Product[]) {
     sortItems(data).map((item) => {
         const card = document.createElement('div');
         card.className = 'card';
+        card.id = `card-${item.id}`;
 
         const discount = document.createElement('div');
         discount.className = 'card__discount';
         discount.textContent = `-${item.discountPercentage.toString()}%`;
 
-        const title = document.createElement('div');
+        const title = document.createElement('h4');
         title.className = 'card__title';
         title.textContent = item.title;
 
@@ -32,15 +34,25 @@ export function createCards(data: Product[]) {
         const addBtn = document.createElement('button');
         addBtn.className = 'card__add-btn card__btn';
 
+        const iconContainer = document.createElement('div');
+        iconContainer.className = 'card__icon-cont';
+
         const cartIcon = document.createElement('img');
         cartIcon.src = logo;
         cartIcon.alt = 'cart';
         cartIcon.className = 'card__cart-icon';
+        iconContainer.append(cartIcon);
 
         const cartText = document.createElement('span');
         cartText.className = 'add-to-cart';
-        cartText.textContent = 'add';
-        addBtn.append(cartIcon, cartText);
+        const product = cart.getCart().find((cartItem) => cartItem.id === item.id);
+        if (product) {
+            cartText.textContent = 'remove';
+            iconContainer.setAttribute('data-count', `${product.count}`);
+        } else {
+            cartText.textContent = 'add';
+        }
+        addBtn.append(iconContainer, cartText);
 
         const detailsBtn = document.createElement('button');
         detailsBtn.className = 'card__detail-btn card__btn';

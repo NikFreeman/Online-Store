@@ -5,18 +5,7 @@ import PromoCodes from '../../models/promo-codes';
 import { ProductsController } from '../../components/controller/productsController';
 import { Product } from './../../models/Product';
 
-//тестовое значение корзины
-localStorage.removeItem('cart');
-const cartTest = new CartController();
-cartTest.addProduct(3, 1, 100);
-cartTest.addProduct(23, 1, 110);
-cartTest.addProduct(26, 5, 112);
-cartTest.addProduct(78, 6, 214);
-cartTest.addProduct(34, 2, 657);
-
-//------
-
-const cart = new CartController();
+export const cart = new CartController();
 
 function renderItem(product: Product, count: number, price: number) {
     const template = document.createElement('template');
