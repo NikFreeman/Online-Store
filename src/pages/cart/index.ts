@@ -6,13 +6,13 @@ import { ProductsController } from '../../components/controller/productsControll
 import { Product } from './../../models/Product';
 
 //тестовое значение корзины
-localStorage.removeItem('cart');
-const cartTest = new CartController();
-cartTest.addProduct(3, 1, 100);
-cartTest.addProduct(23, 1, 110);
-cartTest.addProduct(26, 5, 112);
-cartTest.addProduct(78, 6, 214);
-cartTest.addProduct(34, 2, 657);
+// localStorage.removeItem('cart');
+// const cartTest = new CartController();
+// cartTest.addProduct(3, 1, 100);
+// cartTest.addProduct(23, 1, 110);
+// cartTest.addProduct(26, 5, 112);
+// cartTest.addProduct(78, 6, 214);
+// cartTest.addProduct(34, 2, 657);
 
 //------
 

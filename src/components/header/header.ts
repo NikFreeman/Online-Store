@@ -1,5 +1,4 @@
 import { cart } from '../../pages/cart/index';
-// const app = document.getElementById('App');
 
 export const header = document.createElement('header');
 header.className = 'header';
@@ -29,16 +28,17 @@ cartIconHeader.alt = 'cart';
 cartIconHeader.className = 'card__cart-icon';
 cartContainer.append(cartIconHeader);
 
-totalSum.textContent = `$ ${cart.getSummaryAmount()}`;
-if (cart.getSummaryCount() > 0) {
-    cartContainer.setAttribute('data-count', `${cart.getSummaryCount()}`);
-} else {
-    cartContainer.setAttribute('data-count', '');
+function updateHeaderCartData() {
+    totalSum.textContent = `$ ${cart.getSummaryAmount()}`;
+    if (cart.getSummaryCount() > 0) {
+        cartContainer.setAttribute('data-count', `${cart.getSummaryCount()}`);
+    } else {
+        cartContainer.setAttribute('data-count', '');
+    }
 }
+updateHeaderCartData();
 
 headerContent.append(shopLogo, totalBlock, cartContainer);
 header.append(headerContent);
 
-// if (app) {
-//     app.prepend(header);
-// }
+window.addEventListener('storage', updateHeaderCartData);
