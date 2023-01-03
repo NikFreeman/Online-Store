@@ -45,12 +45,10 @@ export function createCards(data: Product[]) {
 
         const cartText = document.createElement('span');
         cartText.className = 'add-to-cart';
-        if (cart.getCart().find((cartItem) => cartItem.id === item.id)) {
+        const product = cart.getCart().find((cartItem) => cartItem.id === item.id);
+        if (product) {
             cartText.textContent = 'remove';
-            iconContainer.setAttribute(
-                'data-count',
-                `${cart.getCart().find((cartItem) => cartItem.id === item.id)?.count}`
-            );
+            iconContainer.setAttribute('data-count', `${product.count}`);
         } else {
             cartText.textContent = 'add';
         }

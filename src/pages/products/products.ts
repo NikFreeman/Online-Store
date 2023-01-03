@@ -462,7 +462,6 @@ function actionCardButtons(e: Event) {
         const elementId = e.target.closest('.card')?.id.substring(5);
         const prod = products.find((item) => item.id.toString() === elementId);
         if (prod) {
-            console.log(cart.getCart());
             if (e.target.classList.contains('card__detail-btn')) {
                 window.location.href = `/product-detail/${elementId}`;
             } else if (e.target.closest('.card__add-btn')) {
