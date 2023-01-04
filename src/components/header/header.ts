@@ -1,4 +1,5 @@
 import { cart } from '../../pages/cart/index';
+import { routerHandler } from '../../routes/router';
 
 export const header = document.createElement('header');
 header.className = 'header';
@@ -47,7 +48,13 @@ export function updateHeaderCartData() {
     }
 }
 
-cartContainer.addEventListener('click', () => (window.location.href = '/cart'));
-shopLogo.addEventListener('click', () => (window.location.href = '/'));
+cartContainer.addEventListener('click', () => {
+    history.pushState({}, '', '/cart');
+    routerHandler();
+});
+shopLogo.addEventListener('click', () => {
+    history.pushState({}, '', '/');
+    routerHandler();
+});
 
 window.addEventListener('storage', updateHeaderCartData);
