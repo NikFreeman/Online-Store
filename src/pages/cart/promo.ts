@@ -11,7 +11,6 @@ export function renderApplyPromo() {
     }
     promo.getPromo().map((item) => {
         const promo = document.querySelector(`#${item.id}`);
-        console.log(promo);
         if (!promo) {
             const promo = document.createElement('div');
             promo.className = 'promo__item';
@@ -37,6 +36,8 @@ export function renderApplyPromo() {
 
     const blockPromo = document.querySelector('.summary__promo');
     const buttonsPromo = document.querySelector('.summary__buttons');
+    const event = new CustomEvent('apply-promo', { bubbles: true });
+    promoKey.dispatchEvent(event);
     blockPromo?.insertBefore(promoKey, buttonsPromo);
 }
 function handlePromoRemote(e: Event) {
@@ -44,12 +45,12 @@ function handlePromoRemote(e: Event) {
         const promoItems = document.querySelector('.promo__items');
         const btn = e.target;
         const removeItem = btn.closest('div') as HTMLDivElement;
-        console.log(removeItem);
         const id = removeItem.getAttribute('id');
-        console.log(id);
         if (id) {
             promo.removePromo(id);
         }
+        const event = new CustomEvent('apply-promo', { bubbles: true });
+        removeItem.dispatchEvent(event);
         if (promoItems) {
             promoItems.removeChild(removeItem);
         }

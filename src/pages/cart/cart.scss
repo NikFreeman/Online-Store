@@ -160,6 +160,27 @@ font-family: 'Geometria', sans-serif;
     border-radius: 5px;
     border: 2px solid #009FDF;
   }
+  .summary__product-value,
+  .summary__not-promo,
+  .summary__total-value {
+    font-family: 'Geometria';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 13px;
+    line-height: 16px;
+    padding-left: 5px;
+  }
+  .summary__not-promo {
+    color: red;
+    text-decoration: line-through; 
+  }
+  .summary__subtitle {
+    font-family: 'Geometria';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 13px;
+    line-height: 16px;
+  }
   @media (max-width: 1079px) {
     
   }

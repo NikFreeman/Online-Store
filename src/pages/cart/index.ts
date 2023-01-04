@@ -27,8 +27,10 @@ function pageCartRender() {
     if (app) {
         app.removeEventListener('remove-item', removeItem);
         app.removeEventListener('counted-id', changeProductCount);
+        app.removeEventListener('apply-promo', setSummaryInfo);
         app.addEventListener('remove-item', removeItem);
         app.addEventListener('counted-id', changeProductCount);
+        app.addEventListener('apply-promo', setSummaryInfo);
     }
     const cartItem = cart
         .getCart()
@@ -58,6 +60,7 @@ async function pageCart() {
             <div class = 'summary__buttons'>
             <input type='text' class='summary__input'>
             <button id='btn-apply' disabled class='summary__btn'>Apply</button>
+            <p class = 'summary__subtitle'>Test 'NG2023', 'EPM', 'RS-SCHOOL' </p>
             </div>
             <button class='summary__btn summary__buy'>Buy now</button>
             </div>
@@ -112,12 +115,27 @@ function renderRemoveCartItem(id: number) {
 }
 function setSummaryInfo() {
     const summaryProductCount = document.querySelector('.summary__product-value');
-    const summaryProductAmount = document.querySelector('.summary__total-value');
     if (summaryProductCount) {
         summaryProductCount.textContent = `${cart.getSummaryCount()}`;
     }
-    if (summaryProductAmount) {
-        summaryProductAmount.textContent = `$${cart.getSummaryAmount()}`;
+    const summaryNotDiscount = document.querySelector('.summary__not-promo');
+    const summaryProductAmount = document.querySelector('.summary__total-value');
+    if (promo.getPromo().length !== 0) {
+        const summaryDiscount = promo.getSummaryDiscount();
+        if (summaryNotDiscount) {
+            summaryNotDiscount.textContent = `$${cart.getSummaryAmount()}`;
+        }
+        const discount = cart.getSummaryAmount() - (cart.getSummaryAmount() * summaryDiscount) / 100;
+        if (summaryProductAmount) {
+            summaryProductAmount.textContent = `$${discount}`;
+        }
+    } else {
+        if (summaryProductAmount) {
+            summaryProductAmount.textContent = `$${cart.getSummaryAmount()}`;
+        }
+        if (summaryNotDiscount) {
+            summaryNotDiscount.textContent = '';
+        }
     }
 }
 function handleInputPromo(e: Event) {

@@ -26,7 +26,6 @@ class PromoController {
     }
     removePromo(value: string) {
         const removeIndex = this.getApplyPromoIndex(value);
-        console.log(' remove -- ', removeIndex);
         if (removeIndex !== -1) {
             this.applyPromo.splice(removeIndex, 1);
             StorageBox.key = this.storageKey;
@@ -41,6 +40,9 @@ class PromoController {
     }
     getPromo() {
         return this.applyPromo;
+    }
+    getSummaryDiscount() {
+        return this.applyPromo.reduce((acc, item) => acc + item.discount, 0);
     }
 }
 
