@@ -1,8 +1,8 @@
 import './cart.scss';
 import '../../components/elements/cart-item';
 import CartController from '../../components/controller/cartController';
-import PromoCodes from '../../models/promo-codes';
 import { ProductsController } from '../../components/controller/productsController';
+import { promo, renderApplyPromo } from './promo';
 import { Product } from './../../models/Product';
 
 export const cart = new CartController();
@@ -38,27 +38,32 @@ function pageCartRender() {
     return Promise.all(cartItem);
 }
 async function pageCart() {
-    const app = document.getElementById('App'); //Kochab
+    const app = document.getElementById('App');
     if (app) {
-        app.innerHTML = `<div class='wrapper'>
-            <h3 class="cart__title">Products in Cart</h3>
-            
-            <div class='cart__wrapper'>            
-            <div class='cart__summary'>
-            <h2 class='summary__title'>Summary</h2>
-            <p> Products: <span class='summary__product-value'></span></p>
-            <p> Total: <span class='summary__not-promo'></span> $<span class='summary__total-value'></span></p>
-            <div class=''>
-            <h4>Promo</h4>
-            <div class = 'summary__promo'>
+        app.innerHTML = `
+        <div class='wrapper'>
+          <h3 class="cart__title">Products in Cart</h3>
+          <div class='cart__wrapper'>            
+             <div class='cart__summary'>
+               <h2 class='summary__title'>Summary</h2>
+               <p class = 'summary__subtitle'> Products:
+                  <span class='summary__product-value'></span>
+               </p>
+               <p class = 'summary__subtitle'> Total:
+                 <span class='summary__not-promo'></span>
+                 <span class='summary__total-value'></span>
+               </p>
+            <div class='summary__promo'>
+            <h2 class='summary__title'>Promo</h2>            
+            <div class = 'summary__buttons'>
             <input type='text' class='summary__input'>
-            <button class='summary__btn'>Apply</button>
+            <button id='btn-apply' disabled class='summary__btn'>Apply</button>
             </div>
             <button class='summary__btn summary__buy'>Buy now</button>
             </div>
         </div>
         `;
-        const inputPromo = app.querySelector('.summary__promo');
+        const inputPromo = app.querySelector('.summary__input');
         inputPromo?.removeEventListener('input', handleInputPromo);
         inputPromo?.addEventListener('input', handleInputPromo);
     }
@@ -76,6 +81,7 @@ async function pageCart() {
             cartWrapper.insertBefore(divTemp, cartWrapper.firstChild);
         }
     }
+    renderApplyPromo();
 }
 
 function removeItem(e: Event) {
@@ -111,12 +117,37 @@ function setSummaryInfo() {
         summaryProductCount.textContent = `${cart.getSummaryCount()}`;
     }
     if (summaryProductAmount) {
-        summaryProductAmount.textContent = `${cart.getSummaryAmount()}`;
+        summaryProductAmount.textContent = `$${cart.getSummaryAmount()}`;
     }
 }
 function handleInputPromo(e: Event) {
-    console.log(PromoCodes);
-    console.log(e.target);
+    const input = e.currentTarget as HTMLInputElement;
+    const btnApply = document.querySelector('#btn-apply') as HTMLButtonElement;
+    if (e.currentTarget as HTMLInputElement) {
+        if (
+            promo.getPromoIndex(input.value.toUpperCase()) !== -1 &&
+            promo.getApplyPromoIndex(input.value.toUpperCase()) === -1
+        ) {
+            btnApply.disabled = false;
+            btnApply.addEventListener('click', handleApplyPromo);
+        } else {
+            btnApply.disabled = true;
+            btnApply.removeEventListener('click', handleApplyPromo);
+        }
+    }
+}
+
+function handleApplyPromo() {
+    const input = document.querySelector('.summary__input') as HTMLInputElement;
+    const promoKey = input.value.toUpperCase();
+    const btnApply = document.querySelector('#btn-apply') as HTMLButtonElement;
+    if (promo.getPromoIndex(promoKey) !== -1 && promo.getApplyPromoIndex(promoKey) === -1) {
+        promo.addPromo(promoKey);
+        renderApplyPromo();
+        btnApply.disabled = true;
+        btnApply.removeEventListener('click', handleApplyPromo);
+        input.value = '';
+    }
 }
 
 export default pageCart;

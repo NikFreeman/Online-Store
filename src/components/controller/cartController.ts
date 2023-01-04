@@ -1,10 +1,13 @@
 import Cart from '../../models/Cart/Cart';
+import { Keys } from '../../models/types';
 import ErrorMessage from '../../models/error-message';
 import StorageBox from '../../utils/storage';
 
 class CartController {
     public cart: Cart[];
+    private storageKey: Keys = 'cart';
     constructor() {
+        StorageBox.key = this.storageKey;
         this.cart = StorageBox.getStorage();
     }
     addProduct(id: number, count = 1, price: number) {
@@ -15,6 +18,7 @@ class CartController {
         };
         if (this.getProductIndex(id)) {
             this.cart.push(product);
+            StorageBox.key = this.storageKey;
             StorageBox.setStorage(this.cart);
         }
     }
@@ -22,6 +26,7 @@ class CartController {
         const removeIndex = this.getProductIndex(id);
         if (removeIndex !== -1) {
             this.cart.splice(removeIndex, 1);
+            StorageBox.key = this.storageKey;
             StorageBox.setStorage(this.cart);
         }
         return [];
@@ -36,6 +41,7 @@ class CartController {
         const index = this.getProductIndex(id);
         if (index !== -1) {
             this.cart[index].count = count;
+            StorageBox.key = this.storageKey;
             StorageBox.setStorage(this.cart);
         } else {
             throw new Error(ErrorMessage.PRODUCT_NOT_IN_CART);
