@@ -28,7 +28,17 @@ cartIconHeader.alt = 'cart';
 cartIconHeader.className = 'card__cart-icon';
 cartContainer.append(cartIconHeader);
 
-function updateHeaderCartData() {
+totalSum.textContent = `$ ${cart.getSummaryAmount()}`;
+if (cart.getSummaryCount() > 0) {
+    cartContainer.setAttribute('data-count', `${cart.getSummaryCount()}`);
+} else {
+    cartContainer.setAttribute('data-count', '');
+}
+
+headerContent.append(shopLogo, totalBlock, cartContainer);
+header.append(headerContent);
+
+export function updateHeaderCartData() {
     totalSum.textContent = `$ ${cart.getSummaryAmount()}`;
     if (cart.getSummaryCount() > 0) {
         cartContainer.setAttribute('data-count', `${cart.getSummaryCount()}`);
@@ -36,9 +46,8 @@ function updateHeaderCartData() {
         cartContainer.setAttribute('data-count', '');
     }
 }
-updateHeaderCartData();
 
-headerContent.append(shopLogo, totalBlock, cartContainer);
-header.append(headerContent);
+cartContainer.addEventListener('click', () => (window.location.href = '/cart'));
+shopLogo.addEventListener('click', () => (window.location.href = '/'));
 
 window.addEventListener('storage', updateHeaderCartData);

@@ -5,7 +5,7 @@ import { switchSizeItems, RangeSettings } from './settings';
 import { btnsContainer } from './copyLink';
 import { searchCont, searchIn, searchProducts } from './search';
 import { cart } from '../cart/index';
-import { header } from '../../components/header/header';
+import { header, updateHeaderCartData } from '../../components/header/header';
 
 // query params
 export const searchParams = new URLSearchParams(document.location.search);
@@ -478,9 +478,12 @@ function actionCardButtons(e: Event) {
                         addBtn.lastElementChild.textContent = 'remove';
                         addBtn.firstElementChild.setAttribute('data-count', '1');
                     }
+                    updateHeaderCartData();
                 }
             }
         }
     }
 }
 cardsBlock.addEventListener('click', actionCardButtons);
+
+// window.addEventListener('storage', updateHeaderCartData);

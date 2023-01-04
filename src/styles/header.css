@@ -17,6 +17,7 @@
 .header__logo {
   font-size: 2em;
   text-shadow: none;
+  cursor: pointer;
 }
 
 .header__total-container {
@@ -24,12 +25,12 @@
   font-style: normal;
   font-weight: 700;
   font-size: 1em;
-  /* text-transform: uppercase; */
   color: #FFFFFF;
 }
 
 .header__cart-container {
   position: relative;
+  cursor: pointer;
 }
 
 .header__cart-container::after {
