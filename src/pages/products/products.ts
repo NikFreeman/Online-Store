@@ -5,6 +5,8 @@ import { switchSizeItems, RangeSettings } from './settings';
 import { btnsContainer } from './copyLink';
 import { searchCont, searchIn, searchProducts } from './search';
 import { cart } from '../cart/index';
+import { header, updateHeaderCartData } from '../../components/header/header';
+import { routerHandler } from '../../routes/router';
 
 // query params
 export const searchParams = new URLSearchParams(document.location.search);
@@ -379,6 +381,7 @@ export async function start() {
     if (app) {
         app.innerHTML = '';
         app.append(main);
+        app.prepend(header);
     }
 }
 
@@ -463,7 +466,8 @@ function actionCardButtons(e: Event) {
         const prod = products.find((item) => item.id.toString() === elementId);
         if (prod) {
             if (e.target.classList.contains('card__detail-btn')) {
-                window.location.href = `/product-detail/${elementId}`;
+                history.pushState({}, '', `/product-detail/${elementId}`);
+                routerHandler();
             } else if (e.target.closest('.card__add-btn')) {
                 const addBtn = e.target.closest('.card__add-btn');
                 if (addBtn && addBtn.lastElementChild && addBtn.firstElementChild) {
@@ -476,6 +480,7 @@ function actionCardButtons(e: Event) {
                         addBtn.lastElementChild.textContent = 'remove';
                         addBtn.firstElementChild.setAttribute('data-count', '1');
                     }
+                    updateHeaderCartData();
                 }
             }
         }

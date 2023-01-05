@@ -4,6 +4,7 @@ import CartController from '../../components/controller/cartController';
 import { ProductsController } from '../../components/controller/productsController';
 import { promo, renderApplyPromo } from './promo';
 import { Product } from './../../models/Product';
+//import { header, updateHeaderCartData } from '../../components/header/header';
 
 export const cart = new CartController();
 
@@ -66,6 +67,7 @@ async function pageCart() {
             </div>
         </div>
         `;
+        //app.prepend(header);
         const inputPromo = app.querySelector('.summary__input');
         inputPromo?.removeEventListener('input', handleInputPromo);
         inputPromo?.addEventListener('input', handleInputPromo);
@@ -137,7 +139,9 @@ function setSummaryInfo() {
             summaryNotDiscount.textContent = '';
         }
     }
+    // updateHeaderCartData();
 }
+
 function handleInputPromo(e: Event) {
     const input = e.currentTarget as HTMLInputElement;
     const btnApply = document.querySelector('#btn-apply') as HTMLButtonElement;
