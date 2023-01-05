@@ -7,6 +7,8 @@ import { Product } from './../../models/Product';
 
 export const cart = new CartController();
 
+const cartEmpty = '<h3>Cart is empty</h3>';
+
 function renderItem(product: Product, count: number, price: number) {
     const template = document.createElement('template');
     template.innerHTML = `
@@ -47,7 +49,7 @@ async function pageCart() {
           <h3 class="cart__title">Products in Cart</h3>
           <div class='cart__wrapper'>
              <div class='cart__items'>
-             <h3>Cart is empty</h3> 
+             <h3>Cart is loaded</h3> 
              </div>            
              <div class='cart__summary'>
                <h2 class='summary__title'>Summary</h2>
@@ -85,7 +87,7 @@ async function pageCart() {
         if (cartWrapper) {
             cartWrapper.innerHTML = '';
             if (divTemp.children.length == 0) {
-                cartWrapper.innerHTML = '<div><h3>Cart is empty</h3></div>';
+                cartWrapper.innerHTML = cartEmpty;
             } else {
                 cartWrapper.append(divTemp);
             }
@@ -116,7 +118,7 @@ function renderRemoveCartItem(id: number) {
             cartItems.removeChild(removeItem);
         }
         if (cartItems.children.length === 0) {
-            cartItems.innerHTML = '<div><h3>Cart is empty</h3> </div>';
+            cartItems.innerHTML = cartEmpty;
         }
     }
 }
@@ -127,7 +129,7 @@ function setSummaryInfo() {
     }
     const summaryNotDiscount = document.querySelector('.summary__not-promo');
     const summaryProductAmount = document.querySelector('.summary__total-value');
-    if (promo.getPromo().length !== 0) {
+    if (promo.getPromos().length !== 0) {
         const summaryDiscount = promo.getSummaryDiscount();
         if (summaryNotDiscount) {
             summaryNotDiscount.textContent = `$${cart.getSummaryAmount()}`;
@@ -150,10 +152,8 @@ function handleInputPromo(e: Event) {
     const input = e.currentTarget as HTMLInputElement;
     const btnApply = document.querySelector('#btn-apply') as HTMLButtonElement;
     if (e.currentTarget as HTMLInputElement) {
-        if (
-            promo.getPromoIndex(input.value.toUpperCase()) !== -1 &&
-            promo.getApplyPromoIndex(input.value.toUpperCase()) === -1
-        ) {
+        const promoKey = input.value.toUpperCase();
+        if (promo.isPromoExists(promoKey) && !promo.isPromoAlreadyApplied(promoKey)) {
             btnApply.disabled = false;
             btnApply.addEventListener('click', handleApplyPromo);
         } else {
@@ -167,7 +167,7 @@ function handleApplyPromo() {
     const input = document.querySelector('.summary__input') as HTMLInputElement;
     const promoKey = input.value.toUpperCase();
     const btnApply = document.querySelector('#btn-apply') as HTMLButtonElement;
-    if (promo.getPromoIndex(promoKey) !== -1 && promo.getApplyPromoIndex(promoKey) === -1) {
+    if (promo.isPromoExists(promoKey) && !promo.isPromoAlreadyApplied(promoKey)) {
         promo.addPromo(promoKey);
         renderApplyPromo();
         btnApply.disabled = true;

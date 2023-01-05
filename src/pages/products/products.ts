@@ -474,7 +474,7 @@ function actionCardButtons(e: Event) {
                         addBtn.lastElementChild.textContent = 'remove';
                         addBtn.firstElementChild.setAttribute('data-count', '1');
                     }
-                    // eventUpdateCartData;
+
                     const eventUpdate = new CustomEvent('update-cart', { bubbles: true });
                     addBtn.dispatchEvent(eventUpdate);
                 }
