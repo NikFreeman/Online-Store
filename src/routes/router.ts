@@ -45,11 +45,11 @@ function parsePathName(pathname: string): false | { routePath: string; param: st
 
 function router(): void {
     window.addEventListener('click', (e) => {
-        e.preventDefault();
         const tempTarget = <HTMLElement>e.target;
         const itemLink = tempTarget.closest('a');
         if (itemLink) {
             if (itemLink.hasAttribute('data-link')) {
+                e.preventDefault();
                 history.pushState('', '', window.location.origin + itemLink.getAttribute('href'));
                 routerHandler();
             }

@@ -5,7 +5,6 @@ import { switchSizeItems, RangeSettings } from './settings';
 import { btnsContainer } from './copyLink';
 import { searchCont, searchIn, searchProducts } from './search';
 import { cart } from '../cart/index';
-import { routerHandler } from '../../routes/router';
 
 // query params
 export const searchParams = new URLSearchParams(document.location.search);
@@ -463,10 +462,7 @@ function actionCardButtons(e: Event) {
         const elementId = e.target.closest('.card')?.id.substring(5);
         const prod = products.find((item) => item.id.toString() === elementId);
         if (prod) {
-            if (e.target.classList.contains('card__detail-btn')) {
-                history.pushState({}, '', `/product-detail/${elementId}`);
-                routerHandler();
-            } else if (e.target.closest('.card__add-btn')) {
+            if (e.target.closest('.card__add-btn')) {
                 const addBtn = e.target.closest('.card__add-btn');
                 if (addBtn && addBtn.lastElementChild && addBtn.firstElementChild) {
                     if (addBtn.lastElementChild.textContent === 'remove') {
