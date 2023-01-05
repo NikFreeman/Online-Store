@@ -4,7 +4,6 @@ import CartController from '../../components/controller/cartController';
 import { ProductsController } from '../../components/controller/productsController';
 import { promo, renderApplyPromo } from './promo';
 import { Product } from './../../models/Product';
-import { header, updateHeaderCartData } from '../../components/header/header';
 
 export const cart = new CartController();
 
@@ -28,10 +27,10 @@ function pageCartRender() {
     if (app) {
         app.removeEventListener('remove-item', removeItem);
         app.removeEventListener('counted-id', changeProductCount);
-        app.removeEventListener('apply-promo', setSummaryInfo);
+        app.removeEventListener('update-cart', setSummaryInfo);
         app.addEventListener('remove-item', removeItem);
         app.addEventListener('counted-id', changeProductCount);
-        app.addEventListener('apply-promo', setSummaryInfo);
+        app.addEventListener('update-cart', setSummaryInfo);
     }
     const cartItem = cart
         .getCart()
@@ -46,7 +45,10 @@ async function pageCart() {
         app.innerHTML = `
         <div class='wrapper'>
           <h3 class="cart__title">Products in Cart</h3>
-          <div class='cart__wrapper'>            
+          <div class='cart__wrapper'>
+             <div class='cart__items'>
+             <h3>Cart is empty</h3> 
+             </div>            
              <div class='cart__summary'>
                <h2 class='summary__title'>Summary</h2>
                <p class = 'summary__subtitle'> Products:
@@ -67,23 +69,27 @@ async function pageCart() {
             </div>
         </div>
         `;
-        app.prepend(header);
+
         const inputPromo = app.querySelector('.summary__input');
         inputPromo?.removeEventListener('input', handleInputPromo);
         inputPromo?.addEventListener('input', handleInputPromo);
     }
 
-    const div = document.createElement('div');
-    div.classList.add('cart__items');
+    const div = document.createDocumentFragment();
     const data = await pageCartRender();
     const divTemp = data.reduce(function (div_1, template) {
         div_1.appendChild(template.content.cloneNode(true));
         return div_1;
     }, div);
     if (app) {
-        const cartWrapper = app.querySelector('.cart__wrapper');
+        const cartWrapper = app.querySelector('.cart__items');
         if (cartWrapper) {
-            cartWrapper.insertBefore(divTemp, cartWrapper.firstChild);
+            cartWrapper.innerHTML = '';
+            if (divTemp.children.length == 0) {
+                cartWrapper.innerHTML = '<div><h3>Cart is empty</h3></div>';
+            } else {
+                cartWrapper.append(divTemp);
+            }
         }
     }
     renderApplyPromo();
@@ -111,7 +117,7 @@ function renderRemoveCartItem(id: number) {
             cartItems.removeChild(removeItem);
         }
         if (cartItems.children.length === 0) {
-            cartItems.innerHTML = '<div class="top"><h3>Cart is empty</h3> </div>';
+            cartItems.innerHTML = '<div><h3>Cart is empty</h3> </div>';
         }
     }
 }
@@ -139,8 +145,8 @@ function setSummaryInfo() {
             summaryNotDiscount.textContent = '';
         }
     }
-    updateHeaderCartData();
 }
+
 function handleInputPromo(e: Event) {
     const input = e.currentTarget as HTMLInputElement;
     const btnApply = document.querySelector('#btn-apply') as HTMLButtonElement;

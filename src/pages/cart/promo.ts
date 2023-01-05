@@ -36,7 +36,7 @@ export function renderApplyPromo() {
 
     const blockPromo = document.querySelector('.summary__promo');
     const buttonsPromo = document.querySelector('.summary__buttons');
-    const event = new CustomEvent('apply-promo', { bubbles: true });
+    const event = new CustomEvent('update-cart', { bubbles: true });
     promoKey.dispatchEvent(event);
     blockPromo?.insertBefore(promoKey, buttonsPromo);
 }
@@ -49,7 +49,7 @@ function handlePromoRemote(e: Event) {
         if (id) {
             promo.removePromo(id);
         }
-        const event = new CustomEvent('apply-promo', { bubbles: true });
+        const event = new CustomEvent('update-cart', { bubbles: true });
         removeItem.dispatchEvent(event);
         if (promoItems) {
             promoItems.removeChild(removeItem);

@@ -1,11 +1,12 @@
-import { header } from '../components/header/header';
-
-function render(idTag: string, content: string) {
+function render(idTag: string, content: string | Node) {
     const app = document.getElementById(idTag);
     if (app) {
         app.innerHTML = '';
-        app.innerHTML = content;
-        app.prepend(header);
+        if (typeof content === 'string') {
+            app.innerHTML = content;
+        } else {
+            app.append(content);
+        }
     } else {
         throw new Error(`Not found ${idTag}`);
     }
