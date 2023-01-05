@@ -3,4 +3,4 @@
 team task Online-Store
 deploy
 
-<https://rainbow-online-store.netlify.app/>
+<https://nikfreeman-online-store.netlify.app/>

@@ -22,3 +22,5 @@ export interface ProductList {
 export type GroupedBy = {
     [key: string]: Product[];
 };
+
+export type Keys = 'cart' | 'promo';

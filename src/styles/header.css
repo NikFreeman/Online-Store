@@ -20,6 +20,10 @@
   cursor: pointer;
 }
 
+.header__logo-link {
+  text-decoration: none;
+}
+
 .header__total-container {
   font-family: 'Geometria';
   font-style: normal;

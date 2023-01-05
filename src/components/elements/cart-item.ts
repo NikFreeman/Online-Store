@@ -20,7 +20,7 @@ const styles = `
     grid-template-rows: 20px 30px 30px 30px;
     column-gap: 10px;
     grid-template-areas:
-      'thumbnail title title close'
+      'thumbnail title title remove'
       'thumbnail description description stock'
       'thumbnail catalog rating count'
       'thumbnail catalog rating amount';
@@ -47,20 +47,32 @@ const styles = `
 
   .cart__item-description {
     grid-area: description;
+    margin-bottom: 1rem;
   }
-  .cart__item-close {
-    grid-area: close;
-    justify-self: end;
-    border: 1px solid lightblue;
+
+  .cart__item-remove {
+    grid-area: remove;
+    justify-self: end;    
     background: linear-gradient(90deg, #0099DC 7.09%, #3CC39D 93.66%);
     box-shadow: 0px 2px 10px 1px rgba(0, 0, 0, 0.15);
-    border-radius: 5px;
+    border-radius: 5px;    
+    border: 2px solid #009FDF;
+    font-family: 'Geometria';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 13px;
+    line-height: 16px;
+    text-transform: uppercase;
+    color: white;
   } 
   
-  .cart__item-close:hover {
-    color:red;
-    border:1px solid blue;
+  .cart__item-remove:hover {
+    color:#009FDF;    
+    background: white;
+    border-radius: 5px;
+    border: 2px solid #009FDF;
   }
+
   .cart__item-stock {
     grid-area: stock;
     justify-self: center;
@@ -75,7 +87,24 @@ const styles = `
     height: 100%;
     object-fit: contain;
     border-radius: 10px;
-  }`;
+  }
+  .cart__item-description,
+  .cart__item-amount, 
+  .cart__item-stock,
+  .cart__item-category,
+  .cart__item-rating {
+    font-family: 'Geometria';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 13px;
+    line-height: 16px;
+    color: #495955;
+  }
+  .cart__item-category,
+  .cart__item-rating {
+    margin-top: 1rem;
+  }
+  `;
 
 const template = document.createElement('template');
 template.innerHTML = `
@@ -90,7 +119,7 @@ template.innerHTML = `
     <p class = 'cart__item-stock'>Stock: <span><slot name='stock'></slot></span></p>
     <p class = 'cart__item-category'>Category: <span><slot name='category'></slot></span></p>
     <p class = 'cart__item-rating'>Rating: <span><slot name='rating'></slot></span></p>
-      <button class='cart__item-close'>X</button>
+      <button class='cart__item-remove'>X</button>
       <counter-element class='cart__item-count'></counter-element>
     </div>
   <hr> `;
@@ -115,7 +144,7 @@ class CartItem extends HTMLElement {
                 this.counter.addEventListener('counted', this.countedCount.bind(this));
             }
             this.imageThumbnail = this.shadowRoot.querySelector('.cart__item-image');
-            this.removeButton = this.shadowRoot.querySelector('.cart__item-close');
+            this.removeButton = this.shadowRoot.querySelector('.cart__item-remove');
             if (this.removeButton) {
                 this.removeButton.addEventListener('click', this.handleRemoveButton.bind(this));
             }

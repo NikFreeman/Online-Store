@@ -5,9 +5,9 @@ const styles = `
     font-family: sans-serif;
 }
 .buttons {
-    border: 1px solid lightblue;
     background: white;
-    border-radius: 10px;
+    border-radius: 5px;
+    border: 2px solid #009FDF;
 }
 #counter-increment, #counter-decrement {
     font-weight: bold;

@@ -1,31 +1,35 @@
- 
 h1 {
-    text-align: center;   
+    text-align: center;
 }
+
+.wrapper {
+    max-width: 1200px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 0 10px;
+}
+
 .cart__title {
-font-family: 'Geometria', sans-serif;
+    font-family: 'Geometria', sans-serif;
     font-size: 2em;
     text-transform: uppercase;
     text-align: center;
-    color: #BFC0C0;
-    margin-top: 0px;    
+    color: #bfc0c0;
+    margin-top: 0px;
     font-weight: 900;
 }
-.top {
-    flex: 1 0 80%;
-    width: calc(240px + 2fr);
-}
+
 .cart__items {
     flex: 1 0 80%;
     box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.25);
     border-radius: 0px 0px 10px 10px;
     padding: 5px;
-    flex-grow:  1;
+    flex-grow: 1;
 }
-    
+
 .cart__summary {
     flex: 0 0 20%;
-    align-self: start; ;
+    align-self: start;
     box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.25);
     border-radius: 0px 0px 10px 10px;
     padding: 5px;
@@ -36,35 +40,136 @@ font-family: 'Geometria', sans-serif;
 }
 .summary__title {
     text-align: center;
+    font-family: 'Geometria';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 23px;
+    text-transform: uppercase;
+    color: #000000;
 }
 
-.summary__promo {
+.summary__input {
     text-align: center;
     margin-bottom: 10px;
     margin-right: 3px;
-    max-width: 100px;    
-    border: 1px solid #E6E6E6;
     box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2);
     border-radius: 5px;
+    width: 55%;
+    height: 40px;
+    border: 1px solid #cccccc;
+    outline: none;
+    border-radius: 5px;
+    padding: 10px;
+    font-family: 'Geometria';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 18px;
+    color: #6a6a6a;
+    text-transform: uppercase;
 }
 .summary__buy {
     display: block;
-    margin: 0 auto;    
+    margin: 0 auto;
 }
-.summary__product-value, .summary__total-value {
+.summary__product-value,
+.summary__total-value {
     font-weight: 600;
 }
-.wrapper {
-    max-width: 1200px;
-    width: 100%;
-    margin: 0 auto;
-    padding: 0 10px;
-  }
-  
-  @media (max-width: 1079px) {
-    
-  }
-  
-  @media (max-width: 779px) {
- 
+
+.summary__btn {
+    width: 40%;
+    height: 40px;
+    background: #f5f5f5;
+    border-radius: 5px;
+    border: 2px solid #009fdf;
+    font-family: 'Geometria';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 13px;
+    line-height: 16px;
+    text-transform: uppercase;
+    color: #009fdf;
+    box-shadow: 0px 2px 10px 1px rgba(0, 0, 0, 0.15);
+    &:hover {
+        background: #009fdf;
+        color: #f5f5f5;
+    }
+    &:disabled {
+        background: #f5f5f5;
+        color: #6a6a6a;
+        border: 2px solid #6a6a6a;
+    }
+}
+.summary__buttons {
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+.promo__items {
+    margin-top: 3px;
+    margin-bottom: 10px;
+    display: flex;
+    flex-direction: column;
+    row-gap: 5px;
+}
+.promo__item {
+    display: flex;
+    font-family: 'Geometria';
+    font-style: normal;
+    font-size: 13px;
+    line-height: 16px;
+
+    & > button {
+        margin-left: auto;
+    }
+    &-name {
+        font-weight: 500;
+        color: #495955;
+    }
+    &-discount {
+        font-weight: 700;
+        color: #009fdf;
+    }
+    &-remove {
+        background: linear-gradient(90deg, #0099dc 7.09%, #3cc39d 93.66%);
+        box-shadow: 0px 2px 10px 1px rgba(0, 0, 0, 0.15);
+        border-radius: 5px;
+        border: 2px solid #009fdf;
+        font-weight: 400;
+        text-transform: uppercase;
+        color: white;
+    }
+    &-remove:hover {
+        color: #009fdf;
+        background: white;
+        border-radius: 5px;
+        border: 2px solid #009fdf;
+    }
+}
+.summary__product-value,
+.summary__not-promo,
+.summary__total-value {
+    font-family: 'Geometria';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 13px;
+    line-height: 16px;
+    padding-left: 5px;
+}
+.summary__not-promo {
+    color: red;
+    text-decoration: line-through;
+}
+.summary__subtitle {
+    font-family: 'Geometria';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 13px;
+    line-height: 16px;
+}
+@media (max-width: 1079px) {
+}
+
+@media (max-width: 779px) {
 }

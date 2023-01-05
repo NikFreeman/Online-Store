@@ -1,8 +1,7 @@
-import Cart from '../models/Cart/Cart';
-
+import { Keys } from '../models/types';
 class StorageBox {
-    static key = 'cart';
-    static setStorage(value: Cart[]) {
+    static key: Keys;
+    static setStorage<T>(value: T) {
         localStorage.setItem(StorageBox.key, JSON.stringify(value));
     }
     static getStorage() {

@@ -46,10 +46,13 @@ function parsePathName(pathname: string): false | { routePath: string; param: st
 function router(): void {
     window.addEventListener('click', (e) => {
         const tempTarget = <HTMLElement>e.target;
-        if (tempTarget.hasAttribute('data-link')) {
-            e.preventDefault();
-            history.pushState('', '', window.location.origin + tempTarget.getAttribute('href'));
-            routerHandler();
+        const itemLink = tempTarget.closest('a');
+        if (itemLink) {
+            if (itemLink.hasAttribute('data-link')) {
+                e.preventDefault();
+                history.pushState('', '', window.location.origin + itemLink.getAttribute('href'));
+                routerHandler();
+            }
         }
     });
     window.addEventListener('popstate', routerHandler);

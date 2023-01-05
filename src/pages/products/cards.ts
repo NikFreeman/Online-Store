@@ -54,8 +54,9 @@ export function createCards(data: Product[]) {
         }
         addBtn.append(iconContainer, cartText);
 
-        const detailsBtn = document.createElement('button');
+        const detailsBtn = document.createElement('a');
         detailsBtn.className = 'card__detail-btn card__btn';
+        detailsBtn.href = `/product-detail/${item.id}`;
         detailsBtn.textContent = 'details';
 
         btnsWrapper.append(addBtn, detailsBtn);
