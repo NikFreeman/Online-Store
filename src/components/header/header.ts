@@ -1,6 +1,5 @@
 import { cart } from '../../pages/cart/index';
 import { promo } from '../../pages/cart/promo';
-import { routerHandler } from '../../routes/router';
 
 export const header = document.createElement('header');
 header.className = 'header';
@@ -11,6 +10,12 @@ headerContent.className = 'wrapper header__wrapper';
 const shopLogo = document.createElement('h1');
 shopLogo.className = 'header__logo';
 shopLogo.textContent = 'Online Store';
+
+const shopLink = document.createElement('a');
+shopLink.href = '/';
+shopLink.className = 'header__logo-link';
+shopLink.setAttribute('data-link', '');
+shopLink.append(shopLogo);
 
 const totalBlock = document.createElement('div');
 totalBlock.className = 'header__total-container';
@@ -24,11 +29,16 @@ totalBlock.append(totalSum);
 const cartContainer = document.createElement('div');
 cartContainer.className = 'header__cart-container';
 
+const cartLink = document.createElement('a');
+cartLink.href = '/cart';
+cartLink.setAttribute('data-link', '');
+
 const cartIconHeader = document.createElement('img');
 cartIconHeader.src = require('../../assets/images/shopping-cart.svg');
 cartIconHeader.alt = 'cart';
 cartIconHeader.className = 'card__cart-icon';
-cartContainer.append(cartIconHeader);
+cartLink.append(cartIconHeader);
+cartContainer.append(cartLink);
 
 totalSum.textContent = `$ ${cart.getSummaryAmount()}`;
 if (cart.getSummaryCount() > 0) {
@@ -37,7 +47,7 @@ if (cart.getSummaryCount() > 0) {
     cartContainer.setAttribute('data-count', '');
 }
 
-headerContent.append(shopLogo, totalBlock, cartContainer);
+headerContent.append(shopLink, totalBlock, cartContainer);
 header.append(headerContent);
 
 export function updateHeaderCartData() {
@@ -55,16 +65,7 @@ export function updateHeaderCartData() {
     }
 }
 
-cartContainer.addEventListener('click', () => {
-    history.pushState({}, '', '/cart');
-    routerHandler();
-});
-shopLogo.addEventListener('click', () => {
-    history.pushState({}, '', '/');
-    routerHandler();
-});
 window.addEventListener('update-cart', updateHeaderCartData);
 window.addEventListener('remove-item', updateHeaderCartData);
 window.addEventListener('counted-id', updateHeaderCartData);
-
 window.addEventListener('storage', updateHeaderCartData);

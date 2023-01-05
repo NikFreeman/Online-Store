@@ -47,7 +47,7 @@ async function pageCart() {
           <h3 class="cart__title">Products in Cart</h3>
           <div class='cart__wrapper'>
              <div class='cart__items'>
-             <div><h3>Cart is empty</h3> </div>
+             <h3>Cart is empty</h3> 
              </div>            
              <div class='cart__summary'>
                <h2 class='summary__title'>Summary</h2>
