@@ -50,26 +50,46 @@ const descriptionsBlock = document.createElement('div');
 descriptionsBlock.className = 'details__descriptions-block';
 
 const description = document.createElement('div');
-description.className = 'details__description';
 
 const discount = document.createElement('div');
-discount.className = 'details__description';
 
 const rating = document.createElement('div');
-rating.className = 'details__description';
 
 const stock = document.createElement('div');
-stock.className = 'details__description';
 
 const brand = document.createElement('div');
-brand.className = 'details__description';
 
 const category = document.createElement('div');
-category.className = 'details__description';
+
+enum Descriptions {
+    description,
+    discount,
+    rating,
+    stock,
+    brand,
+    category,
+}
 
 descriptionsBlock.append(description, discount, rating, stock, brand, category);
+let i = 0;
+for (const element of descriptionsBlock.children) {
+    element.className = `details__description description-${Descriptions[i]}`;
+    const firstChild = document.createElement('div');
+    firstChild.className = `description-title title-of-${Descriptions[i]}`;
+    firstChild.textContent = `${Descriptions[i]}:`;
+    if (firstChild.textContent === 'discount') {
+        firstChild.textContent = 'discount percentage:';
+    }
+    const secondChild = document.createElement('div');
+    secondChild.className = `description-text text-of-${Descriptions[i]}`;
+    element.append(firstChild, secondChild);
+    i++;
+}
 
-productBlock.append(productTitle, productDetails);
+const bottomBlock = document.createElement('div');
+bottomBlock.className = 'details__bottom';
+
+productBlock.append(productTitle, productDetails, bottomBlock);
 productDetails.append(imagesBlock, descriptionsBlock);
 imagesBlock.append(imageLargeBlock, imageSmallBlock);
 imageLargeBlock.append(imageLarge);
@@ -130,6 +150,11 @@ export function pageDetails() {
             };
             xhr.send(null);
         });
-        console.log(result);
+        (description.lastElementChild as HTMLDivElement).textContent = result.description;
+        (discount.lastElementChild as HTMLDivElement).textContent = result.discountPercentage.toString();
+        (rating.lastElementChild as HTMLDivElement).textContent = result.rating.toString();
+        (stock.lastElementChild as HTMLDivElement).textContent = result.stock.toString();
+        (brand.lastElementChild as HTMLDivElement).textContent = result.brand;
+        (category.lastElementChild as HTMLDivElement).textContent = result.category;
     });
 }
