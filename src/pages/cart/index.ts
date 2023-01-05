@@ -4,6 +4,7 @@ import CartController from '../../components/controller/cartController';
 import { ProductsController } from '../../components/controller/productsController';
 import { promo, renderApplyPromo } from './promo';
 import { Product } from './../../models/Product';
+import { updateHeaderCartData } from '../../components/header/header';
 
 export const cart = new CartController();
 
@@ -137,6 +138,7 @@ function setSummaryInfo() {
             summaryNotDiscount.textContent = '';
         }
     }
+    updateHeaderCartData();
 }
 function handleInputPromo(e: Event) {
     const input = e.currentTarget as HTMLInputElement;
