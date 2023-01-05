@@ -47,7 +47,7 @@ async function pageCart() {
           <h3 class="cart__title">Products in Cart</h3>
           <div class='cart__wrapper'>
              <div class='cart__items'>
-             <div class="top"><h3>Cart is empty</h3> </div>
+             <div><h3>Cart is empty</h3> </div>
              </div>            
              <div class='cart__summary'>
                <h2 class='summary__title'>Summary</h2>
@@ -85,7 +85,7 @@ async function pageCart() {
         if (cartWrapper) {
             cartWrapper.innerHTML = '';
             if (divTemp.children.length == 0) {
-                cartWrapper.innerHTML = '<div class="top"><h3>Cart is empty</h3></div>';
+                cartWrapper.innerHTML = '<div><h3>Cart is empty</h3></div>';
             } else {
                 cartWrapper.append(divTemp);
             }
@@ -116,7 +116,7 @@ function renderRemoveCartItem(id: number) {
             cartItems.removeChild(removeItem);
         }
         if (cartItems.children.length === 0) {
-            cartItems.innerHTML = '<div class="top"><h3>Cart is empty</h3> </div>';
+            cartItems.innerHTML = '<div><h3>Cart is empty</h3> </div>';
         }
     }
 }
