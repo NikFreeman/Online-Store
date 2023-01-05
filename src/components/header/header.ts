@@ -1,4 +1,5 @@
 import { cart } from '../../pages/cart/index';
+import { promo } from '../../pages/cart/promo';
 import { routerHandler } from '../../routes/router';
 
 export const header = document.createElement('header');
@@ -40,7 +41,13 @@ headerContent.append(shopLogo, totalBlock, cartContainer);
 header.append(headerContent);
 
 export function updateHeaderCartData() {
-    totalSum.textContent = `$ ${cart.getSummaryAmount()}`;
+    if (promo.getPromo().length !== 0) {
+        totalSum.textContent = `$ ${
+            cart.getSummaryAmount() - (cart.getSummaryAmount() * promo.getSummaryDiscount()) / 100
+        }`;
+    } else {
+        totalSum.textContent = `$ ${cart.getSummaryAmount()}`;
+    }
     if (cart.getSummaryCount() > 0) {
         cartContainer.setAttribute('data-count', `${cart.getSummaryCount()}`);
     } else {
@@ -56,5 +63,8 @@ shopLogo.addEventListener('click', () => {
     history.pushState({}, '', '/');
     routerHandler();
 });
+window.addEventListener('update-cart', updateHeaderCartData);
+window.addEventListener('remove-item', updateHeaderCartData);
+window.addEventListener('counted-id', updateHeaderCartData);
 
 window.addEventListener('storage', updateHeaderCartData);
