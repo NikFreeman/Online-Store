@@ -1,16 +1,17 @@
 import page404 from '../pages/page404';
 import r_testPage from '../pages/testPage';
-import r_testPageDetail from '../pages/testPage-details';
+// import r_testPageDetail from '../pages/testPage-details';
 import render from '../utils/render';
 import { start } from '../pages/products/products';
 import pageCart from '../pages/cart';
+import { pageDetails } from '../pages/details/details';
 
 const mountedTag = 'App';
 const routes = new Map();
 
 routes.set('/', start);
 routes.set('/product', r_testPage);
-routes.set('/product-detail/:id', r_testPageDetail);
+routes.set('/product-detail/:id', pageDetails);
 routes.set('/cart', pageCart);
 
 export function routerHandler(): void {
