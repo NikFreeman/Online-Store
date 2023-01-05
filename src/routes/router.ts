@@ -13,7 +13,7 @@ routes.set('/product', r_testPage);
 routes.set('/product-detail/:id', r_testPageDetail);
 routes.set('/cart', pageCart);
 
-function routerHandler(): void {
+export function routerHandler(): void {
     const routePath = parsePathName(window.location.pathname);
 
     if (routePath) {

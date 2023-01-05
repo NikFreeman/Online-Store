@@ -4,6 +4,7 @@ import CartController from '../../components/controller/cartController';
 import PromoCodes from '../../models/promo-codes';
 import { ProductsController } from '../../components/controller/productsController';
 import { Product } from './../../models/Product';
+import { header, updateHeaderCartData } from '../../components/header/header';
 
 export const cart = new CartController();
 
@@ -55,6 +56,7 @@ async function pageCart() {
             </div>
         </div>
         `;
+        app.prepend(header);
         const inputPromo = app.querySelector('.summary__promo');
         inputPromo?.removeEventListener('input', handleInputPromo);
         inputPromo?.addEventListener('input', handleInputPromo);
@@ -109,6 +111,7 @@ function setSummaryInfo() {
     if (summaryProductAmount) {
         summaryProductAmount.textContent = `${cart.getSummaryAmount()}`;
     }
+    updateHeaderCartData();
 }
 function handleInputPromo(e: Event) {
     console.log(PromoCodes);
