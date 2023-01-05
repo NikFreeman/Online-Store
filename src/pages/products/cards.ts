@@ -57,6 +57,7 @@ export function createCards(data: Product[]) {
         const detailsBtn = document.createElement('a');
         detailsBtn.className = 'card__detail-btn card__btn';
         detailsBtn.href = `/product-detail/${item.id}`;
+        detailsBtn.setAttribute('data-link', '');
         detailsBtn.textContent = 'details';
 
         btnsWrapper.append(addBtn, detailsBtn);
