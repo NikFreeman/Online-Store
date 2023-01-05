@@ -4,11 +4,11 @@ import StorageBox from '../../utils/storage';
 import Promo from '../../models/Cart/Promo';
 
 class PromoController {
-    public applyPromo: Promo[];
+    public appliedPromos: Promo[];
     private storageKey: Keys = 'promo';
     constructor() {
         StorageBox.key = this.storageKey;
-        this.applyPromo = StorageBox.getStorage();
+        this.appliedPromos = StorageBox.getStorage();
     }
     addPromo(value: string) {
         const idx = this.getPromoIndex(value);
@@ -17,32 +17,41 @@ class PromoController {
                 id: value,
                 discount: promoCodes[idx].discount,
             };
-            if (this.getApplyPromoIndex(value) === -1) {
-                this.applyPromo.push(tempPromo);
+            if (this.isPromoExists(value)) {
+                this.appliedPromos.push(tempPromo);
                 StorageBox.key = this.storageKey;
-                StorageBox.setStorage(this.applyPromo);
+                StorageBox.setStorage(this.appliedPromos);
             }
         }
     }
     removePromo(value: string) {
-        const removeIndex = this.getApplyPromoIndex(value);
+        const removeIndex = this.getAppliedPromosIndex(value);
         if (removeIndex !== -1) {
-            this.applyPromo.splice(removeIndex, 1);
+            this.appliedPromos.splice(removeIndex, 1);
             StorageBox.key = this.storageKey;
-            StorageBox.setStorage(this.applyPromo);
+            StorageBox.setStorage(this.appliedPromos);
+            return true;
         }
+        return false;
     }
     getPromoIndex(value: string) {
         return promoCodes.findIndex((el) => el.id === value);
     }
-    getApplyPromoIndex(value: string) {
-        return this.applyPromo.findIndex((el) => el.id === value);
+    getAppliedPromosIndex(value: string) {
+        return this.appliedPromos.findIndex((el) => el.id === value);
     }
-    getPromo() {
-        return this.applyPromo;
+    getPromos() {
+        return this.appliedPromos;
     }
     getSummaryDiscount() {
-        return this.applyPromo.reduce((acc, item) => acc + item.discount, 0);
+        return this.appliedPromos.reduce((acc, item) => acc + item.discount, 0);
+    }
+    isPromoExists(value: string) {
+        return promoCodes.findIndex((el) => el.id === value) !== -1;
+    }
+
+    isPromoAlreadyApplied(value: string) {
+        return this.appliedPromos.findIndex((el) => el.id === value) !== -1;
     }
 }
 

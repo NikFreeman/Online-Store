@@ -40,7 +40,7 @@ cartIconHeader.className = 'card__cart-icon';
 cartLink.append(cartIconHeader);
 cartContainer.append(cartLink);
 
-totalSum.textContent = `$ ${cart.getSummaryAmount()}`;
+totalSum.textContent = `$ ${cart.getSummaryAmount() - (cart.getSummaryAmount() * promo.getSummaryDiscount()) / 100}`;
 if (cart.getSummaryCount() > 0) {
     cartContainer.setAttribute('data-count', `${cart.getSummaryCount()}`);
 } else {
@@ -51,13 +51,10 @@ headerContent.append(shopLink, totalBlock, cartContainer);
 header.append(headerContent);
 
 export function updateHeaderCartData() {
-    if (promo.getPromo().length !== 0) {
-        totalSum.textContent = `$ ${
-            cart.getSummaryAmount() - (cart.getSummaryAmount() * promo.getSummaryDiscount()) / 100
-        }`;
-    } else {
-        totalSum.textContent = `$ ${cart.getSummaryAmount()}`;
-    }
+    totalSum.textContent = `$ ${
+        cart.getSummaryAmount() - (cart.getSummaryAmount() * promo.getSummaryDiscount()) / 100
+    }`;
+
     if (cart.getSummaryCount() > 0) {
         cartContainer.setAttribute('data-count', `${cart.getSummaryCount()}`);
     } else {

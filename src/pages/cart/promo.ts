@@ -9,7 +9,7 @@ export function renderApplyPromo() {
         promoKey.className = 'promo__items';
         promoKey.addEventListener('click', handlePromoRemote);
     }
-    promo.getPromo().map((item) => {
+    promo.getPromos().map((item) => {
         const promo = document.querySelector(`#${item.id}`);
         if (!promo) {
             const promo = document.createElement('div');
