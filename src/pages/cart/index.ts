@@ -4,6 +4,7 @@ import CartController from '../../components/controller/cartController';
 import { ProductsController } from '../../components/controller/productsController';
 import { promo, renderApplyPromo } from './promo';
 import { Product } from './../../models/Product';
+import { showModal } from './../modal';
 
 export const cart = new CartController();
 
@@ -67,13 +68,17 @@ async function pageCart() {
             <button id='btn-apply' disabled class='summary__btn'>Apply</button>
             <p class = 'summary__subtitle'>Test 'NG2023', 'EPM', 'RS-SCHOOL' </p>
             </div>
-            <button class='summary__btn summary__buy'>Buy now</button>
+            <button id='btn-buy' class='summary__btn summary__buy'>Buy now</button>
             </div>
         </div>
         `;
         const inputPromo = app.querySelector('.summary__input');
         inputPromo?.removeEventListener('input', handleInputPromo);
         inputPromo?.addEventListener('input', handleInputPromo);
+
+        const buttonBuy = app.querySelector('#btn-buy');
+        buttonBuy?.removeEventListener('click', showModal);
+        buttonBuy?.addEventListener('click', showModal);
     }
 
     const div = document.createDocumentFragment();
