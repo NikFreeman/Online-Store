@@ -3,7 +3,7 @@ import { cardsBlock, foundProducts } from './products';
 import { sortItems } from './settings';
 import { cart } from '../cart/index';
 
-const logo = require('../../assets/images/shopping-cart.svg');
+export const logo = require('../../assets/images/shopping-cart.svg');
 
 export function createCards(data: Product[]) {
     cardsBlock.innerHTML = '';

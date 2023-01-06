@@ -1,4 +1,7 @@
 import { ProductsController } from '../../components/controller/productsController';
+import { Product } from '../../models/types';
+import { logo } from '../products/cards';
+import { cart } from '../cart/index';
 
 const wrapper = document.createElement('div');
 wrapper.className = 'wrapper details__wrapper';
@@ -27,7 +30,7 @@ const productBlock = document.createElement('div');
 productBlock.className = 'details__product-block product';
 wrapper.append(breadcrumbsBlock, productBlock);
 
-const productTitle = document.createElement('div');
+const productTitle = document.createElement('h3');
 productTitle.className = 'details__title product__title';
 
 const productDetails = document.createElement('div');
@@ -61,6 +64,8 @@ const brand = document.createElement('div');
 
 const category = document.createElement('div');
 
+const price = document.createElement('div');
+
 enum Descriptions {
     description,
     discount,
@@ -68,9 +73,10 @@ enum Descriptions {
     stock,
     brand,
     category,
+    price,
 }
 
-descriptionsBlock.append(description, discount, rating, stock, brand, category);
+descriptionsBlock.append(description, discount, rating, stock, brand, category, price);
 let i = 0;
 for (const element of descriptionsBlock.children) {
     element.className = `details__description description-${Descriptions[i]}`;
@@ -89,10 +95,34 @@ for (const element of descriptionsBlock.children) {
 const bottomBlock = document.createElement('div');
 bottomBlock.className = 'details__bottom';
 
-productBlock.append(productTitle, productDetails, bottomBlock);
+const addBtn = document.createElement('button');
+addBtn.className = 'card__add-btn details__btn';
+
+const iconContainer = document.createElement('div');
+iconContainer.className = 'card__icon-cont';
+
+const cartIcon = document.createElement('img');
+cartIcon.src = logo;
+cartIcon.alt = 'cart';
+cartIcon.className = 'card__cart-icon';
+
+const cartText = document.createElement('span');
+cartText.className = 'add-to-cart';
+
+const buyBtn = document.createElement('a');
+buyBtn.className = 'card__detail-btn details__btn';
+buyBtn.href = '/cart';
+buyBtn.textContent = 'buy now';
+
+iconContainer.append(cartIcon);
+addBtn.append(iconContainer, cartText);
+bottomBlock.append(addBtn, buyBtn);
+
+productBlock.append(productTitle, productDetails, imageSmallBlock, bottomBlock);
 productDetails.append(imagesBlock, descriptionsBlock);
-imagesBlock.append(imageLargeBlock, imageSmallBlock);
+imagesBlock.append(imageLargeBlock);
 imageLargeBlock.append(imageLarge);
+let currentProduct: Product;
 
 export function pageDetails() {
     const app = document.getElementById('App');
@@ -108,6 +138,7 @@ export function pageDetails() {
     }
     const product = ProductsController.getProductDetails(productId);
     product.then(function (result) {
+        currentProduct = result;
         breadcrumbCategory.textContent = result.category;
         breadcrumbBrand.textContent = result.brand;
         breadcrumbTitle.textContent = result.title;
@@ -127,34 +158,90 @@ export function pageDetails() {
         };
         xhr.send(null);
         const sizes: (string | null)[] = [];
-        result.images.forEach((image) => {
-            const imageSmall = document.createElement('img');
-            imageSmall.className = 'product__image image__small';
-            imageSmall.alt = 'product';
-            imageSmall.src = image;
-            const xhr = new XMLHttpRequest();
-            xhr.open('HEAD', image, true);
-            xhr.onreadystatechange = function () {
-                if (xhr.readyState == 4) {
-                    if (xhr.status == 200) {
-                        const smallImageSize = xhr.getResponseHeader('Content-Length');
-                        if (smallImageSize && !sizes.includes(smallImageSize)) {
-                            sizes.push(smallImageSize);
-                            imageSmallBlock.append(imageSmall);
-                            if (bigImageSize === smallImageSize) {
-                                imageSmall.classList.add('image__active');
+        if (!imageSmallBlock.firstElementChild) {
+            result.images.forEach((image) => {
+                const imageSmall = document.createElement('img');
+                imageSmall.className = 'product__image image__small';
+                imageSmall.alt = 'product';
+                imageSmall.src = image;
+                const xhr = new XMLHttpRequest();
+                xhr.open('HEAD', image, true);
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState == 4) {
+                        if (xhr.status == 200) {
+                            const smallImageSize = xhr.getResponseHeader('Content-Length');
+                            if (smallImageSize && !sizes.includes(smallImageSize)) {
+                                sizes.push(smallImageSize);
+                                imageSmallBlock.append(imageSmall);
+                                if (bigImageSize === smallImageSize) {
+                                    imageSmall.classList.add('image__active');
+                                }
                             }
                         }
                     }
-                }
-            };
-            xhr.send(null);
-        });
+                };
+                xhr.send(null);
+            });
+        }
         (description.lastElementChild as HTMLDivElement).textContent = result.description;
         (discount.lastElementChild as HTMLDivElement).textContent = result.discountPercentage.toString();
         (rating.lastElementChild as HTMLDivElement).textContent = result.rating.toString();
         (stock.lastElementChild as HTMLDivElement).textContent = result.stock.toString();
         (brand.lastElementChild as HTMLDivElement).textContent = result.brand;
         (category.lastElementChild as HTMLDivElement).textContent = result.category;
+        (price.lastElementChild as HTMLDivElement).textContent = `$ ${result.price}`;
+        const prodInCart = cart.getCart().find((cartItem) => cartItem.id === result.id);
+        if (prodInCart) {
+            cartText.textContent = 'remove';
+            iconContainer.setAttribute('data-count', `${prodInCart.count}`);
+        } else {
+            cartText.textContent = 'add';
+        }
     });
 }
+
+function actionAddToCartButton() {
+    if (addBtn && addBtn.lastElementChild && addBtn.firstElementChild) {
+        if (addBtn.lastElementChild.textContent === 'remove') {
+            cart.removeProduct(currentProduct.id);
+            addBtn.lastElementChild.textContent = 'add';
+            addBtn.firstElementChild.setAttribute('data-count', '');
+        } else {
+            cart.addProduct(currentProduct.id, 1, currentProduct.price);
+            addBtn.lastElementChild.textContent = 'remove';
+            addBtn.firstElementChild.setAttribute('data-count', '1');
+        }
+        const eventUpdate = new CustomEvent('update-cart', { bubbles: true });
+        addBtn.dispatchEvent(eventUpdate);
+    }
+}
+
+addBtn.addEventListener('click', actionAddToCartButton);
+
+function switchMainImage(e: Event) {
+    if (e.target instanceof HTMLImageElement) {
+        if (!e.target.classList.contains('image__active') && e.target.parentElement) {
+            imageLarge.src = e.target.src;
+            for (const imageElement of e.target.parentElement.children) {
+                imageElement.classList.remove('image__active');
+            }
+            e.target.classList.add('image__active');
+        }
+    }
+}
+
+imageSmallBlock.addEventListener('click', switchMainImage);
+
+function actionBuyNowButton() {
+    if (addBtn && addBtn.lastElementChild && addBtn.firstElementChild) {
+        if (addBtn.lastElementChild.textContent === 'add') {
+            cart.addProduct(currentProduct.id, 1, currentProduct.price);
+            addBtn.lastElementChild.textContent = 'remove';
+            addBtn.firstElementChild.setAttribute('data-count', '1');
+        }
+        const eventUpdate = new CustomEvent('update-cart', { bubbles: true });
+        addBtn.dispatchEvent(eventUpdate);
+    }
+}
+
+buyBtn.addEventListener('click', actionBuyNowButton);
