@@ -49,6 +49,9 @@ const imageLarge = document.createElement('img');
 imageLarge.className = 'product__image image__large';
 imageLarge.alt = 'product';
 
+const mask = document.createElement('div');
+mask.className = 'details__mask loader';
+
 const descriptionsBlock = document.createElement('div');
 descriptionsBlock.className = 'details__descriptions-block';
 
@@ -121,7 +124,8 @@ bottomBlock.append(addBtn, buyBtn);
 productBlock.append(productTitle, productDetails, imageSmallBlock, bottomBlock);
 productDetails.append(imagesBlock, descriptionsBlock);
 imagesBlock.append(imageLargeBlock);
-imageLargeBlock.append(imageLarge);
+imageLargeBlock.append(mask);
+// imageLargeBlock.append(imageLarge);
 let currentProduct: Product;
 
 export function pageDetails() {
@@ -130,6 +134,7 @@ export function pageDetails() {
         app.innerHTML = '';
         app.append(wrapper);
     }
+    imageLarge.remove();
     const productId = Number(window.location.href.split('/').pop());
     if (productId > 100 || productId < 1 || !productId) {
         breadcrumbsBlock.innerHTML = `Product id "${window.location.href.split('/').pop()}" not found`;
@@ -144,6 +149,10 @@ export function pageDetails() {
         breadcrumbTitle.textContent = result.title;
         productTitle.textContent = result.title;
         imageLarge.src = result.thumbnail;
+        imageLarge.addEventListener('load', () => {
+            mask.remove();
+            imageLargeBlock.append(imageLarge);
+        });
         let bigImageSize: string | null = '';
         const xhr = new XMLHttpRequest();
         xhr.open('HEAD', result.thumbnail, true);
@@ -158,31 +167,30 @@ export function pageDetails() {
         };
         xhr.send(null);
         const sizes: (string | null)[] = [];
-        if (!imageSmallBlock.firstElementChild) {
-            result.images.forEach((image) => {
-                const imageSmall = document.createElement('img');
-                imageSmall.className = 'product__image image__small';
-                imageSmall.alt = 'product';
-                imageSmall.src = image;
-                const xhr = new XMLHttpRequest();
-                xhr.open('HEAD', image, true);
-                xhr.onreadystatechange = function () {
-                    if (xhr.readyState == 4) {
-                        if (xhr.status == 200) {
-                            const smallImageSize = xhr.getResponseHeader('Content-Length');
-                            if (smallImageSize && !sizes.includes(smallImageSize)) {
-                                sizes.push(smallImageSize);
-                                imageSmallBlock.append(imageSmall);
-                                if (bigImageSize === smallImageSize) {
-                                    imageSmall.classList.add('image__active');
-                                }
+        imageSmallBlock.innerHTML = '';
+        result.images.forEach((image) => {
+            const imageSmall = document.createElement('img');
+            imageSmall.className = 'product__image image__small';
+            imageSmall.alt = 'product';
+            imageSmall.src = image;
+            const xhr = new XMLHttpRequest();
+            xhr.open('HEAD', image, true);
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4) {
+                    if (xhr.status == 200) {
+                        const smallImageSize = xhr.getResponseHeader('Content-Length');
+                        if (smallImageSize && !sizes.includes(smallImageSize)) {
+                            sizes.push(smallImageSize);
+                            imageSmallBlock.append(imageSmall);
+                            if (bigImageSize === smallImageSize) {
+                                imageSmall.classList.add('image__active');
                             }
                         }
                     }
-                };
-                xhr.send(null);
-            });
-        }
+                }
+            };
+            xhr.send(null);
+        });
         (description.lastElementChild as HTMLDivElement).textContent = result.description;
         (discount.lastElementChild as HTMLDivElement).textContent = result.discountPercentage.toString();
         (rating.lastElementChild as HTMLDivElement).textContent = result.rating.toString();

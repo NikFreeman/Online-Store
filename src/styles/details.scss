@@ -61,6 +61,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  height: 100%;
 }
 
 .image__large {  
@@ -130,4 +131,84 @@
   font-size: 26px;
   line-height: 32px;
   color: #E56B50;
+}
+
+.details__mask {  
+  width: 100%;
+  height: 100%;
+  background: #ffffff;
+}
+
+
+.loader {
+  width: 30px;
+  height: 30px;
+  position: relative;
+  margin: auto;
+}
+.loader::before, .loader::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  width: 10px;
+  height: 10px;
+  top: calc(50% - 5px);
+  left: calc(50% - 5px);
+  -webkit-animation-duration: 3s;
+          animation-duration: 3s;
+  -webkit-animation-timing-function: linear;
+          animation-timing-function: linear;
+  -webkit-animation-iteration-count: infinite;
+          animation-iteration-count: infinite;
+}
+.loader::before {
+  background: rgba(0, 153, 220, 1);
+  -webkit-animation-name: droplets;
+          animation-name: droplets;
+}
+.loader::after {
+  border: 1px solid rgba(60, 195, 157, 1);
+  opacity: 0;
+  -webkit-animation-name: ripples;
+          animation-name: ripples;
+}
+
+@keyframes droplets {
+  0%, 15% {
+    opacity: 1;
+  }
+  15% {
+    transform: scale(0.5);
+  }
+  60% {
+    transform: scale(4);
+  }
+  60%, 90% {
+    opacity: 0;
+  }
+  90% {
+    transform: scale(3);
+  }
+  95%, 100% {
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes ripples {
+  0%, 30% {
+    opacity: 0;
+    transform: scale(1);
+  }
+  60% {
+    opacity: 0.3;
+  }
+  90% {
+    transform: scale(3);
+  }
+  100% {
+    opacity: 0;
+  }
 }
