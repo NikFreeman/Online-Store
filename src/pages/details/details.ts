@@ -125,7 +125,6 @@ productBlock.append(productTitle, productDetails, imageSmallBlock, bottomBlock);
 productDetails.append(imagesBlock, descriptionsBlock);
 imagesBlock.append(imageLargeBlock);
 imageLargeBlock.append(mask);
-// imageLargeBlock.append(imageLarge);
 let currentProduct: Product;
 
 export function pageDetails() {
@@ -149,10 +148,10 @@ export function pageDetails() {
         breadcrumbTitle.textContent = result.title;
         productTitle.textContent = result.title;
         imageLarge.src = result.thumbnail;
-        imageLarge.addEventListener('load', () => {
+        imageLarge.onload = function () {
             mask.remove();
             imageLargeBlock.append(imageLarge);
-        });
+        };
         let bigImageSize: string | null = '';
         const xhr = new XMLHttpRequest();
         xhr.open('HEAD', result.thumbnail, true);
