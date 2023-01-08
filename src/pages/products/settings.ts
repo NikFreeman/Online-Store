@@ -37,7 +37,7 @@ export function switchSizeItems() {
             document.documentElement.style.setProperty('--direction-for-btns', 'column');
             break;
         case 'Large':
-            searchParams.set('size', 'large');
+            searchParams.delete('size');
             window.history.replaceState(null, '', '?' + searchParams.toString());
             document.documentElement.style.setProperty('--cards-multiplier', '1');
             document.documentElement.style.removeProperty('--direction-for-btns');
