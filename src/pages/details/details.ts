@@ -207,23 +207,23 @@ export function pageDetails() {
     });
 }
 
-function actionAddToCartButton() {
-    if (addBtn && addBtn.lastElementChild && addBtn.firstElementChild) {
-        if (addBtn.lastElementChild.textContent === 'remove') {
+export function actionAddToCartButton(btn: HTMLButtonElement) {
+    if (btn && btn.lastElementChild && btn.firstElementChild) {
+        if (btn.lastElementChild.textContent === 'remove') {
             cart.removeProduct(currentProduct.id);
-            addBtn.lastElementChild.textContent = 'add';
-            addBtn.firstElementChild.setAttribute('data-count', '');
+            btn.lastElementChild.textContent = 'add';
+            btn.firstElementChild.setAttribute('data-count', '');
         } else {
             cart.addProduct(currentProduct.id, 1, currentProduct.price);
-            addBtn.lastElementChild.textContent = 'remove';
-            addBtn.firstElementChild.setAttribute('data-count', '1');
+            btn.lastElementChild.textContent = 'remove';
+            btn.firstElementChild.setAttribute('data-count', '1');
         }
         const eventUpdate = new CustomEvent('update-cart', { bubbles: true });
-        addBtn.dispatchEvent(eventUpdate);
+        btn.dispatchEvent(eventUpdate);
     }
 }
 
-addBtn.addEventListener('click', actionAddToCartButton);
+addBtn.addEventListener('click', () => actionAddToCartButton(addBtn));
 
 function switchMainImage(e: Event) {
     if (e.target instanceof HTMLImageElement) {
