@@ -203,11 +203,12 @@ export function pageDetails() {
             iconContainer.setAttribute('data-count', `${prodInCart.count}`);
         } else {
             cartText.textContent = 'add';
+            iconContainer.setAttribute('data-count', '');
         }
     });
 }
 
-export function actionAddToCartButton(btn: HTMLButtonElement) {
+export function actionAddToCartButton(btn: HTMLButtonElement, currentProduct: Product) {
     if (btn && btn.lastElementChild && btn.firstElementChild) {
         if (btn.lastElementChild.textContent === 'remove') {
             cart.removeProduct(currentProduct.id);
@@ -223,7 +224,7 @@ export function actionAddToCartButton(btn: HTMLButtonElement) {
     }
 }
 
-addBtn.addEventListener('click', () => actionAddToCartButton(addBtn));
+addBtn.addEventListener('click', () => actionAddToCartButton(addBtn, currentProduct));
 
 function switchMainImage(e: Event) {
     if (e.target instanceof HTMLImageElement) {

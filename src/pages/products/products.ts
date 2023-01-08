@@ -465,7 +465,7 @@ function actionCardButtons(e: Event) {
             if (e.target.closest('.card__add-btn')) {
                 const addBtn: HTMLButtonElement | null = e.target.closest('.card__add-btn');
                 if (addBtn) {
-                    actionAddToCartButton(addBtn);
+                    actionAddToCartButton(addBtn, prod);
                 }
             }
         }
