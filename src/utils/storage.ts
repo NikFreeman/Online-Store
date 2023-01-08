@@ -8,5 +8,8 @@ class StorageBox {
         const storage = localStorage.getItem(StorageBox.key);
         return storage ? JSON.parse(storage) : [];
     }
+    static removeStorage() {
+        localStorage.removeItem(StorageBox.key);
+    }
 }
 export default StorageBox;

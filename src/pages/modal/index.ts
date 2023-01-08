@@ -1,6 +1,8 @@
 import './modal.scss';
 import payment from '../../assets/images/cards';
 import ErrorMessage from '../../models/error-message';
+import { cart } from '../../pages/cart/index';
+import { promo } from '../../pages/cart/promo';
 
 const modal = document.createElement('div');
 modal.className = 'container';
@@ -31,6 +33,7 @@ const inputFullName = document.createElement('input');
 inputFullName.className = 'input input__full-name';
 inputFullName.required = true;
 inputFullName.placeholder = 'Name';
+inputFullName.addEventListener('input', validityFullName);
 
 blockFullName.append(inputFullName, errorMessageFullName);
 
@@ -43,6 +46,7 @@ errorMessagePhone.className = 'error-message';
 const inputPhone = document.createElement('input');
 inputPhone.className = 'input input__phone';
 inputPhone.required = true;
+inputPhone.addEventListener('input', validityPhone);
 inputPhone.placeholder = 'Phone number';
 
 blockPhone.append(inputPhone, errorMessagePhone);
@@ -56,6 +60,7 @@ errorMessageDelivery.className = 'error-message';
 const inputDelivery = document.createElement('input');
 inputDelivery.className = 'input input__delivery';
 inputDelivery.required = true;
+inputDelivery.addEventListener('input', validityDelivery);
 inputDelivery.placeholder = 'Delivery address';
 blockDelivery.append(inputDelivery, errorMessageDelivery);
 
@@ -68,6 +73,8 @@ errorMessageEmail.className = 'error-message';
 const inputEmail = document.createElement('input');
 inputEmail.className = 'input input__email';
 inputEmail.required = true;
+inputEmail.type = 'email';
+inputEmail.addEventListener('input', validityEmail);
 inputEmail.placeholder = 'E-mail';
 
 blockEmail.append(inputEmail, errorMessageEmail);
@@ -83,48 +90,20 @@ btnConfirm.textContent = 'Confirm';
 const cardFront = document.createElement('div');
 cardFront.className = 'credit-card';
 
+const divPayment = document.createElement('div');
+divPayment.className = 'credit-card-img';
+
 const imgPayment = document.createElement('img');
 imgPayment.className = 'credit-card-img';
 
 const inputCardNumber = document.createElement('input');
 inputCardNumber.className = 'input__card input__card-number';
+imgPayment.src = cardType();
 inputCardNumber.addEventListener('input', () => {
     const regExp = new RegExp('[\\D]', 'gi');
     inputCardNumber.value = inputCardNumber.value.replace(regExp, '');
-    console.log(cardType());
-    console.log(payment.visa);
-    if (cardType() === 'visa') {
-        console.log('ty ty');
-        imgPayment.src = `${payment.visa}`;
-        //imgPayment.src = require('../../assets/images/cards/visa.png');
-        //imgPayment.setAttribute('src', payment.visa);
-
-        console.log('src', imgPayment.src);
-    }
-    if (cardType() === 'mastercard') {
-        imgPayment.src = payment.mastercard;
-    }
-    if (cardType() === 'dinersclub') {
-        imgPayment.src = payment.dinersclub;
-    }
-    if (cardType() === 'amex') {
-        imgPayment.src = payment.amex;
-    }
-    if (cardType() === 'jcb') {
-        imgPayment.src = payment.jcb;
-    }
-    if (cardType() === 'troy') {
-        imgPayment.src = payment.troy;
-    }
-    if (cardType() === 'discover') {
-        imgPayment.src = payment.discover;
-    }
-    if (cardType() === 'unionpay') {
-        imgPayment.src = payment.unionpay;
-    }
-    if (cardType()) {
-        imgPayment.src = '';
-    }
+    imgPayment.src = cardType();
+    validityCardNumber();
 });
 inputCardNumber.placeholder = 'Card number';
 
@@ -136,13 +115,14 @@ inputCardValid.className = 'input__card input__card-valid';
 inputCardValid.id = 'card-valid';
 inputCardValid.placeholder = 'MM/YY';
 inputCardValid.addEventListener('input', () => {
-    const regExp = new RegExp('[\\D^\\/]', 'gi');
+    const regExp = new RegExp('[\\D[^\\/]]', 'gi');
     inputCardValid.value = inputCardValid.value.replace(regExp, '');
-    console.log(inputCardValid.value, inputCardValid.value.length);
+
     inputCardValid.value = inputCardValid.value.length === 2 ? inputCardValid.value + '/' : inputCardValid.value;
     if (inputCardValid.value.length > 5) {
         inputCardValid.value = inputCardValid.value.slice(0, 5);
     }
+    validityCardValid();
 });
 
 const labelCardValid = document.createElement('label');
@@ -155,9 +135,10 @@ inputCardCVV.className = 'input__card input__card-cvv';
 inputCardCVV.id = 'card-cvv';
 inputCardCVV.placeholder = 'Code';
 inputCardCVV.addEventListener('input', () => {
-    const regExp = new RegExp('[\\D[^\\/]]', 'gi');
+    const regExp = new RegExp('[\\D]', 'gi');
     inputCardCVV.value = inputCardCVV.value.replace(regExp, '');
     inputCardCVV.value = inputCardCVV.value.length > 3 ? inputCardCVV.value.slice(1, 4) : inputCardCVV.value;
+    validityCardCVV();
 });
 
 const labelCardCVV = document.createElement('label');
@@ -165,10 +146,22 @@ labelCardCVV.className = 'card__cvv';
 labelCardCVV.htmlFor = inputCardCVV.id;
 labelCardCVV.textContent = 'CVV:';
 
+const errorMessageCardNumber = document.createElement('giv');
+errorMessageCardNumber.className = 'error-message';
+
+const errorMessageCardValid = document.createElement('giv');
+errorMessageCardValid.className = 'error-message';
+
+const errorMessageCardCVV = document.createElement('giv');
+errorMessageCardCVV.className = 'error-message';
+
 cardDetailContainer.append(labelCardValid, inputCardValid, labelCardCVV, inputCardCVV);
 cardFront.append(inputCardNumber, cardDetailContainer, imgPayment);
 formFields.append(labelDetail, blockFullName, blockPhone, blockDelivery, blockEmail);
-formFields.append(labelCard, cardFront, btnConfirm);
+
+formFields.append(labelCard, cardFront);
+formFields.append(errorMessageCardNumber, errorMessageCardValid, errorMessageCardCVV);
+formFields.append(btnConfirm);
 
 function renderModal() {
     content.append(buttonClose);
@@ -182,7 +175,7 @@ export function showModal() {
     document.body.insertBefore(modal, header);
     document.body.classList.add('lock');
     modal.addEventListener('click', hideModal);
-    btnConfirm.addEventListener('click', validateModal);
+    btnConfirm.addEventListener('click', validityModal);
 }
 
 function hideModal(e: Event) {
@@ -197,85 +190,108 @@ function hideModal(e: Event) {
         }, 1000);
     }
 }
-function validateModal(e: Event) {
-    let isOk = true;
+function validityModal(e: Event) {
+    validityFullName();
+    validityPhone();
+    validityDelivery();
+    validityEmail();
+    validityCardNumber();
+    validityCardValid();
+    validityCardCVV();
+    e.preventDefault();
+    if (isFullName() && isPhone() && isDelivery() && isEmail() && isCardNumber() && isCardValid() && isCardCVV()) {
+        cart.clearCart();
+        promo.clearPromos();
+        if (content) content.remove();
+        modal.innerHTML = '<h3>Thanks for your order.</h3>';
+        //Redirect to the store after 0 sec
+        setTimeout(() => {
+            if (modal) {
+                modal.remove();
+                document.body.classList.remove('lock');
+            }
+            history.pushState('', '', window.location.origin + '/');
+            window.history.go();
+        }, 5000);
+    }
+}
+function validityFullName() {
     if (isFullName()) {
         inputFullName.classList.remove('invalid');
         inputFullName.classList.add('valid');
         errorMessageFullName.textContent = '';
     } else {
-        isOk = false;
         inputFullName.classList.remove('valid');
         inputFullName.classList.add('invalid');
         errorMessageFullName.textContent = ErrorMessage.ERROR_MESSAGE;
     }
+}
+function validityPhone() {
     if (isPhone()) {
         inputPhone.classList.remove('invalid');
         inputPhone.classList.add('valid');
         errorMessagePhone.textContent = '';
     } else {
-        isOk = false;
         inputPhone.classList.remove('valid');
         inputPhone.classList.add('invalid');
         errorMessagePhone.textContent = ErrorMessage.ERROR_MESSAGE;
     }
+}
+function validityDelivery() {
     if (isDelivery()) {
         inputDelivery.classList.remove('invalid');
         inputDelivery.classList.add('valid');
         errorMessageDelivery.textContent = '';
     } else {
-        isOk = false;
         inputDelivery.classList.remove('valid');
         inputDelivery.classList.add('invalid');
         errorMessageDelivery.textContent = ErrorMessage.ERROR_MESSAGE;
     }
+}
+function validityEmail() {
     if (isEmail()) {
         inputEmail.classList.remove('invalid');
         inputEmail.classList.add('valid');
         errorMessageEmail.textContent = '';
     } else {
-        isOk = false;
         inputEmail.classList.remove('valid');
         inputEmail.classList.add('invalid');
         errorMessageEmail.textContent = ErrorMessage.ERROR_MESSAGE;
     }
+}
+function validityCardNumber() {
     if (isCardNumber()) {
-        isOk = false;
         inputCardNumber.classList.remove('invalid-card');
         inputCardNumber.classList.add('valid-card');
-        //errorMessageCa.textContent = '';
+        errorMessageCardNumber.textContent = '';
     } else {
-        isOk = false;
         inputCardNumber.classList.remove('valid-card');
         inputCardNumber.classList.add('invalid-card');
-        //errorMessageEmail.textContent = ErrorMessage.ERROR_MESSAGE;
+        errorMessageCardNumber.textContent = ErrorMessage.ERROR_CARD_NUMBER;
     }
+}
+function validityCardValid() {
     if (isCardValid()) {
         inputCardValid.classList.remove('invalid-card');
         inputCardValid.classList.add('valid-card');
-        //errorMessageCa.textContent = '';
+        errorMessageCardValid.textContent = '';
     } else {
-        isOk = false;
         inputCardValid.classList.remove('valid-card');
         inputCardValid.classList.add('invalid-card');
-        //errorMessageEmail.textContent = ErrorMessage.ERROR_MESSAGE;
+        errorMessageCardValid.textContent = ErrorMessage.ERROR_CARD_VALID;
     }
+}
+function validityCardCVV() {
     if (isCardCVV()) {
         inputCardCVV.classList.remove('invalid-card');
         inputCardCVV.classList.add('valid-card');
-        //errorMessageCa.textContent = '';
+        errorMessageCardCVV.textContent = '';
     } else {
-        isOk = false;
         inputCardCVV.classList.remove('valid-card');
         inputCardCVV.classList.add('invalid-card');
-        //errorMessageEmail.textContent = ErrorMessage.ERROR_MESSAGE;
-    }
-    e.preventDefault();
-    if (isOk) {
-        console.log('Close');
+        errorMessageCardCVV.textContent = ErrorMessage.ERROR_CARD_CVV;
     }
 }
-
 function isFullName() {
     const arrayFullName = inputFullName.value.replace(/\s+/g, ' ').trim().split(' ');
     if (arrayFullName.length < 2) {
@@ -318,28 +334,43 @@ function isCardCVV() {
 function cardType() {
     const number = inputCardNumber.value;
     let regExp = new RegExp('^4');
-    if (number.match(regExp) != null) return 'visa';
+    if (number.match(regExp) != null) {
+        return `${payment.visa}`;
+    }
 
     regExp = new RegExp('^(34|37)');
-    if (number.match(regExp) != null) return 'amex';
+    if (number.match(regExp) != null) {
+        return `${payment.amex}`;
+    }
 
     regExp = new RegExp('^5[1-5]');
-    if (number.match(regExp) != null) return 'mastercard';
+    if (number.match(regExp) != null) {
+        return `${payment.mastercard}`;
+    }
 
     regExp = new RegExp('^6011');
-    if (number.match(regExp) != null) return 'discover';
+    if (number.match(regExp) != null) {
+        return `${payment.discover}`;
+    }
 
     regExp = new RegExp('^62');
-    if (number.match(regExp) != null) return 'unionpay';
+    if (number.match(regExp) != null) {
+        return `${payment.unionpay}`;
+    }
 
     regExp = new RegExp('^9792');
-    if (number.match(regExp) != null) return 'troy';
+    if (number.match(regExp) != null) {
+        return `${payment.troy}`;
+    }
 
     regExp = new RegExp('^3(?:0([0-5]|9)|[689]\\d?)\\d{0,11}');
-    if (number.match(regExp) != null) return 'dinersclub';
+    if (number.match(regExp) != null) {
+        return `${payment.dinersclub}`;
+    }
 
     regExp = new RegExp('^35(2[89]|[3-8])');
-    if (number.match(regExp) != null) return 'jcb';
-
-    return ''; // default type
+    if (number.match(regExp) != null) {
+        return `${payment.jcb}`;
+    }
+    return `${payment.chip}`;
 }

@@ -6,6 +6,7 @@ import discover from './discover.png';
 import jcb from './jcb.png';
 import troy from './troy.png';
 import unionpay from './unionpay.png';
+import chip from './chip.png';
 
 const payment = {
     visa,
@@ -16,6 +17,7 @@ const payment = {
     jcb,
     troy,
     unionpay,
+    chip,
 };
 
 export default payment;

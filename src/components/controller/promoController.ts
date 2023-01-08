@@ -53,6 +53,11 @@ class PromoController {
     isPromoAlreadyApplied(value: string) {
         return this.appliedPromos.findIndex((el) => el.id === value) !== -1;
     }
+    clearPromos(): void {
+        this.appliedPromos = [];
+        StorageBox.key = this.storageKey;
+        StorageBox.removeStorage();
+    }
 }
 
 export default PromoController;

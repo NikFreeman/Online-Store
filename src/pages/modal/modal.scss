@@ -168,6 +168,7 @@ body.lock {
 
 .confirm__btn {
     margin-top: 20px;
+    margin-bottom: 20px;
 }
 .modal__title {
     font-family: 'Geometria';
@@ -187,7 +188,15 @@ body.lock {
     margin-top: 20px;
 }
 .credit-card-img {
-    border: 1px solid white;
+    display: flex;
+    width: 70px;
+    object-fit: cover;
+    margin-right: auto;
+    margin-left: auto;
+    margin-top: 3px;
+}
+.credit-card-visa {
     width: 100px;
     height: 50px;
+    background-image: url('./../../assets/images/cards/visa.png');
 }
