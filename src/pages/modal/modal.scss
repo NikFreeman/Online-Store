@@ -16,16 +16,19 @@ body.lock {
 }
 .modal__content {
     position: relative;
-    display: flex;
-    flex-direction: column;
+    margin: auto;
     width: 45%;
     min-height: 530px;
     align-items: center;
-    margin: auto;
-    background-color: white;
     border-radius: 10px;
+    background-color: white;
     z-index: 2;
     cursor: auto;
+}
+.form__content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 .modal__close {
     position: absolute;
@@ -40,7 +43,20 @@ body.lock {
         color: red;
     }
 }
-
+.block {
+    width: 85%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+.error-message {
+    font-family: 'Geometria';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 18px;
+    color: red;
+}
 .input {
     text-align: center;
     justify-self: center;
@@ -49,11 +65,10 @@ body.lock {
     margin-left: auto;
     box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2);
     border-radius: 5px;
-    width: 75%;
+    width: 80%;
     height: 40px;
     border: 1px solid #cccccc;
     outline: none;
-    border-radius: 5px;
     padding: 10px;
     font-family: 'Geometria';
     font-style: normal;
@@ -65,7 +80,14 @@ body.lock {
     &__full-name {
         color: black;
     }
+    &.valid {
+        box-shadow: 0px 0px 20px #58ff6ebd;
+    }
+    &.invalid {
+        box-shadow: 0px 0px 20px rgba(253, 66, 66, 0.7);
+    }
 }
+
 .confirm__btn {
     width: 40%;
     height: 40px;
@@ -98,11 +120,9 @@ body.lock {
     margin-left: auto;
     box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2);
     border-radius: 5px;
-
     height: 20px;
-    border: 1px solid #cccccc;
+    border: 1px solid;
     outline: none;
-    border-radius: 5px;
     padding: 10px;
     font-family: 'Geometria';
     font-style: normal;
@@ -118,25 +138,28 @@ body.lock {
     }
     &-valid {
         width: 25%;
-        margin-top: 20px;
     }
     &-cvv {
         width: 25%;
-        margin-top: 20px;
     }
 }
+.valid-card {
+    color: green;
+}
+.invalid-card {
+    color: red;
+}
 .card__cvv {
-    margin-top: 20px;
     margin-left: 20px;
 }
 .card__valid {
-    margin-top: 20px;
+    margin-left: 10px;
+    color: white;
 }
 .credit-card {
-    max-width: 60%;
-    height: 120px;
+    max-width: 290px;
+    height: 140px;
     border-radius: 10px;
-    position: relative;
     background-image: url('./../../assets/images/card-bg.jpeg');
     background-position: center;
     background-repeat: no-repeat;
@@ -150,7 +173,21 @@ body.lock {
     font-family: 'Geometria';
     font-style: normal;
     font-weight: 800;
-    font-size: 20px;
+    font-size: 18px;
     line-height: 25px;
-    color: #009fdf;
+    color: black;
+    text-transform: uppercase;
+}
+.card__detail-row {
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+    margin-right: auto;
+    min-width: 240px;
+    margin-top: 20px;
+}
+.credit-card-img {
+    border: 1px solid white;
+    width: 100px;
+    height: 50px;
 }
