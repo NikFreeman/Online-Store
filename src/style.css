@@ -5,7 +5,7 @@
 @import './styles/checkboxes.css';
 @import './styles/settings.css';
 @import './styles/cards.css';
-
+@import './styles/details.scss';
 
 @font-face {
   font-family: 'Geometria';

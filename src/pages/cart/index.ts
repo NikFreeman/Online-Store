@@ -72,6 +72,7 @@ async function pageCart() {
             </div>
         </div>
         `;
+
         const inputPromo = app.querySelector('.summary__input');
         inputPromo?.removeEventListener('input', handleInputPromo);
         inputPromo?.addEventListener('input', handleInputPromo);
