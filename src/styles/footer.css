@@ -1,0 +1,80 @@
+.footer__wrapper {
+  display: flex;
+  justify-content: space-between;
+  padding: 1em;
+  font-family: 'Geometria';
+  font-style: normal;  
+}
+
+.footer__authors {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+}
+
+.footer__author-link {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  text-decoration: none;
+}
+
+.footer__author-gh {
+  max-width: 26px;
+  height: auto;
+  filter: invert(30%);
+  transition: all 0.3s;
+}
+
+.footer__author-gh:hover {  
+  filter: invert(0%);
+  transform: scale(1.1);
+}
+
+.footer__author-name {
+  position: relative;
+  color: #495955;
+}
+
+.footer__author-name::after {
+  content: "";
+  position: absolute;
+  bottom: -3px;
+  left: 0;
+  height: 2px;
+  width: 100%;
+  background-color: #495955;
+  opacity: 0;
+  transition: 0.3s;
+}
+
+.footer__author-name:hover::after {
+  opacity: 1;
+  animation-name: underline; 
+  animation-duration: 0.5s;
+  animation-fill-mode: forwards;
+}
+
+
+.footer__rs {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+}
+
+.footer__rsschool-logo {
+  max-width: 5em;
+  transition: transform 0.3s;
+}
+
+.footer__rsschool-logo:hover {
+  transform: scale(1.1);
+}
+
+.footer__year {
+  text-align: right;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 18px;
+  color: #9F9F9F;
+}

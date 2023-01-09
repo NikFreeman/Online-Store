@@ -1,0 +1,45 @@
+:root {
+  --gap-cards: 20px;
+  --cards-in-row: 4;
+  --cards-multiplier: 1;
+  --direction-for-btns: row;
+  --primary: #2196F3;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+button {
+  cursor: pointer;
+}
+
+.wrapper {
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 10px;
+}
+
+@media (max-width: 1079px) {
+  :root {
+    --gap-cards: 10px;
+    --cards-in-row: 4;
+    --direction-for-btns: column;
+  }
+  
+}
+
+@media (max-width: 779px) {
+  :root {
+    --gap-cards: 10px;
+    --cards-in-row: 2;
+  }
+}
+
+@media (max-width: 449px) {
+  :root {    
+    --cards-in-row: 1;
+  } 
+
+}

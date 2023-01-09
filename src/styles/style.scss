@@ -1,0 +1,7 @@
+html, body {
+    min-height: calc(100vh - 158px);
+}
+#App {
+    min-height: inherit;
+    overflow: auto;
+}

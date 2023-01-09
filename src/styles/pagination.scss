@@ -1,0 +1,76 @@
+.pagination {
+  padding: 1em;
+  font-family: 'Geometria';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 1em;
+}
+
+.pagination__limit {
+  position: relative;
+  display: flex;
+  gap: 1em;
+}
+
+.pagination__input {
+  font-family: 'Geometria';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 1em;
+  text-align: center;
+}
+.pagination__input:focus {
+  outline: none;
+  border: 2px solid rgba(60, 195, 157, 1);
+  box-shadow: 0px 2px 10px 1px rgba(0, 0, 0, 0.15);
+}
+
+.pagination__control {
+  display: flex;
+  justify-items: center;
+  gap: 1em;
+  font-family: 'Geometria';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 1em;
+}
+
+.pagination__page-block {
+  display: flex;
+  position: relative;
+  gap: 1em;  
+}
+
+.pagination__buttons,
+.pagination__input {
+  background: white;
+  border-radius: 5px;
+  border: 2px solid #009FDF;
+}
+
+.pagination__btn {
+  font-weight: bold;
+  font-size: 20px;
+  color: gray;
+  text-align: center;
+  line-height: 20px;
+  width: 25px;
+  height: 20px;
+  margin-left: 5px;
+  margin-right: 5px;
+  border: none;
+  background: none;
+}
+
+.pagination__btn:hover {
+color: black;
+}
+
+.pagination__btn:disabled  {
+  color: white;
+}
+
+.pagination__input,
+.pagination__page-number {
+  font-weight: bold;
+}

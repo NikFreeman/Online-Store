@@ -1,0 +1,166 @@
+
+.cards-text {
+  font-family: 'Geometria';
+  font-style: normal;
+  font-weight: 800;
+  font-size: 26px;
+  line-height: 40px;
+  text-align: center;
+  color: var(--primary);
+  margin: auto;
+}
+
+.cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gap-cards);
+  width: 100%;
+  min-height: 20vh;
+  margin-bottom: 8px;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  width: calc((100% - var(--gap-cards) * (var(--cards-in-row) * var(--cards-multiplier) - 1)) / (var(--cards-in-row) * var(--cards-multiplier)));
+  justify-items: center;
+  align-items: center;
+  background-color: #F5F5F5;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.card__discount {
+  align-self: flex-end;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 64px;
+  height: 29px;
+  background: #E56B50;
+  border-radius: 10px;
+  font-family: 'Geometria';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 18px;  
+  color: #FFFFFF;
+}
+
+.card__title {
+  margin: 0;
+  font-family: 'Geometria';
+  font-style: normal;
+  font-weight: 800;
+  font-size: 1em;
+  line-height: 21px;
+  color: #009FDF;
+  flex-grow: 1;
+}
+
+.card__image {
+  width: 100%;
+  aspect-ratio: 1/1;
+  background-repeat: no-repeat;  
+  background-size: cover;
+}
+
+.card__price {
+  align-self: flex-start;
+  font-family: 'Geometria';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 22px;
+  line-height: 28px;
+}
+
+.card__btns {
+  display: flex;
+  flex-direction: var(--direction-for-btns);
+  width: 100%;
+  gap: 0.5em;
+}
+
+.card__btn {
+  width: 100%;
+  height: 40px;
+}
+
+.card__add-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5%;
+  background: linear-gradient(90deg, #0099DC 7.09%, #3CC39D 93.66%);
+  box-shadow: 0px 2px 10px 1px rgba(0, 0, 0, 0.15);
+  border-radius: 5px;
+  border: none;
+  height: 40px;
+  position: relative;
+}
+
+.card__add-btn:hover {
+  background: linear-gradient(0deg, rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0.15)), linear-gradient(90deg, #0099DC 7.09%, #3CC39D 93.66%);
+}
+
+.card__icon-cont {
+  position: relative;
+}
+
+.card__icon-cont::after {
+  content: attr(data-count);
+  position: absolute;  
+  top: 0;
+  right: 0;
+  background: #FFFFFF;
+  box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.3);
+  width: 13px;
+  border-radius: 50%;
+  font-family: 'Geometria';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 10px;
+  line-height: 13px;
+  color: #000000;
+}
+
+.add-to-cart {
+  font-family: 'Geometria';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 16px;
+  text-transform: uppercase;
+  color: white;
+}
+
+.card__detail-btn {
+  display: flex;
+  background: #F5F5F5;
+  border-radius: 5px;
+  border: 2px solid #009FDF;
+  font-family: 'Geometria';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 13px;
+  line-height: 16px;
+  text-transform: uppercase;
+  text-decoration: none;
+  align-items: center;
+  justify-content: center;
+  color: #009FDF;
+  box-shadow: 0px 2px 10px 1px rgba(0, 0, 0, 0.15);
+}
+
+.card__detail-btn:hover {
+  background: #009FDF;
+  color: #F5F5F5;
+}
+
+@media (max-width: 449px) {
+
+  .card {    
+    width: calc((100% - var(--gap-cards) * (var(--cards-in-row) * (var(--cards-multiplier) - 0.5) * 2 - 1)) / (var(--cards-in-row) * (var(--cards-multiplier) - 0.5) * 2));
+  }
+
+}
