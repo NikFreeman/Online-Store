@@ -5,11 +5,13 @@ import { ProductsController } from '../../components/controller/productsControll
 import { promo, renderApplyPromo } from './promo';
 import { Product } from './../../models/Product';
 import { showModal } from './../modal';
+import { paginationCtrl, hideItems } from '../../components/elements/pagination';
 
 export const cart = new CartController();
 let modalAutoRender = false;
 
 const cartEmpty = '<h3>Cart is empty</h3>';
+export let cartElements: HTMLCollection;
 
 function renderItem(product: Product, count: number, price: number) {
     const template = document.createElement('template');
@@ -49,6 +51,7 @@ async function pageCart() {
         app.innerHTML = `
         <div class='wrapper'>
           <h3 class="cart__title">Products in Cart</h3>
+          <div class="cart__pagination pagination"></div>
           <div class='cart__wrapper'>
              <div class='cart__items'>
              <h3>Cart is loaded</h3> 
@@ -91,15 +94,27 @@ async function pageCart() {
     }, div);
     if (app) {
         const cartWrapper = app.querySelector('.cart__items');
+        const pagination = app.querySelector('.cart__pagination');
+        if (pagination) {
+            pagination.append(paginationCtrl);
+        }
         if (cartWrapper) {
             cartWrapper.innerHTML = '';
             if (divTemp.children.length == 0) {
                 cartWrapper.innerHTML = cartEmpty;
+                document.querySelector('.cart__summary')?.classList.add('hide');
+                if (pagination) {
+                    pagination.classList.add('hide');
+                }
             } else {
                 cartWrapper.append(divTemp);
             }
+            renderProductIndex();
+            cartElements = cartWrapper.children;
         }
     }
+    hideItems();
+
     renderApplyPromo();
 
     if (modalAutoRender) {
@@ -114,6 +129,7 @@ export function activateModal() {
 function removeItem(e: Event) {
     const id = Number((e as CustomEvent).detail);
     cart.removeProduct(id);
+    renderProductIndex();
     renderRemoveCartItem(id);
     setSummaryInfo();
 }
@@ -134,6 +150,8 @@ function renderRemoveCartItem(id: number) {
         }
         if (cartItems.children.length === 0) {
             cartItems.innerHTML = cartEmpty;
+            document.querySelector('.cart__summary')?.classList.add('hide');
+            document.querySelector('.cart__pagination')?.classList.add('hide');
         }
     }
 }
@@ -190,5 +208,14 @@ function handleApplyPromo() {
         input.value = '';
     }
 }
-
+function renderProductIndex() {
+    const cartProducts = document.querySelectorAll('cart-item');
+    cartProducts.forEach((elem) => {
+        const idProduct = Number(elem.getAttribute('id'));
+        const numberProduct = elem.shadowRoot?.querySelector('.cart__item-number');
+        if (idProduct && numberProduct) {
+            numberProduct.textContent = String(cart.getProductIndex(idProduct) + 1);
+        }
+    });
+}
 export default pageCart;

@@ -8,22 +8,22 @@ const styles = `
 }
 .cart__item-thumbnail {
     grid-area: thumbnail;
-    width: 160px;
-    height: 80px;
+    width: 100%;
+    height: 100px;
     border-radius: 10px;
   }
   .cart__item {
     margin-top: 10px;
     margin-bottom: 10px;
     display: grid;
-    grid-template-columns: 160px 1fr 1fr 120px; 
+    grid-template-columns: 30px 160px 1fr 1fr 120px; 
     grid-template-rows: 20px 30px 30px 30px;
     column-gap: 10px;
     grid-template-areas:
-      'thumbnail title title remove'
-      'thumbnail description description stock'
-      'thumbnail catalog rating count'
-      'thumbnail catalog rating amount';
+      'number thumbnail title title remove'
+      'number thumbnail description description stock'
+      'number thumbnail catalog rating count'
+      'number thumbnail catalog rating amount';
   }
   .cart__item-title {
     grid-area: title;
@@ -73,7 +73,17 @@ const styles = `
     border-radius: 5px;
     border: 2px solid #009FDF;
   }
-
+  .cart__item-number{
+    grid-area: number;
+    align-self: center;
+    text-align: end;
+    font-family: 'Geometria';
+    font-style: normal;
+    font-weight: 800;
+    font-size: 16px;
+    line-height: 21px;
+    color: #009FDF;
+  }
   .cart__item-stock {
     grid-area: stock;
     justify-self: center;
@@ -111,6 +121,7 @@ const template = document.createElement('template');
 template.innerHTML = `
   <style>${styles}</style>
   <div class='cart__item'>
+  <div class = 'cart__item-number'></div>
     <div class='cart__item-thumbnail'>
       <img class ='cart__item-image'>
     </div>
