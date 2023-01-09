@@ -124,6 +124,12 @@ inputCardValid.addEventListener('input', () => {
     }
     validityCardValid();
 });
+inputCardValid.addEventListener('keydown', (e: KeyboardEvent) => {
+    if (e.key === 'Backspace') {
+        inputCardValid.value =
+            inputCardValid.value.length === 3 ? inputCardValid.value.slice(0, -1) : inputCardValid.value;
+    }
+});
 
 const labelCardValid = document.createElement('label');
 labelCardValid.className = 'card__valid';
@@ -309,7 +315,7 @@ function isDelivery() {
     if (arrayDelivery.length < 3) {
         return false;
     }
-    const regExp = new RegExp('(^[A-ZА-ЯЁ]{5,})', 'i');
+    const regExp = new RegExp('(^[A-ZА-ЯЁ0-9,\\-\\/]{5,})', 'i');
     return arrayDelivery.every((elem: string) => regExp.test(elem));
 }
 function isEmail() {
