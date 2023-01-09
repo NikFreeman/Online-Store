@@ -109,8 +109,8 @@ function changePageCount() {
         pageNumber.textContent = `${Math.ceil(cartElements.length / Number(inputPagesCount.value))}`;
         searchParams.set('page', `${pageNumber.textContent}`);
         window.history.replaceState(null, '', '?' + searchParams.toString());
-        hideItems();
     }
+    hideItems();
 }
 
 window.addEventListener('remove-item', changePageCount);
