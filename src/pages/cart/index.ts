@@ -114,7 +114,9 @@ async function pageCart() {
         }
     }
     hideItems();
+
     renderApplyPromo();
+
     if (modalAutoRender) {
         setTimeout(showModal, 0);
         modalAutoRender = false;
