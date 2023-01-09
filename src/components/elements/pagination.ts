@@ -69,9 +69,10 @@ function turnPage(e: Event) {
         }
         if (e.target.classList.contains('pagination__page-up')) {
             pageNumber.textContent = (Number(pageNumber.textContent) + 1).toString();
-            if (Number(pageNumber.textContent) > Math.ceil(cartElements.length / Number(searchParams.get('limit')))) {
-                pageNumber.textContent = `${Math.ceil(cartElements.length / Number(searchParams.get('limit')))}`;
+            if (Number(pageNumber.textContent) > Math.ceil(cartElements.length / Number(inputPagesCount.value))) {
+                pageNumber.textContent = `${Math.ceil(cartElements.length / Number(inputPagesCount.value))}`;
             }
+            console.log(cartElements);
             searchParams.set('page', `${pageNumber.textContent}`);
             window.history.replaceState(null, '', '?' + searchParams.toString());
         }
@@ -79,6 +80,7 @@ function turnPage(e: Event) {
 }
 
 paginationPages.addEventListener('click', turnPage);
+paginationPages.addEventListener('click', hideItems);
 
 function changeItemsPerPage() {
     searchParams.set('limit', `${inputPagesCount.value}`);
@@ -86,14 +88,19 @@ function changeItemsPerPage() {
 }
 
 inputPagesCount.addEventListener('change', changeItemsPerPage);
+inputPagesCount.addEventListener('change', hideItems);
 
-// function hideItems() {
-//     const elements = (document.querySelector('cart__items') as HTMLDivElement).children;
-//     if (elements.length > 0) {
-//         Array.from(elements).forEach((item, index) => {
-//             if (index) {
-//                 console.log(item);
-//             }
-//         });
-//     }
-// }
+function hideItems() {
+    const pageN = Number(searchParams.get('page')) || 1;
+    const lim = Number(searchParams.get('limit')) || 3;
+    if (cartElements.length > 0) {
+        console.log(cartElements);
+        Array.from(cartElements).forEach((item, index) => {
+            if (index + 1 > lim * pageN || index < lim * (pageN - 1)) {
+                item.classList.add('hide');
+            } else {
+                item.classList.remove('hide');
+            }
+        });
+    }
+}
