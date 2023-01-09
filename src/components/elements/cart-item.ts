@@ -33,6 +33,7 @@ const styles = `
     font-size: 16px;
     line-height: 21px;
     color: #009FDF;
+    text-decoration: none;
   }
 
   .cart__item-amount {
@@ -113,7 +114,7 @@ template.innerHTML = `
     <div class='cart__item-thumbnail'>
       <img class ='cart__item-image'>
     </div>
-    <h3 class='cart__item-title'><slot name='title'></slot></h3>
+    <a class='cart__item-title' id='product-link'><h3 ><slot name='title'></slot></h3></a>
     <p class='cart__item-description'><slot name='description'></slot></p>  
     <p class = 'cart__item-amount'>Amount: $<span class='cart__item-amount-item'></span></p>
     <p class = 'cart__item-stock'>Stock: <span><slot name='stock'></slot></span></p>
@@ -129,6 +130,7 @@ class CartItem extends HTMLElement {
     removeButton: HTMLButtonElement | null;
     imageThumbnail: HTMLImageElement | null;
     amount: HTMLElement | null;
+    linkDetails: HTMLAnchorElement | null;
     static get observedAttributes() {
         return ['count', 'id', 'src', 'price', 'stock'];
     }
@@ -149,11 +151,13 @@ class CartItem extends HTMLElement {
                 this.removeButton.addEventListener('click', this.handleRemoveButton.bind(this));
             }
             this.amount = this.shadowRoot.querySelector('.cart__item-amount-item');
+            this.linkDetails = this.shadowRoot.querySelector('#product-link');
         } else {
             this.counter = null;
             this.removeButton = null;
             this.imageThumbnail = null;
             this.amount = null;
+            this.linkDetails = null;
         }
     }
 
@@ -201,6 +205,11 @@ class CartItem extends HTMLElement {
     connectedCallback() {
         const countTemp = this.getAttribute('count');
         const src = this.getAttribute('src');
+        const id = this.getAttribute('id');
+        console.log(this.linkDetails);
+        if (this.linkDetails) {
+            this.linkDetails.href = `/product-detail/${id}`;
+        }
         if (countTemp) {
             this.counter?.setAttribute('counter', countTemp);
         }
