@@ -33,7 +33,7 @@ const inputFullName = document.createElement('input');
 inputFullName.className = 'input input__full-name';
 inputFullName.required = true;
 inputFullName.placeholder = 'Name';
-inputFullName.addEventListener('input', validityFullName);
+inputFullName.addEventListener('input', validateFullName);
 
 blockFullName.append(inputFullName, errorMessageFullName);
 
@@ -46,7 +46,7 @@ errorMessagePhone.className = 'error-message';
 const inputPhone = document.createElement('input');
 inputPhone.className = 'input input__phone';
 inputPhone.required = true;
-inputPhone.addEventListener('input', validityPhone);
+inputPhone.addEventListener('input', validatePhone);
 inputPhone.placeholder = 'Phone number';
 
 blockPhone.append(inputPhone, errorMessagePhone);
@@ -60,7 +60,7 @@ errorMessageDelivery.className = 'error-message';
 const inputDelivery = document.createElement('input');
 inputDelivery.className = 'input input__delivery';
 inputDelivery.required = true;
-inputDelivery.addEventListener('input', validityDelivery);
+inputDelivery.addEventListener('input', validateDelivery);
 inputDelivery.placeholder = 'Delivery address';
 blockDelivery.append(inputDelivery, errorMessageDelivery);
 
@@ -74,7 +74,7 @@ const inputEmail = document.createElement('input');
 inputEmail.className = 'input input__email';
 inputEmail.required = true;
 inputEmail.type = 'email';
-inputEmail.addEventListener('input', validityEmail);
+inputEmail.addEventListener('input', validateEmail);
 inputEmail.placeholder = 'E-mail';
 
 blockEmail.append(inputEmail, errorMessageEmail);
@@ -103,7 +103,7 @@ inputCardNumber.addEventListener('input', () => {
     const regExp = new RegExp('[\\D]', 'gi');
     inputCardNumber.value = inputCardNumber.value.replace(regExp, '');
     imgPayment.src = cardType();
-    validityCardNumber();
+    validateCardNumber();
 });
 inputCardNumber.placeholder = 'Card number';
 
@@ -122,7 +122,7 @@ inputCardValid.addEventListener('input', () => {
     if (inputCardValid.value.length > 5) {
         inputCardValid.value = inputCardValid.value.slice(0, 5);
     }
-    validityCardValid();
+    validateCardValid();
 });
 inputCardValid.addEventListener('keydown', (e: KeyboardEvent) => {
     if (e.key === 'Backspace') {
@@ -144,7 +144,7 @@ inputCardCVV.addEventListener('input', () => {
     const regExp = new RegExp('[\\D]', 'gi');
     inputCardCVV.value = inputCardCVV.value.replace(regExp, '');
     inputCardCVV.value = inputCardCVV.value.length > 3 ? inputCardCVV.value.slice(1, 4) : inputCardCVV.value;
-    validityCardCVV();
+    validateCardCVV();
 });
 
 const labelCardCVV = document.createElement('label');
@@ -181,7 +181,7 @@ export function showModal() {
     document.body.insertBefore(modal, header);
     document.body.classList.add('lock');
     modal.addEventListener('click', hideModal);
-    btnConfirm.addEventListener('click', validityModal);
+    btnConfirm.addEventListener('click', validateModal);
 }
 
 function hideModal(e: Event) {
@@ -193,24 +193,31 @@ function hideModal(e: Event) {
                 modal.remove();
                 document.body.classList.remove('lock');
             }
-        }, 1000);
+        }, 1);
     }
 }
-function validityModal(e: Event) {
-    validityFullName();
-    validityPhone();
-    validityDelivery();
-    validityEmail();
-    validityCardNumber();
-    validityCardValid();
-    validityCardCVV();
+function validateModal(e: Event) {
+    validateFullName();
+    validatePhone();
+    validateDelivery();
+    validateEmail();
+    validateCardNumber();
+    validateCardValid();
+    validateCardCVV();
     e.preventDefault();
-    if (isFullName() && isPhone() && isDelivery() && isEmail() && isCardNumber() && isCardValid() && isCardCVV()) {
+    if (
+        isFullNameValid() &&
+        isPhoneValid() &&
+        isDeliveryValid() &&
+        isEmailValid() &&
+        isCardNumberValid() &&
+        isCardValid() &&
+        isCardCVVValid()
+    ) {
         cart.clearCart();
         promo.clearPromos();
         if (content) content.remove();
-        modal.innerHTML = '<h3>Thanks for your order.</h3>';
-        //Redirect to the store after 0 sec
+        modal.innerHTML = '<h3 class="modal-message">Thanks for your order.</h3>';
         setTimeout(() => {
             if (modal) {
                 modal.remove();
@@ -221,8 +228,8 @@ function validityModal(e: Event) {
         }, 5000);
     }
 }
-function validityFullName() {
-    if (isFullName()) {
+function validateFullName() {
+    if (isFullNameValid()) {
         inputFullName.classList.remove('invalid');
         inputFullName.classList.add('valid');
         errorMessageFullName.textContent = '';
@@ -232,8 +239,8 @@ function validityFullName() {
         errorMessageFullName.textContent = ErrorMessage.ERROR_MESSAGE;
     }
 }
-function validityPhone() {
-    if (isPhone()) {
+function validatePhone() {
+    if (isPhoneValid()) {
         inputPhone.classList.remove('invalid');
         inputPhone.classList.add('valid');
         errorMessagePhone.textContent = '';
@@ -243,8 +250,8 @@ function validityPhone() {
         errorMessagePhone.textContent = ErrorMessage.ERROR_MESSAGE;
     }
 }
-function validityDelivery() {
-    if (isDelivery()) {
+function validateDelivery() {
+    if (isDeliveryValid()) {
         inputDelivery.classList.remove('invalid');
         inputDelivery.classList.add('valid');
         errorMessageDelivery.textContent = '';
@@ -254,8 +261,8 @@ function validityDelivery() {
         errorMessageDelivery.textContent = ErrorMessage.ERROR_MESSAGE;
     }
 }
-function validityEmail() {
-    if (isEmail()) {
+function validateEmail() {
+    if (isEmailValid()) {
         inputEmail.classList.remove('invalid');
         inputEmail.classList.add('valid');
         errorMessageEmail.textContent = '';
@@ -265,8 +272,8 @@ function validityEmail() {
         errorMessageEmail.textContent = ErrorMessage.ERROR_MESSAGE;
     }
 }
-function validityCardNumber() {
-    if (isCardNumber()) {
+function validateCardNumber() {
+    if (isCardNumberValid()) {
         inputCardNumber.classList.remove('invalid-card');
         inputCardNumber.classList.add('valid-card');
         errorMessageCardNumber.textContent = '';
@@ -276,7 +283,7 @@ function validityCardNumber() {
         errorMessageCardNumber.textContent = ErrorMessage.ERROR_CARD_NUMBER;
     }
 }
-function validityCardValid() {
+function validateCardValid() {
     if (isCardValid()) {
         inputCardValid.classList.remove('invalid-card');
         inputCardValid.classList.add('valid-card');
@@ -287,8 +294,8 @@ function validityCardValid() {
         errorMessageCardValid.textContent = ErrorMessage.ERROR_CARD_VALID;
     }
 }
-function validityCardCVV() {
-    if (isCardCVV()) {
+function validateCardCVV() {
+    if (isCardCVVValid()) {
         inputCardCVV.classList.remove('invalid-card');
         inputCardCVV.classList.add('valid-card');
         errorMessageCardCVV.textContent = '';
@@ -298,7 +305,7 @@ function validityCardCVV() {
         errorMessageCardCVV.textContent = ErrorMessage.ERROR_CARD_CVV;
     }
 }
-function isFullName() {
+function isFullNameValid() {
     const arrayFullName = inputFullName.value.replace(/\s+/g, ' ').trim().split(' ');
     if (arrayFullName.length < 2) {
         return false;
@@ -306,11 +313,11 @@ function isFullName() {
     const regExp = new RegExp('(^[A-ZА-ЯЁ]{3,})', 'i');
     return arrayFullName.every((elem: string) => regExp.test(elem));
 }
-function isPhone() {
+function isPhoneValid() {
     const regExp = new RegExp('^\\+([0-9]{9,})', 'i');
     return regExp.test(inputPhone.value);
 }
-function isDelivery() {
+function isDeliveryValid() {
     const arrayDelivery = inputDelivery.value.replace(/\s+/g, ' ').trim().split(' ');
     if (arrayDelivery.length < 3) {
         return false;
@@ -318,12 +325,12 @@ function isDelivery() {
     const regExp = new RegExp('(^[A-ZА-ЯЁ0-9,\\-\\/]{5,})', 'i');
     return arrayDelivery.every((elem: string) => regExp.test(elem));
 }
-function isEmail() {
+function isEmailValid() {
     const regExp = new RegExp('^\\S+@\\S+\\.\\S+$', 'i');
     return regExp.test(String(inputEmail.value));
 }
 
-function isCardNumber() {
+function isCardNumberValid() {
     const regExp = new RegExp('^([0-9]{16})$', 'i');
     return regExp.test(inputCardNumber.value);
 }
@@ -332,50 +339,50 @@ function isCardValid() {
     return regExp.test(inputCardValid.value);
 }
 
-function isCardCVV() {
+function isCardCVVValid() {
     const regExp = new RegExp('^([0-9]{3})$', 'i');
     return regExp.test(inputCardCVV.value.replace(/\s+/g, ''));
 }
 
 function cardType() {
     const number = inputCardNumber.value;
-    let regExp = new RegExp('^4');
-    if (number.match(regExp) != null) {
+    const regExpVisa = new RegExp('^4');
+    if (number.match(regExpVisa) != null) {
         return `${payment.visa}`;
     }
 
-    regExp = new RegExp('^(34|37)');
-    if (number.match(regExp) != null) {
+    const regExpAmex = new RegExp('^(34|37)');
+    if (number.match(regExpAmex) != null) {
         return `${payment.amex}`;
     }
 
-    regExp = new RegExp('^5[1-5]');
-    if (number.match(regExp) != null) {
+    const regExpMastercard = new RegExp('^5[1-5]');
+    if (number.match(regExpMastercard) != null) {
         return `${payment.mastercard}`;
     }
 
-    regExp = new RegExp('^6011');
-    if (number.match(regExp) != null) {
+    const regExpDiscover = new RegExp('^6011');
+    if (number.match(regExpDiscover) != null) {
         return `${payment.discover}`;
     }
 
-    regExp = new RegExp('^62');
-    if (number.match(regExp) != null) {
+    const regExpUnionPay = new RegExp('^62');
+    if (number.match(regExpUnionPay) != null) {
         return `${payment.unionpay}`;
     }
 
-    regExp = new RegExp('^9792');
-    if (number.match(regExp) != null) {
+    const regExpTroy = new RegExp('^9792');
+    if (number.match(regExpTroy) != null) {
         return `${payment.troy}`;
     }
 
-    regExp = new RegExp('^3(?:0([0-5]|9)|[689]\\d?)\\d{0,11}');
-    if (number.match(regExp) != null) {
+    const regExpDinersclub = new RegExp('^3(?:0([0-5]|9)|[689]\\d?)\\d{0,11}');
+    if (number.match(regExpDinersclub) != null) {
         return `${payment.dinersclub}`;
     }
 
-    regExp = new RegExp('^35(2[89]|[3-8])');
-    if (number.match(regExp) != null) {
+    const regExpJcb = new RegExp('^35(2[89]|[3-8])');
+    if (number.match(regExpJcb) != null) {
         return `${payment.jcb}`;
     }
     return `${payment.chip}`;
