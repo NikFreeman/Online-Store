@@ -5,7 +5,7 @@ import { ProductsController } from '../../components/controller/productsControll
 import { promo, renderApplyPromo } from './promo';
 import { Product } from './../../models/Product';
 import { showModal } from './../modal';
-import { paginationCtrl } from '../../components/elements/pagination';
+import { paginationCtrl, hideItems } from '../../components/elements/pagination';
 
 export const cart = new CartController();
 
@@ -111,6 +111,7 @@ async function pageCart() {
             cartElements = cartWrapper.children;
         }
     }
+    hideItems();
     renderApplyPromo();
 }
 
