@@ -7,6 +7,7 @@ import { Product } from './../../models/Product';
 import { showModal } from './../modal';
 
 export const cart = new CartController();
+let modalAutoRender = false;
 
 const cartEmpty = '<h3>Cart is empty</h3>';
 
@@ -100,6 +101,14 @@ async function pageCart() {
         }
     }
     renderApplyPromo();
+
+    if (modalAutoRender) {
+        setTimeout(showModal, 0);
+        modalAutoRender = false;
+    }
+}
+export function activateModal() {
+    modalAutoRender = true;
 }
 
 function removeItem(e: Event) {

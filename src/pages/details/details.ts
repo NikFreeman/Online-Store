@@ -1,7 +1,7 @@
 import { ProductsController } from '../../components/controller/productsController';
 import { Product } from '../../models/types';
 import { logo } from '../products/cards';
-import { cart } from '../cart/index';
+import { cart, activateModal } from '../cart/index';
 
 const wrapper = document.createElement('div');
 wrapper.className = 'wrapper details__wrapper';
@@ -114,9 +114,12 @@ cartText.className = 'add-to-cart';
 
 const buyBtn = document.createElement('a');
 buyBtn.className = 'card__detail-btn details__btn';
+buyBtn.setAttribute('data-link', '');
 buyBtn.href = '/cart';
 buyBtn.textContent = 'buy now';
-
+buyBtn.addEventListener('click', () => {
+    activateModal();
+});
 iconContainer.append(cartIcon);
 addBtn.append(iconContainer, cartText);
 bottomBlock.append(addBtn, buyBtn);
