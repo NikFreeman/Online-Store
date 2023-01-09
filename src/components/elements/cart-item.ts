@@ -206,7 +206,6 @@ class CartItem extends HTMLElement {
         const countTemp = this.getAttribute('count');
         const src = this.getAttribute('src');
         const id = this.getAttribute('id');
-        console.log(this.linkDetails);
         if (this.linkDetails) {
             this.linkDetails.href = `/product-detail/${id}`;
         }

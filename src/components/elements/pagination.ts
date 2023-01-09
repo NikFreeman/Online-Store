@@ -72,7 +72,6 @@ function turnPage(e: Event) {
             if (Number(pageNumber.textContent) > Math.ceil(cartElements.length / Number(inputPagesCount.value))) {
                 pageNumber.textContent = `${Math.ceil(cartElements.length / Number(inputPagesCount.value))}`;
             }
-            console.log(cartElements);
             searchParams.set('page', `${pageNumber.textContent}`);
             window.history.replaceState(null, '', '?' + searchParams.toString());
         }
@@ -90,11 +89,10 @@ function changeItemsPerPage() {
 inputPagesCount.addEventListener('change', changeItemsPerPage);
 inputPagesCount.addEventListener('change', hideItems);
 
-function hideItems() {
+export function hideItems() {
     const pageN = Number(searchParams.get('page')) || 1;
     const lim = Number(searchParams.get('limit')) || 3;
     if (cartElements.length > 0) {
-        console.log(cartElements);
         Array.from(cartElements).forEach((item, index) => {
             if (index + 1 > lim * pageN || index < lim * (pageN - 1)) {
                 item.classList.add('hide');
