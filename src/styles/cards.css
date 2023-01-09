@@ -16,6 +16,7 @@
   gap: var(--gap-cards);
   width: 100%;
   min-height: 20vh;
+  margin-bottom: 8px;
 }
 
 .card {

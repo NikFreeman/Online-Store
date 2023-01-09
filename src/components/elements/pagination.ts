@@ -84,6 +84,7 @@ paginationPages.addEventListener('click', hideItems);
 function changeItemsPerPage() {
     searchParams.set('limit', `${inputPagesCount.value}`);
     window.history.replaceState(null, '', '?' + searchParams.toString());
+    changePageCount();
 }
 
 inputPagesCount.addEventListener('change', changeItemsPerPage);
@@ -103,11 +104,13 @@ export function hideItems() {
     }
 }
 
-window.addEventListener('remove-item', () => {
+function changePageCount() {
     if (Number(pageNumber.textContent) > Math.ceil(cartElements.length / Number(inputPagesCount.value))) {
         pageNumber.textContent = `${Math.ceil(cartElements.length / Number(inputPagesCount.value))}`;
         searchParams.set('page', `${pageNumber.textContent}`);
         window.history.replaceState(null, '', '?' + searchParams.toString());
         hideItems();
     }
-});
+}
+
+window.addEventListener('remove-item', changePageCount);
