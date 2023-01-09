@@ -6,6 +6,7 @@
 @import './styles/settings.css';
 @import './styles/cards.css';
 @import './styles/details.scss';
+@import './styles/footer.css';
 
 @font-face {
   font-family: 'Geometria';

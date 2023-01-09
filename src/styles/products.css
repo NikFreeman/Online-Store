@@ -36,3 +36,10 @@ button {
     --cards-in-row: 2;
   }
 }
+
+@media (max-width: 449px) {
+  :root {    
+    --cards-in-row: 1;
+  } 
+
+}
