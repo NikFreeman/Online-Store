@@ -8,6 +8,7 @@ import { showModal } from './../modal';
 import { paginationCtrl, hideItems } from '../../components/elements/pagination';
 
 export const cart = new CartController();
+let modalAutoRender = false;
 
 const cartEmpty = '<h3>Cart is empty</h3>';
 export let cartElements: HTMLCollection;
@@ -115,6 +116,14 @@ async function pageCart() {
     hideItems();
 
     renderApplyPromo();
+
+    if (modalAutoRender) {
+        setTimeout(showModal, 0);
+        modalAutoRender = false;
+    }
+}
+export function activateModal() {
+    modalAutoRender = true;
 }
 
 function removeItem(e: Event) {

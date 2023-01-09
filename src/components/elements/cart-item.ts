@@ -125,7 +125,7 @@ template.innerHTML = `
     <div class='cart__item-thumbnail'>
       <img class ='cart__item-image'>
     </div>
-    <a class='cart__item-title' id='product-link'><h3 ><slot name='title'></slot></h3></a>
+    <a class='cart__item-title' id='product-link' data-link><h3 ><slot name='title'></slot></h3></a>
     <p class='cart__item-description'><slot name='description'></slot></p>  
     <p class = 'cart__item-amount'>Amount: $<span class='cart__item-amount-item'></span></p>
     <p class = 'cart__item-stock'>Stock: <span><slot name='stock'></slot></span></p>
