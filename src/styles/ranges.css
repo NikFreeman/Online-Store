@@ -1,8 +1,8 @@
 .range__container {
   display: flex;
   flex-direction: column;
-  width: 90%;
-  margin: 0 auto 5%;
+  width: 90%; 
+  margin: 0.5em auto;
 }
 
 .range__title {

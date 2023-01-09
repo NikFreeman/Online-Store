@@ -1,5 +1,5 @@
 html, body {
-    min-height: 100vh;
+    min-height: calc(100vh - 158px);
 }
 #App {
     //display: flex;
