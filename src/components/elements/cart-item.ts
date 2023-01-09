@@ -16,14 +16,14 @@ const styles = `
     margin-top: 10px;
     margin-bottom: 10px;
     display: grid;
-    grid-template-columns: 160px 1fr 1fr 120px; 
+    grid-template-columns: 50px 160px 1fr 1fr 120px; 
     grid-template-rows: 20px 30px 30px 30px;
     column-gap: 10px;
     grid-template-areas:
-      'thumbnail title title remove'
-      'thumbnail description description stock'
-      'thumbnail catalog rating count'
-      'thumbnail catalog rating amount';
+      'number thumbnail title title remove'
+      'number thumbnail description description stock'
+      'number thumbnail catalog rating count'
+      'number thumbnail catalog rating amount';
   }
   .cart__item-title {
     grid-area: title;
@@ -73,7 +73,11 @@ const styles = `
     border-radius: 5px;
     border: 2px solid #009FDF;
   }
-
+  .cart__item__number{
+    grid-area: number;
+    justify-self: center;
+    align-self: center;
+  }
   .cart__item-stock {
     grid-area: stock;
     justify-self: center;
@@ -111,6 +115,7 @@ const template = document.createElement('template');
 template.innerHTML = `
   <style>${styles}</style>
   <div class='cart__item'>
+  <div class = 'cart__item__number'></div>
     <div class='cart__item-thumbnail'>
       <img class ='cart__item-image'>
     </div>
