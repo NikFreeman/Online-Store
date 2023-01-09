@@ -56,5 +56,10 @@ class CartController {
     getCart() {
         return this.cart;
     }
+    clearCart() {
+        this.cart = [];
+        StorageBox.key = this.storageKey;
+        StorageBox.removeStorage();
+    }
 }
 export default CartController;

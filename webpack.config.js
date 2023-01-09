@@ -13,11 +13,15 @@ const baseConfig = {
     module: {
         rules: [
             {
-                test: /\.(png|jpg|svg|gif|ico)$/,
+                test: /\.(jpg|svg|gif|ico)$/,
                 type: 'asset/resource',
                 generator: {
                     filename: 'assets/icons/[name][ext]',
                 },
+            },
+            {
+                test: /\.(png)$/,
+                type: 'asset/resource',
             },
             {
                 test: /\.(woff|woff2|eot|ttf|otf)$/i,
