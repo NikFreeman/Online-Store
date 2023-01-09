@@ -50,7 +50,7 @@ btnRight.textContent = ' + ';
 
 const pageNumber = document.createElement('span');
 pageNumber.className = 'pagination__page-number';
-pageNumber.textContent = '1';
+pageNumber.textContent = searchParams.get('page') || '1';
 
 paginationCtrl.append(paginationLimit, paginationPages);
 paginationLimit.append(limitText, inputPagesCount);
@@ -102,3 +102,12 @@ export function hideItems() {
         });
     }
 }
+
+window.addEventListener('remove-item', () => {
+    if (Number(pageNumber.textContent) > Math.ceil(cartElements.length / Number(inputPagesCount.value))) {
+        pageNumber.textContent = `${Math.ceil(cartElements.length / Number(inputPagesCount.value))}`;
+        searchParams.set('page', `${pageNumber.textContent}`);
+        window.history.replaceState(null, '', '?' + searchParams.toString());
+        hideItems();
+    }
+});
