@@ -157,7 +157,7 @@
 }
 
 @media (max-width: 449px) {
- 
+
   .card {    
     width: calc((100% - var(--gap-cards) * (var(--cards-in-row) * (var(--cards-multiplier) - 0.5) * 2 - 1)) / (var(--cards-in-row) * (var(--cards-multiplier) - 0.5) * 2));
   }
