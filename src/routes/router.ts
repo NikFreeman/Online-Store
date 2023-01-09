@@ -38,7 +38,16 @@ function parsePathName(pathname: string): false | { routePath: string; param: st
 function router(): void {
     window.addEventListener('click', (e) => {
         const tempTarget = <HTMLElement>e.target;
-        const itemLink = tempTarget.closest('a');
+        let itemLink = tempTarget.closest('a');
+        if (!itemLink) {
+            if (e.target instanceof HTMLSpanElement && e.target.getAttribute('slot') === 'title') {
+                itemLink = tempTarget.closest('cart-item');
+                const elem = itemLink?.shadowRoot?.querySelector('a');
+                if (elem) {
+                    itemLink = elem;
+                }
+            }
+        }
         if (itemLink) {
             if (itemLink.hasAttribute('data-link')) {
                 e.preventDefault();
